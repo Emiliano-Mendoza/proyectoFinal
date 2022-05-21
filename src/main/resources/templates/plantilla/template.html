@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head">
+<meta charset="UTF-8">
+<title>Guardia</title>
+
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/css/animate.min.css}">
+<link rel="stylesheet" th:href="@{/css/bootnavbar.css}">
+<link rel="stylesheet" th:href="@{/css/daterangepicker.css}">
+<link rel="stylesheet" th:href="@{/css/signin.css}">
+<link rel="stylesheet" th:href="@{/css/bootstrap-icons.css}">
+<link rel="stylesheet" th:href="@{/css/toastr.min.css}">
+<link rel="stylesheet" th:href="@{/css/styles.css}">
+<link rel="stylesheet" th:href="@{/css/all.min.css}">
+<link rel="icon" th:href="@{/images/icono-pestaña.png}">
+
+
+
+</head>
+<body>
+
+	<!-- BARRA DE NAVEGACION -->
+	<header th:fragment="header">
+		<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+			<!-- Navbar Brand-->
+
+			<a class="navbar-brand" th:href="@{/home}"><img
+				th:src="@{/images/scolnik.png}"
+				style="width: 120px; height: 50px; margin-left: 22%;"></a>
+
+			<!-- Sidebar Toggle-->
+			<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
+				id="sidebarToggle" href="#!">
+				<i class="fas fa-bars"></i>
+			</button>
+			<!-- Navbar Search-->
+			<!-- <form
+				class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+				<div class="input-group">
+					<input class="form-control" type="text" placeholder="Search for..."
+						aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+					<button class="btn btn-primary" id="btnNavbarSearch" type="button">
+						<i class="fas fa-search"></i>
+					</button>
+				</div>
+			</form> -->
+			<div class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+				<button type="button" class="btn btn-outline-info"
+								id="plantaButton" data-bs-toggle="modal"
+								data-bs-target="#modalPlanta">Seleccionar Planta</button>
+			</div>
+						
+			<!-- Navbar-->
+			<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" id="navbarDropdown" href="#"
+					role="button" data-bs-toggle="dropdown" aria-expanded="false"><i
+						class="fas fa-user fa-fw"></i></a>
+					<ul class="dropdown-menu dropdown-menu-end"
+						aria-labelledby="navbarDropdown">
+						<li><a class="dropdown-item" th:href="@{/home}">Inicio</a></li>
+						<li><hr class="dropdown-divider" /></li>
+						<li><a class="dropdown-item" href="#!">Cerrar Sesión</a></li>
+					</ul></li>
+			</ul>
+		</nav>
+
+		<!-- MENSAJES -->
+		<div
+			class="alert alert-success alert-dismissable gap-2 d-md-flex justify-content-between"
+			th:if="${success != null}" role="alert">
+			<label th:text="${success}"></label>
+			<button type="button" class="btn-close mr-auto"
+				data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+		<div
+			class="alert alert-danger alert-dismissable gap-2 d-md-flex justify-content-between"
+			th:if="${error != null}" role="alert">
+			<label th:text="${error}"></label>
+			<button type="button" class="btn-close mr-auto"
+				data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	</header>
+
+	<div id="layoutSidenav_nav" th:fragment="sidenav_nav">
+		<nav class="sb-sidenav accordion sb-sidenav-dark"
+			id="sidenavAccordion">
+			<div class="sb-sidenav-menu">
+				<div class="nav">
+					<div class="sb-sidenav-menu-heading">Home</div>
+					<a class="nav-link" th:href="@{/home}">
+						<div class="sb-nav-link-icon">
+							<i class="fas fa-house"></i>
+						</div> Inicio
+					</a>
+					<div class="sb-sidenav-menu-heading">Guardia</div>
+
+					<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+						data-bs-target="#collapsePages" aria-expanded="false"
+						aria-controls="collapsePages">Registrar Actividad
+						<div class="sb-sidenav-collapse-arrow">
+							<i class="fas fa-angle-down"></i>
+						</div>
+					</a>
+					<div class="collapse" id="collapsePages"
+						aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+
+
+						<nav class="sb-sidenav-menu-nested nav accordion"
+							id="sidenavAccordionPages">
+							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+								data-bs-target="#pagesCollapseAuth" aria-expanded="false"
+								aria-controls="pagesCollapseAuth"><div
+									class="sb-nav-link-icon">
+									<i class="fa-solid fa-person-walking-arrow-right"></i>
+								</div> Ingreso a Planta
+								<div class="sb-sidenav-collapse-arrow">
+									<i class="fas fa-angle-down"></i>
+								</div> </a>
+							<div class="collapse" id="pagesCollapseAuth"
+								aria-labelledby="headingOne"
+								data-bs-parent="#sidenavAccordionPages">
+								<nav class="sb-sidenav-menu-nested nav">
+									<a class="nav-link" href="register.html">Empleado</a> <a
+										class="nav-link" href="password.html">Proveedor</a>
+								</nav>
+							</div>
+							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+								data-bs-target="#pagesCollapseError" aria-expanded="false"
+								aria-controls="pagesCollapseError"><div
+									class="sb-nav-link-icon">
+									<i class="fa-solid fa-person-walking-arrow-right"
+										style="transform: scaleX(-1);"></i>
+								</div> Egreso de Planta
+								<div class="sb-sidenav-collapse-arrow">
+									<i class="fas fa-angle-down"></i>
+								</div> </a>
+							<div class="collapse" id="pagesCollapseError"
+								aria-labelledby="headingOne"
+								data-bs-parent="#sidenavAccordionPages">
+								<nav class="sb-sidenav-menu-nested nav">
+									<a class="nav-link" href="register.html">Empleado</a> <a
+										class="nav-link" href="password.html">Proveedor</a>
+								</nav>
+							</div>
+
+
+							<a class="nav-link" th:href="@{/home}">
+								<div class="sb-nav-link-icon">
+									<i class="fa-solid fa-clock"></i>
+								</div> Ronda
+							</a> <a class="nav-link" th:href="@{/home}">
+								<div class="sb-nav-link-icon">
+									<i class="fa-solid fa-boxes-stacked"></i>
+								</div> Retiro de Material
+							</a>
+						</nav>
+
+					</div>
+
+					<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+						data-bs-target="#collapseLayouts" aria-expanded="false"
+						aria-controls="collapseLayouts">Autorizaciones
+						<div class="sb-sidenav-collapse-arrow">
+							<i class="fas fa-angle-down"></i>
+						</div>
+					</a>
+					<div class="collapse" id="collapseLayouts"
+						aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+						<nav class="sb-sidenav-menu-nested nav">
+							<a class="nav-link" href="charts.html">
+								<div class="sb-nav-link-icon">
+									<i class="fa-solid fa-check"></i>
+								</div> Autorizar Retiro
+							</a> <a class="nav-link" href="tables.html">
+								<div class="sb-nav-link-icon">
+									<i class="fa-solid fa-file-circle-check"></i>
+								</div> Ver Retiros
+							</a>
+						</nav>
+					</div>
+
+					<div class="sb-sidenav-menu-heading">Administrador</div>
+					<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+						data-bs-target="#collapseLayouts2" aria-expanded="false"
+						aria-controls="collapseLayouts">
+						<div class="sb-nav-link-icon">
+							<i class="fas fa-columns"></i>
+						</div> Gestión de Entidades
+						<div class="sb-sidenav-collapse-arrow">
+							<i class="fas fa-angle-down"></i>
+						</div>
+					</a>
+					<div class="collapse" id="collapseLayouts2"
+						aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+						<nav class="sb-sidenav-menu-nested nav">
+							<a class="nav-link" href="layout-static.html"><div >
+							<i class="fa-solid fa-people-group" style="margin-right: 3px;"></i>
+						</div>Empleados</a> <a
+								class="nav-link" href="layout-sidenav-light.html"><div >
+							<i class="fa-solid fa-truck-field" style="margin-right: 3px;"></i>
+						</div>Proveedores</a>
+							<a class="nav-link" href="layout-sidenav-light.html"><div >
+							<i class="fa-solid fa-car" style="margin-right: 3px;"></i>
+						</div>Vehiculos</a>
+							<a class="nav-link" href="layout-sidenav-light.html"><div >
+							
+							<i class="fa-solid fa-briefcase" style="margin-right: 3px;"></i>
+						</div>Sectores
+								de Trabajo</a> <a class="nav-link" href="layout-sidenav-light.html"><div >
+							<i class="fa-solid fa-boxes" style="margin-right: 3px;"></i>
+						</div>Materiales</a>
+						</nav>
+					</div>
+					<a class="nav-link" href="charts.html">
+						<div class="sb-nav-link-icon">
+							<i class="fa-solid fa-user-group"></i>
+						</div> Gestión de Usuarios
+					</a>
+
+				</div>
+			</div>
+		</nav>
+	</div>
+
+
+
+
+	<!-- CONTENIDO -->
+	<div class="container"></div>
+
+	<!-- PIE DE PAGINA -->
+	<footer th:fragment="footer"
+		class="bg-dark text-white text-center fixed-bottom ">
+
+
+
+		<script type="text/javascript" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ordenar-tabla.js}"></script>
+		<script type="text/javascript" th:src="@{/js/bootnavbar.js}"></script>
+		<script type="text/javascript" th:src="@{/js/moment.js}"></script>
+		<script type="text/javascript" th:src="@{/js/daterangepicker.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/daterangeconfig.js}"></script>
+		<script type="text/javascript" th:src="@{/js/sockjs.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/stomp.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/toastr.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/all.min.js}"></script>
+
+		<script>
+			new bootnavbar();
+		</script>
+
+		<script th:inline="javascript">
+			
+		
+		window.addEventListener('DOMContentLoaded', event => {
+
+		    // Toggle the side navigation
+		    const sidebarToggle = document.body.querySelector('#sidebarToggle');
+		    if (sidebarToggle) {
+		        // Uncomment Below to persist sidebar toggle between refreshes
+		        // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+		        //     document.body.classList.toggle('sb-sidenav-toggled');
+		        // }
+		        sidebarToggle.addEventListener('click', event => {
+		            event.preventDefault();
+		            document.body.classList.toggle('sb-sidenav-toggled');
+		            localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+		        });
+		    }
+
+		});
+		
+		
+		</script>
+
+
+	</footer>
+
+
+
+</body>
+
+</html>
