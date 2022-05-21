@@ -16,7 +16,13 @@
 <link rel="stylesheet" th:href="@{/css/all.min.css}">
 <link rel="icon" th:href="@{/images/icono-pestaña.png}">
 
+<style>
 
+	.nav-font-1 {
+		font-size: 14px;
+	}
+
+</style>
 
 </head>
 <body>
@@ -77,7 +83,7 @@
 	<div id="layoutSidenav_nav" th:fragment="sidenav_nav">
 		<nav class="sb-sidenav accordion sb-sidenav-dark"
 			id="sidenavAccordion">
-			<div class="sb-sidenav-menu">
+			<div class="sb-sidenav-menu nav-font-1">
 				<div class="nav">
 					<div class="sb-sidenav-menu-heading">Home</div>
 					<a class="nav-link" th:href="@{/home}">
@@ -206,7 +212,8 @@
 						aria-controls="collapseLayouts">
 						<div class="sb-nav-link-icon">
 							<i class="fas fa-columns"></i>
-						</div> Gestión de Entidades
+						</div> 
+						Gestión de Entidades
 						<div class="sb-sidenav-collapse-arrow">
 							<i class="fas fa-angle-down"></i>
 						</div>
