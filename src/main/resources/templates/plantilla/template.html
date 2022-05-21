@@ -35,17 +35,7 @@
 				id="sidebarToggle" href="#!">
 				<i class="fas fa-bars"></i>
 			</button>
-			<!-- Navbar Search-->
-			<!-- <form
-				class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-				<div class="input-group">
-					<input class="form-control" type="text" placeholder="Search for..."
-						aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-					<button class="btn btn-primary" id="btnNavbarSearch" type="button">
-						<i class="fas fa-search"></i>
-					</button>
-				</div>
-			</form> -->
+
 			<div class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
 				<button type="button" class="btn btn-outline-info"
 								id="plantaButton" data-bs-toggle="modal"
@@ -151,7 +141,13 @@
 								<div class="sb-nav-link-icon">
 									<i class="fa-solid fa-clock"></i>
 								</div> Ronda
-							</a> <a class="nav-link" th:href="@{/home}">
+							</a> 
+							<a class="nav-link" th:href="@{/home}">
+								<div class="sb-nav-link-icon">
+									<i class="fa-solid fa-calendar-days"></i>
+								</div> Eventos
+							</a>
+							<a class="nav-link" th:href="@{/home}">
 								<div class="sb-nav-link-icon">
 									<i class="fa-solid fa-boxes-stacked"></i>
 								</div> Retiro de Material
@@ -181,6 +177,28 @@
 							</a>
 						</nav>
 					</div>
+					
+					<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+						data-bs-target="#collapseLayouts3" aria-expanded="false"
+						aria-controls="collapseLayouts">Notificacíon de Eventos
+						<div class="sb-sidenav-collapse-arrow">
+							<i class="fas fa-angle-down"></i>
+						</div>
+					</a>
+					<div class="collapse" id="collapseLayouts3"
+						aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+						<nav class="sb-sidenav-menu-nested nav">
+							<a class="nav-link" href="charts.html">
+								<div class="sb-nav-link-icon">
+									<i class="fa-solid fa-flag"></i>
+								</div> Nuevo Evento
+							</a> <a class="nav-link" href="tables.html">
+								<div class="sb-nav-link-icon">
+									<i class="fa-solid fa-file-circle-check"></i>
+								</div> Ver Eventos
+							</a>
+						</nav>
+					</div>
 
 					<div class="sb-sidenav-menu-heading">Administrador</div>
 					<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
@@ -198,20 +216,20 @@
 						<nav class="sb-sidenav-menu-nested nav">
 							<a class="nav-link" href="layout-static.html"><div >
 							<i class="fa-solid fa-people-group" style="margin-right: 3px;"></i>
-						</div>Empleados</a> <a
+						</div> Empleados</a> <a
 								class="nav-link" href="layout-sidenav-light.html"><div >
 							<i class="fa-solid fa-truck-field" style="margin-right: 3px;"></i>
-						</div>Proveedores</a>
+						</div> Proveedores</a>
 							<a class="nav-link" href="layout-sidenav-light.html"><div >
 							<i class="fa-solid fa-car" style="margin-right: 3px;"></i>
-						</div>Vehiculos</a>
+						</div> Vehiculos</a>
 							<a class="nav-link" href="layout-sidenav-light.html"><div >
 							
 							<i class="fa-solid fa-briefcase" style="margin-right: 3px;"></i>
-						</div>Sectores
+						</div> Sectores
 								de Trabajo</a> <a class="nav-link" href="layout-sidenav-light.html"><div >
 							<i class="fa-solid fa-boxes" style="margin-right: 3px;"></i>
-						</div>Materiales</a>
+						</div> Materiales</a>
 						</nav>
 					</div>
 					<a class="nav-link" href="charts.html">
