@@ -17,11 +17,23 @@
 <link rel="icon" th:href="@{/images/icono-pestaña.png}">
 
 <style>
+.nav-font-1 {
+	font-size: 14px;
+}
 
-	.nav-font-1 {
-		font-size: 14px;
-	}
+::-webkit-scrollbar {
+	width: 9px;
+}
 
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: rgba(155, 155, 155, 0.5);
+	border-radius: 20px;
+	border: transparent;
+}
 </style>
 
 </head>
@@ -41,20 +53,21 @@
 				id="sidebarToggle" href="#!">
 				<i class="fas fa-bars"></i>
 			</button>
-			
+
 			<!-- Notification button -->
-			<button class="btn btn-secondary d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"
-				id="notiBtn" >
+			<button
+				class="btn btn-secondary d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"
+				id="notiBtn">
 				<i class="fa-solid fa-bell"></i>
 			</button>
-						
-			
+
+
 			<div class="ms-auto ms-md-0 me-3 me-lg-4">
-				<button type="button" class="btn btn-outline-info"
-								id="plantaButton" data-bs-toggle="modal"
-								data-bs-target="#modalPlanta">Seleccionar Planta</button>
+				<button type="button" class="btn btn-outline-info" id="plantaButton"
+					data-bs-toggle="modal" data-bs-target="#modalPlanta">Seleccionar
+					Planta</button>
 			</div>
-						
+
 			<!-- Navbar-->
 			<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
 				<li class="nav-item dropdown"><a
@@ -126,8 +139,8 @@
 								aria-labelledby="headingOne"
 								data-bs-parent="#sidenavAccordionPages">
 								<nav class="sb-sidenav-menu-nested nav">
-									<a class="nav-link" th:href="@{/views/ingresos-empleado}">Empleado</a> <a
-										class="nav-link" th:href="@{/views/ingresos-proveedor}">Proveedor</a>
+									<a class="nav-link" th:href="@{/views/ingresos-empleado}">Empleado</a>
+									<a class="nav-link" th:href="@{/views/ingresos-proveedor}">Proveedor</a>
 								</nav>
 							</div>
 							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
@@ -144,7 +157,8 @@
 								aria-labelledby="headingOne"
 								data-bs-parent="#sidenavAccordionPages">
 								<nav class="sb-sidenav-menu-nested nav">
-									<a class="nav-link" th:href="@{/views/ingresos-empleado/egreso}">Empleado</a> <a
+									<a class="nav-link"
+										th:href="@{/views/ingresos-empleado/egreso}">Empleado</a> <a
 										class="nav-link" th:href="@{/views/ingresos-proveedor/egreso}">Proveedor</a>
 								</nav>
 							</div>
@@ -154,13 +168,12 @@
 								<div class="sb-nav-link-icon">
 									<i class="fa-solid fa-clock"></i>
 								</div> Ronda
-							</a> 
-							<a class="nav-link" th:href="@{/views/evento/ocurrencia}">
+							</a> <a class="nav-link" th:href="@{/views/evento/ocurrencia}">
 								<div class="sb-nav-link-icon">
 									<i class="fa-solid fa-calendar-days"></i>
 								</div> Eventos
-							</a>
-							<a class="nav-link" th:href="@{/views/retiro-material/autorizaciones}">
+							</a> <a class="nav-link"
+								th:href="@{/views/retiro-material/autorizaciones}">
 								<div class="sb-nav-link-icon">
 									<i class="fa-solid fa-boxes-stacked"></i>
 								</div> Retiro de Material
@@ -179,18 +192,20 @@
 					<div class="collapse" id="collapseLayouts"
 						aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 						<nav class="sb-sidenav-menu-nested nav">
-							<a class="nav-link" th:href="@{/views/retiro-material/nueva-autorizacion}">
+							<a class="nav-link"
+								th:href="@{/views/retiro-material/nueva-autorizacion}">
 								<div class="sb-nav-link-icon">
 									<i class="fa-solid fa-check"></i>
 								</div> Autorizar Retiro
-							</a> <a class="nav-link" th:href="@{/views/retiro-material/ver-retiros}">
+							</a> <a class="nav-link"
+								th:href="@{/views/retiro-material/ver-retiros}">
 								<div class="sb-nav-link-icon">
 									<i class="fa-solid fa-file-circle-check"></i>
 								</div> Ver Retiros
 							</a>
 						</nav>
 					</div>
-					
+
 					<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
 						data-bs-target="#collapseLayouts3" aria-expanded="false"
 						aria-controls="collapseLayouts">Notificacíon de Eventos
@@ -219,8 +234,7 @@
 						aria-controls="collapseLayouts">
 						<div class="sb-nav-link-icon">
 							<i class="fas fa-columns"></i>
-						</div> 
-						Gestión de Entidades
+						</div> Gestión de Entidades
 						<div class="sb-sidenav-collapse-arrow">
 							<i class="fas fa-angle-down"></i>
 						</div>
@@ -228,22 +242,22 @@
 					<div class="collapse" id="collapseLayouts2"
 						aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 						<nav class="sb-sidenav-menu-nested nav">
-							<a class="nav-link" th:href="@{/views/empleado/administrar}"><div >
-							<i class="fa-solid fa-people-group" style="margin-right: 3px;"></i>
-						</div> Empleados</a> <a
-								class="nav-link" th:href="@{/views/proveedor/administrar}"><div >
-							<i class="fa-solid fa-truck-field" style="margin-right: 3px;"></i>
-						</div> Proveedores</a>
-							<a class="nav-link" th:href="@{/views/vehiculo/administrar}"><div >
-							<i class="fa-solid fa-car" style="margin-right: 3px;"></i>
-						</div> Vehiculos</a>
-							<a class="nav-link" th:href="@{/views/sector-trabajo/administrar}"><div >
-							
-							<i class="fa-solid fa-briefcase" style="margin-right: 3px;"></i>
-						</div> Sectores
-								de Trabajo</a> <a class="nav-link" th:href="@{/views/material/administrar}"><div >
-							<i class="fa-solid fa-boxes" style="margin-right: 3px;"></i>
-						</div> Materiales</a>
+							<a class="nav-link" th:href="@{/views/empleado/administrar}"><div>
+									<i class="fa-solid fa-people-group" style="margin-right: 3px;"></i>
+								</div> Empleados</a> <a class="nav-link"
+								th:href="@{/views/proveedor/administrar}"><div>
+									<i class="fa-solid fa-truck-field" style="margin-right: 3px;"></i>
+								</div> Proveedores</a> <a class="nav-link"
+								th:href="@{/views/vehiculo/administrar}"><div>
+									<i class="fa-solid fa-car" style="margin-right: 3px;"></i>
+								</div> Vehiculos</a> <a class="nav-link"
+								th:href="@{/views/sector-trabajo/administrar}"><div>
+
+									<i class="fa-solid fa-briefcase" style="margin-right: 3px;"></i>
+								</div> Sectores de Trabajo</a> <a class="nav-link"
+								th:href="@{/views/material/administrar}"><div>
+									<i class="fa-solid fa-boxes" style="margin-right: 3px;"></i>
+								</div> Materiales</a>
 						</nav>
 					</div>
 					<a class="nav-link" th:href="@{/views/usuario/administrar}">

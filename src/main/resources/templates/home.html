@@ -3,31 +3,139 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="plantilla/template :: head">
 </head>
-<body >
+<body class="sb-nav-fixed">
 
 	<header th:replace="plantilla/template :: header"></header>
-	
+
 	<div id="layoutSidenav">
-	
-		<div th:replace="plantilla/template :: sidenav_nav"> </div>
-		
+
+		<div th:replace="plantilla/template :: sidenav_nav"></div>
+
 		<div id="layoutSidenav_content">
-			
-			<div class="container">
-				
-				<h1>Home</h1>
-				
+
+			<div class="container-fluid px-4 mt-3">
+
+				<h1 class="">Resumen</h1>
+				<ol class="breadcrumb mb-4">
+					<li class="breadcrumb-item active">Dashboard</li>
+				</ol>
+				<div class="row">
+					<div class="col-xl-3 col-md-6">
+						<div class="card bg-primary text-white mb-4">
+							<div class="card-body">
+								Empleados en Planta: <span id="cantEmpleadosEnPlanta">0</span>
+							</div>
+
+							<div class="card-footer">
+								<div class="row">
+									<button class="btn btn-sm text-white col-6" type="button">Ingreso</button>
+									<button class="btn btn-sm text-white col-6" type="button">Egreso</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-md-6">
+						<div class="card bg-warning text-black mb-4">
+							<div class="card-body">
+								Empleados en Tránsito: <span id="cantEmpleadosEnTransito">0</span>
+							</div>
+							<div class="card-footer">
+								<div class="row">
+									<button class="btn  btn-sm col-6" type="button">Ingreso</button>
+									<button class="btn  btn-sm col-6" type="button">Egreso</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-md-6">
+						<div class="card bg-secondary text-white mb-4">
+							<div class="card-body">
+								Proveedores en Planta: <span id="cantProveedoresEnPlanta">0</span>
+							</div>
+
+							<div class="card-footer">
+								<div class="row">
+									<button class="btn  btn-sm text-white col-6" type="button">Ingreso</button>
+									<button class="btn  btn-sm text-white col-6" type="button">Egreso</button>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-md-6">
+						<div class="card bg-danger text-white mb-4">
+							<div class="card-body">
+								Rondas Diarias: <span id="cantRondas">0</span>
+							</div>
+
+							<div class="card-footer">
+								<div class="row">
+									<button class="btn  btn-sm text-white col-12" type="button">Registrar
+										Ronda</button>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row mt-3">
+
+					<div class="col-6">
+						<div class="card mb-4">
+							<div class="card-header">
+								<i class="fa-solid fa-calendar-days"></i> Eventos Próximos:
+							</div>
+							<div class="card-body">
+								<ul>
+									<li>Evento 1</li>
+									<li>Evento 2</li>
+									<li>Evento 3</li>
+									<li>Evento 4</li>
+									<li>Evento 5</li>
+									<li>Evento 6</li>
+									<li>Evento 7</li>
+
+								</ul>
+
+							</div>
+						</div>
+					</div>
+
+					<div class="col-6">
+						<div class="card mb-4">
+							<div class="card-header">
+								<i class="fa-solid fa-boxes-stacked"></i> Autorizaciones de
+								Retiro:
+							</div>
+							<div class="card-body">
+								<ul>
+									<li>Autorizacion 1</li>
+									<li>Autorizacion 2</li>
+									<li>Autorizacion 3</li>
+									<li>Autorizacion 4</li>
+									<li>Autorizacion 5</li>
+									<li>Autorizacion 6</li>
+									<li>Autorizacion 7</li>
+
+								</ul>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+
+
+
+
 			</div>
-			
-		<div>
-	
-	</div>
-	
-	<footer th:replace="plantilla/template :: footer"></footer>
-	
-	<script type="text/javascript">
-		
-	
-	</script>
+
+
+			<footer th:replace="plantilla/template :: footer"></footer>
+
+			<script type="text/javascript">
+				
+			</script>
 </body>
 </html>
