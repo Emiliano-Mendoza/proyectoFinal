@@ -41,8 +41,15 @@
 				id="sidebarToggle" href="#!">
 				<i class="fas fa-bars"></i>
 			</button>
-
-			<div class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+			
+			<!-- Notification button -->
+			<button class="btn btn-secondary d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"
+				id="notiBtn" >
+				<i class="fa-solid fa-bell"></i>
+			</button>
+						
+			
+			<div class="ms-auto ms-md-0 me-3 me-lg-4">
 				<button type="button" class="btn btn-outline-info"
 								id="plantaButton" data-bs-toggle="modal"
 								data-bs-target="#modalPlanta">Seleccionar Planta</button>
@@ -119,8 +126,8 @@
 								aria-labelledby="headingOne"
 								data-bs-parent="#sidenavAccordionPages">
 								<nav class="sb-sidenav-menu-nested nav">
-									<a class="nav-link" href="register.html">Empleado</a> <a
-										class="nav-link" href="password.html">Proveedor</a>
+									<a class="nav-link" th:href="@{/views/ingresos-empleado}">Empleado</a> <a
+										class="nav-link" th:href="@{/views/ingresos-proveedor}">Proveedor</a>
 								</nav>
 							</div>
 							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
@@ -137,23 +144,23 @@
 								aria-labelledby="headingOne"
 								data-bs-parent="#sidenavAccordionPages">
 								<nav class="sb-sidenav-menu-nested nav">
-									<a class="nav-link" href="register.html">Empleado</a> <a
-										class="nav-link" href="password.html">Proveedor</a>
+									<a class="nav-link" th:href="@{/views/ingresos-empleado/egreso}">Empleado</a> <a
+										class="nav-link" th:href="@{/views/ingresos-proveedor/egreso}">Proveedor</a>
 								</nav>
 							</div>
 
 
-							<a class="nav-link" th:href="@{/home}">
+							<a class="nav-link" th:href="@{/views/ronda}">
 								<div class="sb-nav-link-icon">
 									<i class="fa-solid fa-clock"></i>
 								</div> Ronda
 							</a> 
-							<a class="nav-link" th:href="@{/home}">
+							<a class="nav-link" th:href="@{/views/evento/ocurrencia}">
 								<div class="sb-nav-link-icon">
 									<i class="fa-solid fa-calendar-days"></i>
 								</div> Eventos
 							</a>
-							<a class="nav-link" th:href="@{/home}">
+							<a class="nav-link" th:href="@{/views/retiro-material/autorizaciones}">
 								<div class="sb-nav-link-icon">
 									<i class="fa-solid fa-boxes-stacked"></i>
 								</div> Retiro de Material
@@ -172,11 +179,11 @@
 					<div class="collapse" id="collapseLayouts"
 						aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 						<nav class="sb-sidenav-menu-nested nav">
-							<a class="nav-link" href="charts.html">
+							<a class="nav-link" th:href="@{/views/retiro-material/nueva-autorizacion}">
 								<div class="sb-nav-link-icon">
 									<i class="fa-solid fa-check"></i>
 								</div> Autorizar Retiro
-							</a> <a class="nav-link" href="tables.html">
+							</a> <a class="nav-link" th:href="@{/views/retiro-material/ver-retiros}">
 								<div class="sb-nav-link-icon">
 									<i class="fa-solid fa-file-circle-check"></i>
 								</div> Ver Retiros
@@ -194,11 +201,11 @@
 					<div class="collapse" id="collapseLayouts3"
 						aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 						<nav class="sb-sidenav-menu-nested nav">
-							<a class="nav-link" href="charts.html">
+							<a class="nav-link" th:href="@{/views/evento}">
 								<div class="sb-nav-link-icon">
 									<i class="fa-solid fa-flag"></i>
 								</div> Nuevo Evento
-							</a> <a class="nav-link" href="tables.html">
+							</a> <a class="nav-link" th:href="@{/views/evento/ver-eventos}">
 								<div class="sb-nav-link-icon">
 									<i class="fa-solid fa-file-circle-check"></i>
 								</div> Ver Eventos
@@ -221,25 +228,25 @@
 					<div class="collapse" id="collapseLayouts2"
 						aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 						<nav class="sb-sidenav-menu-nested nav">
-							<a class="nav-link" href="layout-static.html"><div >
+							<a class="nav-link" th:href="@{/views/empleado/administrar}"><div >
 							<i class="fa-solid fa-people-group" style="margin-right: 3px;"></i>
 						</div> Empleados</a> <a
-								class="nav-link" href="layout-sidenav-light.html"><div >
+								class="nav-link" th:href="@{/views/proveedor/administrar}"><div >
 							<i class="fa-solid fa-truck-field" style="margin-right: 3px;"></i>
 						</div> Proveedores</a>
-							<a class="nav-link" href="layout-sidenav-light.html"><div >
+							<a class="nav-link" th:href="@{/views/vehiculo/administrar}"><div >
 							<i class="fa-solid fa-car" style="margin-right: 3px;"></i>
 						</div> Vehiculos</a>
-							<a class="nav-link" href="layout-sidenav-light.html"><div >
+							<a class="nav-link" th:href="@{/views/sector-trabajo/administrar}"><div >
 							
 							<i class="fa-solid fa-briefcase" style="margin-right: 3px;"></i>
 						</div> Sectores
-								de Trabajo</a> <a class="nav-link" href="layout-sidenav-light.html"><div >
+								de Trabajo</a> <a class="nav-link" th:href="@{/views/material/administrar}"><div >
 							<i class="fa-solid fa-boxes" style="margin-right: 3px;"></i>
 						</div> Materiales</a>
 						</nav>
 					</div>
-					<a class="nav-link" href="charts.html">
+					<a class="nav-link" th:href="@{/views/usuario/administrar}">
 						<div class="sb-nav-link-icon">
 							<i class="fa-solid fa-user-group"></i>
 						</div> Gestión de Usuarios
@@ -266,7 +273,6 @@
 		<script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
 		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 		<script type="text/javascript" th:src="@{/js/ordenar-tabla.js}"></script>
-		<script type="text/javascript" th:src="@{/js/bootnavbar.js}"></script>
 		<script type="text/javascript" th:src="@{/js/moment.js}"></script>
 		<script type="text/javascript" th:src="@{/js/daterangepicker.min.js}"></script>
 		<script type="text/javascript" th:src="@{/js/daterangeconfig.js}"></script>
@@ -275,9 +281,6 @@
 		<script type="text/javascript" th:src="@{/js/toastr.min.js}"></script>
 		<script type="text/javascript" th:src="@{/js/all.min.js}"></script>
 
-		<script>
-			new bootnavbar();
-		</script>
 
 		<script th:inline="javascript">
 			

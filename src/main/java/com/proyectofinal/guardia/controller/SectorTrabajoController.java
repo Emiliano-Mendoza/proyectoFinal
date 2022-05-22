@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/views/proveedor")
-public class ProveedorController {
+@RequestMapping("/views/sector-trabajo")
+public class SectorTrabajoController {
 	
 	
 	@GetMapping("/administrar")
-	public String administrarProveedor(Model model) {
+	public String administrarSector(Model model) {
 						
-		return "/views/proveedor/AdministrarProveedor";
+		return "/views/sectorTrabajo/AdministrarSectorTrabajo";
 	}
 }
