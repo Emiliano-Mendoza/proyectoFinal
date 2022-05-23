@@ -6,28 +6,187 @@
 <body class="sb-nav-fixed">
 
 	<header th:replace="plantilla/template :: header"></header>
-	
+
 	<div id="layoutSidenav">
-	
-		<div th:replace="plantilla/template :: sidenav_nav"> </div>
-		
+
+		<div th:replace="plantilla/template :: sidenav_nav"></div>
+
 		<div id="layoutSidenav_content">
-			
+
 			<div class="container-fluid px-4 mt-3">
-				 
-				 <h1>RegistrarIngresoProveedor</h1>
-				
+
+				<h1 class="">Registro de Ingreso</h1>
+				<ol class="breadcrumb mb-4">
+					<li class="breadcrumb-item active">Proveedor</li>
+				</ol>
+
+				<!-- Proveedor Card -->
+				<div class="container">
+					<div
+						class="row mt-3 d-grid gap-2 d-md-flex justify-content-md-center"
+						id="cardAsis"></div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-header">
+						<i class="fa-solid fa-table"></i> Listado de Proveedores:
+					</div>
+					<div class="card-body">
+
+						<table id="table_id" class="display">
+							<thead>
+								<tr>
+									<th>Proveedor</th>
+									<th>Descripción</th>
+									<th>Ingresos</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Pablito Camiones</td>
+									<td>Logistica re locooo</td>
+									<td>
+										<button class="btn btn-sm btn-success btn-ingreso">Ingreso</button>
+									</td>
+								</tr>
+								<tr>
+									<td>Emiliano Awita</td>
+									<td>Proveedor de agua</td>
+									<td>
+										<button class="btn btn-sm btn-success btn-ingreso">Ingreso</button>
+									</td>
+								</tr>
+
+								<tr>
+									<td>Palets Piolas</td>
+									<td>Proveedor de palets</td>
+									<td>
+										<button class="btn btn-sm btn-success btn-ingreso">Ingreso</button>
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+
 			</div>
-			
-		<div>
-	
+		</div>
 	</div>
-	
+
 	<footer th:replace="plantilla/template :: footer"></footer>
-	
+
 	<script type="text/javascript">
 		
+		const cardAsis = document.querySelector('#cardAsis');
+		
+		var datatable;
+		$(document)
+				.ready(
+						function() {
+							datatable = $('#table_id')
+									.DataTable(
+											{
+												language : {
+													"decimal" : "",
+													"emptyTable" : "No hay informaci�n",
+													"info" : "Mostrando _START_ a _END_ de _TOTAL_ Proveedores",
+													"infoEmpty" : "Mostrando 0 to 0 of 0 Entradas",
+													"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
+													"infoPostFix" : "",
+													"thousands" : ",",
+													"lengthMenu" : "Mostrar _MENU_ Proveedores",
+													"loadingRecords" : "Cargando...",
+													"processing" : "Procesando...",
+													"search" : "Buscar:",
+													"zeroRecords" : "Sin resultados encontrados",
+													"paginate" : {
+														"first" : "Primero",
+														"last" : "Ultimo",
+														"next" : "Siguiente",
+														"previous" : "Anterior"
+													}
+												},
+												"columnDefs" : [ {
+													"className" : "dt-center",
+													"targets" : "_all"
+												} ]
+											});
 	
+		});
+		
+		$("#table_id tbody").on("click", '.btn-ingreso', function() {
+			let filaSeleccionada = (this).closest("tr");
+			let data = datatable.row(filaSeleccionada).data();
+				
+			cardAsis.innerHTML = `
+				<div class="col-md-8" >
+					<div class="card text-dark bg-light mb-3">
+						<p class="card-header bg-dark text-white ">Registro de Ingreso
+							a la Planta</p>
+						<div class="row g-0 card-body">
+							<div class="col-md-4 mt-3" id="imagen">
+								<img src='/images/proveedor.jpg' width="100%" height="auto"
+								
+								onerror="this.onerror=null;this.src='/images/anonimo.jpg';">
+							</div>
+							<div class="col-md-8">
+								<div style="margin-left: 18px;">
+									<h5 class="card-title">Registrar ingreso de proveedor:</h5>
+																		
+									<ul class="list-group list-group-flush mt-2">
+									  <li class="list-group-item bg-light">Proveedor: ${data[0]}</li>
+									  <li class="list-group-item bg-light">Planta: </li>
+									  <li class="list-group-item bg-light">Fecha y hora del ingreso: <small class="text-muted"><span
+										id='date-time'></span></small></li>
+									  <li class="list-group-item bg-light">
+									  		<label>Nomber del chofer: </label>
+									  		<input type="text" class="form-control" name="nombreChofer" form="myform">
+									  </li>
+									  <li class="list-group-item bg-light">
+								  		<label>Patente del vehículo: </label>
+								  		<input type="text" class="form-control" name="patenteVehiculo" form="myform">
+								 	 </li>
+									</ul>
+									
+								</div>
+							</div>
+						</div>
+						<form 	
+								method="post"								
+								id="myform">
+							<div
+								class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-between">
+								<button type="button" class="btn btn-secondary" onclick="CloseCard()"
+									>Cancelar</button>
+									<button type="submit" class="btn btn-secondary"
+									>Registrar</button> 
+									
+							</div>
+						</form>
+					</div>
+				</div>
+			`;
+			
+			//formato de la fecha
+			var d = new Date,
+			dformat = `${
+			    d.getDate().toString().padStart(2, '0')}/${
+			    (d.getMonth()+1).toString().padStart(2, '0')}/${
+			    d.getFullYear().toString().padStart(4, '0')} ${
+			    d.getHours().toString().padStart(2, '0')}:${
+			    d.getMinutes().toString().padStart(2, '0')}`;
+													
+			document.getElementById('date-time').innerHTML = dformat;						
+			window.scroll(0, 0);
+																
+		});
+			
+		function CloseCard(){
+			cardAsis.innerHTML = '';
+		}
+		
 	</script>
 </body>
 </html>

@@ -6,27 +6,192 @@
 <body class="sb-nav-fixed">
 
 	<header th:replace="plantilla/template :: header"></header>
-	
+
 	<div id="layoutSidenav">
-	
-		<div th:replace="plantilla/template :: sidenav_nav"> </div>
-		
+
+		<div th:replace="plantilla/template :: sidenav_nav"></div>
+
 		<div id="layoutSidenav_content">
-			
+
 			<div class="container-fluid px-4 mt-3">
-				 
-				 <h1>RegistrarIngresoEmpleado</h1>
-				
+
+				<h1 class="">Registro de Ingreso</h1>
+				<ol class="breadcrumb mb-4">
+					<li class="breadcrumb-item active">Empleados</li>
+				</ol>
+
+				<!-- Empleado Card -->
+				<div class="container">
+					<div
+						class="row mt-3 d-grid gap-2 d-md-flex justify-content-md-center"
+						id="cardAsis"></div>
+				</div>
+
+
+
+				<div class="card mb-4">
+					<div class="card-header">
+						<i class="fa-solid fa-table"></i> Listado de Empleados:
+					</div>
+					<div class="card-body">
+
+						<table id="table_id" class="display">
+							<thead>
+								<tr>
+									<th>Legajo</th>
+									<th>Nombre</th>
+									<th>Apellido</th>
+									<th>Sector de Trabajo</th>
+									<th>Asistencia</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>1</td>
+									<td>Emiliano</td>
+									<td>Mendoza</td>
+									<td>Mantenimiento</td>
+									<td>
+										<button class="btn btn-sm btn-success btn-ingreso">Ingreso</button>
+									</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td>Mariano</td>
+									<td>Mendoza</td>
+									<td>Guardia</td>
+									<td>
+										<button class="btn btn-sm btn-success btn-ingreso">Ingreso</button>
+									</td>
+								</tr>
+
+								<tr>
+									<td>3</td>
+									<td>Celina</td>
+									<td>Del Turco</td>
+									<td>Secretaria</td>
+									<td>
+										<button class="btn btn-sm btn-success btn-ingreso">Ingreso</button>
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+
 			</div>
-			
-		<div>
-	
+		</div>
 	</div>
-	
 	<footer th:replace="plantilla/template :: footer"></footer>
+
+	<script th:inline="javascript">
+			
+		const cardAsis = document.querySelector('#cardAsis');
 	
-	<script type="text/javascript">
+		var datatable;
+		$(document)
+				.ready(
+						function() {
+							datatable = $('#table_id')
+									.DataTable(
+											{
+												language : {
+													"decimal" : "",
+													"emptyTable" : "No hay informaci�n",
+													"info" : "Mostrando _START_ a _END_ de _TOTAL_ Empleados",
+													"infoEmpty" : "Mostrando 0 to 0 of 0 Entradas",
+													"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
+													"infoPostFix" : "",
+													"thousands" : ",",
+													"lengthMenu" : "Mostrar _MENU_ Empleados",
+													"loadingRecords" : "Cargando...",
+													"processing" : "Procesando...",
+													"search" : "Buscar:",
+													"zeroRecords" : "Sin resultados encontrados",
+													"paginate" : {
+														"first" : "Primero",
+														"last" : "Ultimo",
+														"next" : "Siguiente",
+														"previous" : "Anterior"
+													}
+												},
+												"columnDefs" : [ {
+													"className" : "dt-center",
+													"targets" : "_all"
+												} ]
+											});
+
+						});
+
+		$("#table_id tbody").on("click", '.btn-ingreso', function() {
+			let filaSeleccionada = (this).closest("tr");
+			let data = datatable.row(filaSeleccionada).data();
+				
+			cardAsis.innerHTML = `
+				<div class="col-md-8" >
+					<div class="card text-dark bg-light mb-3">
+						<p class="card-header bg-dark text-white ">Registro de Ingreso
+						a la Planta</p>
+						<div class="row g-0 card-body ">
+							<div class="col-md-4 mt-1" id="imagen">
+								<img src="/images/relocoo.jpg" width="100%" height="auto"
+								
+								onerror="this.onerror=null;this.src='/images/anonimo.jpg';">
+							</div>
+							<div class="col-md-8">
+								<div style="margin-left: 18px;">
+									<h5 class="card-title">Registrar asistencia:</h5>
+																		
+									<ul class="list-group list-group-flush mt-3">
+									  <li class="list-group-item bg-light">Empleado: ${data[1]} ${data[2]}</li>
+									  <li class="list-group-item bg-light">Número de Legajo: ${data[0]}</li>
+									  <li class="list-group-item bg-light">Sector de trabajo: ${data[3]}</li>
+									  <li class="list-group-item bg-light">Planta: </li>
+									  <li class="list-group-item bg-light">Fecha y hora del ingreso: <small class="text-muted"><span
+										id='date-time'></span></small></li>
+									</ul>
+									
+								</div>
+							</div>
+						</div>
+						<form 	
+							
+							method="post"
+							>
+							<div
+								class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-between">
+									<button type="button" class="btn btn-secondary" onclick="CloseCard()"
+										>Cancelar</button>
+									<div>
+										<button type="submit" class="btn btn-secondary"
+											>Registrar</button>
+									</div>											 
+									
+							</div>
+						</form>
+					</div>					
+				</div>
+			`;
+			
+			//formato de la fecha
+			var d = new Date,
+			dformat = `${
+			    d.getDate().toString().padStart(2, '0')}/${
+			    (d.getMonth()+1).toString().padStart(2, '0')}/${
+			    d.getFullYear().toString().padStart(4, '0')} ${
+			    d.getHours().toString().padStart(2, '0')}:${
+			    d.getMinutes().toString().padStart(2, '0')}`;
+													
+			document.getElementById('date-time').innerHTML = dformat;						
+			window.scroll(0, 0);
+																
+	});
 		
+	function CloseCard(){
+		cardAsis.innerHTML = '';
+	}
 	
 	</script>
 </body>

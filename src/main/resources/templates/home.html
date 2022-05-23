@@ -28,8 +28,10 @@
 
 							<div class="card-footer">
 								<div class="row">
-									<button class="btn btn-sm text-white col-6" type="button">Ingreso</button>
-									<button class="btn btn-sm text-white col-6" type="button">Egreso</button>
+									<a class="btn btn-sm text-white col-6" type="button"
+										th:href="@{/views/ingresos-empleado}">Ingreso</a> <a
+										class="btn btn-sm text-white col-6" type="button"
+										th:href="@{/views/ingresos-empleado/egreso}">Egreso</a>
 								</div>
 							</div>
 						</div>
@@ -41,8 +43,10 @@
 							</div>
 							<div class="card-footer">
 								<div class="row">
-									<button class="btn  btn-sm col-6" type="button">Ingreso</button>
-									<button class="btn  btn-sm col-6" type="button">Egreso</button>
+									<a class="btn  btn-sm col-6" type="button"
+										th:href="@{/views/ingresos-empleado}">Ingreso</a> <a
+										class="btn  btn-sm col-6" type="button"
+										th:href="@{/views/ingresos-empleado/egreso}">Egreso</a>
 								</div>
 							</div>
 						</div>
@@ -55,8 +59,10 @@
 
 							<div class="card-footer">
 								<div class="row">
-									<button class="btn  btn-sm text-white col-6" type="button">Ingreso</button>
-									<button class="btn  btn-sm text-white col-6" type="button">Egreso</button>
+									<a class="btn  btn-sm text-white col-6" type="button"
+										th:href="@{/views/ingresos-proveedor}">Ingreso</a> <a
+										class="btn  btn-sm text-white col-6" type="button"
+										th:href="@{/views/ingresos-proveedor/egreso}">Egreso</a>
 								</div>
 
 							</div>
@@ -70,8 +76,8 @@
 
 							<div class="card-footer">
 								<div class="row">
-									<button class="btn  btn-sm text-white col-12" type="button">Registrar
-										Ronda</button>
+									<a class="btn  btn-sm text-white col-12" type="button"
+										th:href="@{/views/ronda}">Registrar Ronda</a>
 								</div>
 
 							</div>
@@ -122,20 +128,16 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
-
-
-
-
-
 			</div>
+		</div>
+	</div>
 
 
-			<footer th:replace="plantilla/template :: footer"></footer>
+	<footer th:replace="plantilla/template :: footer"></footer>
 
-			<script type="text/javascript">
-				
-			</script>
+	<script type="text/javascript">
+		
+	</script>
 </body>
 </html>
