@@ -17,7 +17,8 @@
 
 				<h1 class="">Registro de Ingreso</h1>
 				<ol class="breadcrumb mb-4">
-					<li class="breadcrumb-item active">Empleados</li>
+					<li class="breadcrumb-item active"><i
+						class="fa-solid fa-people-group"></i> Empleados</li>
 				</ol>
 
 				<!-- Empleado Card -->
@@ -91,39 +92,37 @@
 		const cardAsis = document.querySelector('#cardAsis');
 	
 		var datatable;
-		$(document)
-				.ready(
-						function() {
-							datatable = $('#table_id')
-									.DataTable(
-											{
-												language : {
-													"decimal" : "",
-													"emptyTable" : "No hay informaci�n",
-													"info" : "Mostrando _START_ a _END_ de _TOTAL_ Empleados",
-													"infoEmpty" : "Mostrando 0 to 0 of 0 Entradas",
-													"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
-													"infoPostFix" : "",
-													"thousands" : ",",
-													"lengthMenu" : "Mostrar _MENU_ Empleados",
-													"loadingRecords" : "Cargando...",
-													"processing" : "Procesando...",
-													"search" : "Buscar:",
-													"zeroRecords" : "Sin resultados encontrados",
-													"paginate" : {
-														"first" : "Primero",
-														"last" : "Ultimo",
-														"next" : "Siguiente",
-														"previous" : "Anterior"
-													}
-												},
-												"columnDefs" : [ {
-													"className" : "dt-center",
-													"targets" : "_all"
-												} ]
-											});
+		$(document).ready(function() {
+			
+			datatable = $('#table_id').DataTable(
+			{
+					language : {
+						"decimal" : "",
+						"emptyTable" : "No hay informaci�n",
+						"info" : "Mostrando _START_ a _END_ de _TOTAL_ Empleados",
+						"infoEmpty" : "Mostrando 0 to 0 of 0 Entradas",
+						"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
+						"infoPostFix" : "",
+						"thousands" : ",",
+						"lengthMenu" : "Mostrar _MENU_ Empleados",
+						"loadingRecords" : "Cargando...",
+						"processing" : "Procesando...",
+						"search" : "Buscar:",
+						"zeroRecords" : "Sin resultados encontrados",
+						"paginate" : {
+							"first" : "Primero",
+							"last" : "Ultimo",
+							"next" : "Siguiente",
+							"previous" : "Anterior"
+						}
+					},
+					"columnDefs" : [ {
+						"className" : "dt-center",
+						"targets" : "_all"
+					} ]
+			});
 
-						});
+		});
 
 		$("#table_id tbody").on("click", '.btn-ingreso', function() {
 			let filaSeleccionada = (this).closest("tr");
