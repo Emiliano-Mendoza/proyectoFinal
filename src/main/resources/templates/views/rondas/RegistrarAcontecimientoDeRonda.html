@@ -15,18 +15,29 @@
 
 			<div class="container-fluid px-4 mt-3">
 
-				<h1 class="">Registro de Rondas</h1>
-				<ol class="breadcrumb mb-4">
-					<li class="breadcrumb-item active"><i class="fa-solid fa-clock" ></i>  Ronda</li>
+
+				<div class="d-md-flex justify-content-between">
+
+					<h1 class="">Registrar Rondas</h1>
+
+					<a  class="nav-link" th:href="@{/views/ronda/registros}"><i
+						class="fa-solid fa-file-circle-check"></i> Ver Registros</a>
+
+				</div>
+				<ol class="breadcrumb mb-4 ">
+
+					<li class="breadcrumb-item active"><i
+						class="fa-solid fa-clock"></i> Ronda</li>
+
 				</ol>
 
 
 				<div class="card text-dark bg-light mb-3 mt-1">
 					<div class="card-header">Nuevo Registro:</div>
-					
+
 					<div class="card-body">
 
-						<form method="post" >
+						<form method="post">
 							<div class="mb-3">
 								<label class="ronda">Ronda: </label>
 								<div></div>
@@ -48,50 +59,48 @@
 						</form>
 					</div>
 				</div>
-				
+
 				<table class="table" id="myTable" style="text-align: center;">
 					<thead>
 						<tr>
 							<th scope="col" style="width: 20%;">Ronda</th>
 							<th scope="col" style="width: 30%;">Descripción</th>
-							<th scope="col" style="width: 20%;">Fecha
-							</th>
-							<th scope="col" style="width: 30%;">Guardia
-							</th>
+							<th scope="col" style="width: 20%;">Fecha</th>
+							<th scope="col" style="width: 30%;">Guardia</th>
 
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
 
-							<th >00:00</th>
-							<td >Se avistaron animales</td>
-							<td >22/05/2022</td>
-							<td >Emiliano Mendoza</td>
+							<th>00:00</th>
+							<td>Se avistaron animales</td>
+							<td>22/05/2022</td>
+							<td>Emiliano Mendoza</td>
 
 						</tr>
 						<tr>
 
-							<th >08:00</th>
-							<td >Olores extraños</td>
-							<td >22/05/2022</td>
-							<td >Emiliano Mendoza</td>
+							<th>08:00</th>
+							<td>Olores extraños</td>
+							<td>22/05/2022</td>
+							<td>Emiliano Mendoza</td>
 
 						</tr>
 						<tr>
 
-							<th >09:00</th>
-							<td >Personas sospechosas</td>
-							<td >22/05/2022</td>
-							<td >Emiliano Mendoza</td>
+							<th>09:00</th>
+							<td>Personas sospechosas</td>
+							<td>22/05/2022</td>
+							<td>Emiliano Mendoza</td>
 
 						</tr>
 						<tr>
 
-							<th >10:00</th>
-							<td >Sin novedades</td>
-							<td >22/05/2022</td>
-							<td >Emiliano Mendoza</td>
+							<th>10:00</th>
+							<td>Sin novedades</td>
+							<td>22/05/2022</td>
+							<td>Emiliano Mendoza</td>
 
 						</tr>
 					</tbody>

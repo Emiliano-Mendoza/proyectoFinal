@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="plantilla/template :: head">
+</head>
+<body class="sb-nav-fixed">
+
+	<header th:replace="plantilla/template :: header"></header>
+
+	<div id="layoutSidenav">
+
+		<div th:replace="plantilla/template :: sidenav_nav"></div>
+
+		<div id="layoutSidenav_content">
+
+			<div class="container-fluid px-4 mt-3">
+
+				<h1 class="">Registros de Rondas</h1>
+				<ol class="breadcrumb mb-4">
+					<li class="breadcrumb-item active"><i
+						class="fa-solid fa-clock"></i> Rondas</li>
+				</ol>
+
+
+				<div class="card mb-4">
+					<div class="card-header">
+						<i class="fa-solid fa-table"></i> Registros de Acontecimientos:
+					</div>
+					<div class="card-body">
+
+
+						<div class="row">
+
+							<div class="col-md-3 pb-2">
+									<label>Rango Fecha: </label> <input type="text" id="date_range"
+										name="date_range" class="form-control">
+
+								</div>
+								<div class="col-md-3 pb-2">
+									<label for="a">Guardia:</label> <select class="form-select">
+										<option value=1 selected>Mendoza Mariano</option>
+										<option value=2>Tito el Loco</option>
+										<option value=3>Del Turco Celina</option>
+									</select>
+								</div>
+								<div class="col-md-3 mt-2"
+									style="display: flex; align-items: center;">
+									<button type="button" class="btn btn-primary mt-2">Filtrar</button>
+								</div>
+
+						</div>
+
+
+
+						<hr>
+
+						<div class="mt-4"></div>
+
+
+
+						<table id="table_id" class="display ">
+							<thead>
+								<tr>
+									<th>Ronda</th>
+									<th>Descripción</th>
+									<th>Fecha</th>
+									<th>Guardia</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>08:00</td>
+									<td>Ruidos Raros</td>
+									<td>24/05/2022</td>
+									<td>Mendoza Mariano</td>
+								</tr>
+								<tr>
+									<td>18:00</td>
+									<td>Olores Extraños</td>
+									<td>24/05/2022</td>
+									<td>Mendoza Mariano</td>
+								</tr>
+								<tr>
+									<td>19:00</td>
+									<td>Avistamiento de animales</td>
+									<td>24/05/2022</td>
+									<td>Matías Rosso</td>
+								</tr>
+
+
+							</tbody>
+						</table>
+					</div>
+
+				</div>
+
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<footer th:replace="plantilla/template :: footer"></footer>
+
+	<script type="text/javascript">
+		var datatable;
+		$(document).ready(function() {
+
+			datatable = $('#table_id').DataTable({
+				language : {
+					"decimal" : "",
+					"emptyTable" : "No hay información",
+					"info" : "Mostrando _START_ a _END_ de _TOTAL_ Registros",
+					"infoEmpty" : "Mostrando 0 to 0 of 0 Entradas",
+					"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
+					"infoPostFix" : "",
+					"thousands" : ",",
+					"lengthMenu" : "Mostrar _MENU_ Registros",
+					"loadingRecords" : "Cargando...",
+					"processing" : "Procesando...",
+					"search" : "Buscar:",
+					"zeroRecords" : "Sin resultados encontrados",
+					"paginate" : {
+						"first" : "Primero",
+						"last" : "Ultimo",
+						"next" : "Siguiente",
+						"previous" : "Anterior"
+					}
+				},
+				"columnDefs" : [ {
+					"className" : "dt-center",
+					"targets" : "_all"
+				} ]
+			});
+
+		});
+	</script>
+</body>
+</html>

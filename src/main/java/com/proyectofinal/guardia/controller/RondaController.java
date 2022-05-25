@@ -15,5 +15,13 @@ public class RondaController {
 						
 		return "/views/rondas/RegistrarAcontecimientoDeRonda";
 	}
+	
+	
+	@GetMapping("/registros")
+	public String verRegistrosDeAcotecimientos(Model model) {
+						
+		return "/views/rondas/VerRegistrosDeRondas";
+	}
 
+	
 }
