@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="plantilla/template :: head">
+</head>
+<body class="sb-nav-fixed">
+
+	<header th:replace="plantilla/template :: header"></header>
+
+	<div id="layoutSidenav">
+
+		<div th:replace="plantilla/template :: sidenav_nav"></div>
+
+		<div id="layoutSidenav_content">
+
+			<div class="container-fluid px-4 mt-3">
+
+				<h1 class="">Registros de Ingresos</h1>
+				<ol class="breadcrumb mb-4">
+					<li class="breadcrumb-item active"><i
+						class="fa-solid fa-person-walking-arrow-right"></i> Ingresos a
+						Planta</li>
+				</ol>
+
+
+				<div class="card mb-4">
+					<div class="card-header">
+
+						<div class="d-md-flex justify-content-between">
+							<div>
+								<i class="fa-solid fa-table mt-2"></i> <span id="spanTitulo">Registros
+									de Ingresos de Empleados:</span>
+							</div>
+							<div>
+								<button class="btn btn-primary btn-sm" id="ocultarBtn1"
+									onclick="ocultar('primerTabla', 'ocultarBtn1')">Empleados</button>
+								<button class="btn btn-secondary btn-sm" id="ocultarBtn2"
+									onclick="ocultar('segundaTabla', 'ocultarBtn2')">Proveedores</button>
+								<button class="btn btn-secondary btn-sm" id="ocultarBtn3"
+									onclick="ocultar('tercerTabla', 'ocultarBtn3')">Tránsitos</button>
+							</div>
+						</div>
+
+					</div>
+					<div class="card-body" id="primerTabla">
+
+						<div class="row">
+
+							<div class="col-md-3 pb-2">
+								<label>Rango Fecha: </label> <input type="text" id="date_range"
+									name="date_range" class="form-control">
+
+							</div>
+							<div class="col-md-3 pb-2">
+								<label for="a">Empleado:</label> <select class="form-select">
+									<option value=1 selected>Mendoza Emiliano</option>
+									<option value=2>Tito el Loco</option>
+									<option value=3>Del Turco Celina</option>
+								</select>
+							</div>
+							<div class="col-md-3 pb-2">
+								<label for="a">Guardia:</label> <select class="form-select">
+									<option value=1 selected>Mendoza Mariano</option>
+									<option value=2>Tito el Loco</option>
+									<option value=3>Del Turco Celina</option>
+								</select>
+							</div>
+							<div class="col-md-3 mt-2"
+								style="display: flex; align-items: center;">
+								<button type="button" class="btn btn-primary mt-2">Filtrar</button>
+							</div>
+
+						</div>
+
+						<hr>
+
+						<div class="mt-4"></div>
+
+						<table id="table_id" class="display">
+							<thead>
+								<tr>
+									<th>Ingreso</th>
+									<th>Egreso</th>
+									<th>Empleado</th>
+									<th>Guardia Ingreso</th>
+									<th>Guardia Egreso</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>20/05/2022 08:00</td>
+									<td>20/05/2022 16:00</td>
+									<td>Mendoza Emiliano</td>
+									<td>Koko Lala</td>
+									<td>Martín Díaz</td>
+								</tr>
+								<tr>
+									<td>20/05/2022 12:00</td>
+									<td>20/05/2022 20:00</td>
+									<td>Del Turco Celina</td>
+									<td>Koko Lala</td>
+									<td>Martín Díaz</td>
+								</tr>
+								<tr>
+									<td>21/05/2022 08:00</td>
+									<td>21/05/2022 16:00</td>
+									<td>Mendoza Emiliano</td>
+									<td>Tano Pasman</td>
+									<td>Marcelo Tineli</td>
+								</tr>
+
+
+							</tbody>
+						</table>
+					</div>
+
+					<div class="card-body" id="segundaTabla" style="display: none;">
+
+						<div class="row">
+
+							<div class="col-md-3 pb-2">
+								<label>Rango Fecha: </label> <input type="text" id="date_range2"
+									name="date_range2" class="form-control">
+
+							</div>
+							<div class="col-md-3 pb-2">
+								<label for="a">Proveedor:</label> <select class="form-select">
+									<option value=1 selected>Emiliano awita</option>
+									<option value=2>Tito el Loco</option>
+									<option value=3>Los MEJORES</option>
+								</select>
+							</div>
+							<div class="col-md-3 pb-2">
+								<label for="a">Guardia:</label> <select class="form-select">
+									<option value=1 selected>Mendoza Mariano</option>
+									<option value=2>Tito el Loco</option>
+									<option value=3>Del Turco Celina</option>
+								</select>
+							</div>
+							<div class="col-md-3 mt-2"
+								style="display: flex; align-items: center;">
+								<button type="button" class="btn btn-primary mt-2">Filtrar</button>
+							</div>
+
+						</div>
+
+						<hr>
+
+						<div class="mt-4"></div>
+
+						<table id="table_id2" class="display ">
+							<thead>
+								<tr>
+									<th>Ingreso</th>
+									<th>Egreso</th>
+									<th>Proveedor</th>
+									<th>Guardia Ingreso</th>
+									<th>Guardia Egreso</th>
+									<th>Chofer</th>
+									<th>Patente</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>20/05/2022 08:00</td>
+									<td>20/05/2022 10:00</td>
+									<td>Emiliano awita</td>
+									<td>Koko Lala</td>
+									<td>Martín Díaz</td>
+									<td>Lucho Requena</td>
+									<td>ASD-432</td>
+								</tr>
+								<tr>
+									<td>20/05/2022 12:00</td>
+									<td>20/05/2022 13:00</td>
+									<td>Los MEJORES</td>
+									<td>Koko Lala</td>
+									<td>Martín Díaz</td>
+									<td>Matías Reyes</td>
+									<td>AKF-132</td>
+								</tr>
+								<tr>
+									<td>21/05/2022 08:00</td>
+									<td>21/05/2022 09:00</td>
+									<td>Tito el Loco</td>
+									<td>Tano Pasman</td>
+									<td>Marcelo Tineli</td>
+									<td>Mariano Reyes</td>
+									<td>HKF-552</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="card-body" id="tercerTabla" style="display: none;">
+
+						<div class="row">
+
+							<div class="col-md-2 pb-2">
+								<label>Rango Fecha: </label> <input type="text" id="date_range3"
+									name="date_range3" class="form-control">
+
+							</div>
+							<div class="col-md-2 pb-2">
+								<label for="a">Empleado:</label> <select class="form-select">
+									<option value=1 selected>Mendoza Emiliano</option>
+									<option value=2>Tito el Loco</option>
+									<option value=3>Del Turco Celina</option>
+								</select>
+							</div>
+							<div class="col-md-2 pb-2">
+								<label for="a">Guardia:</label> <select class="form-select">
+									<option value=1 selected>Mendoza Mariano</option>
+									<option value=2>Tito el Loco</option>
+									<option value=3>Del Turco Celina</option>
+								</select>
+							</div>
+							<div class="col-md-2 pb-2">
+								<label for="a">Vehiculo:</label> <select class="form-select">
+									<option value=1 selected>Renault R9 ASD-342</option>
+									<option value=2>Mazda XE WER-234</option>
+								</select>
+							</div>
+							<div class="col-md-2 mt-2"
+								style="display: flex; align-items: center;">
+								<button type="button" class="btn btn-primary mt-2">Filtrar</button>
+							</div>
+
+						</div>
+
+						<hr>
+
+						<div class="mt-4"></div>
+
+						<table id="table_id3" class="display ">
+
+							<thead>
+								<tr>
+									<th>Ingreso</th>
+									<th>Egreso</th>
+									<th>Empleado</th>
+									<th>Guardia Ingreso</th>
+									<th>Guardia Egreso</th>
+									<th>1er Vehiculo</th>
+									<th>1er Comentario</th>
+									<th>2do Vehiculo</th>
+									<th>2do Comentario</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>20/05/2022 14:00</td>
+									<td>20/05/2022 14:20</td>
+									<td>Emiliano Mendoza</td>
+									<td>Koko Lala</td>
+									<td>Martín Díaz</td>
+									<td>Renault R9 ASD-432</td>
+									<td>Sin comentarios</td>
+									<td>Renault R9 ASD-432</td>
+									<td>Sin comentarios</td>
+								</tr>
+								<tr>
+									<td>20/05/2022 12:00</td>
+									<td>20/05/2022 13:00</td>
+									<td>Gerardo Tomaglio</td>
+									<td>Koko Lala</td>
+									<td>Martín Díaz</td>
+									<td>Mazda XM HFF-123</td>
+									<td>Sin comentarios</td>
+									<td>Renault R9 ASD-432</td>
+									<td>Sin comentarios</td>
+								</tr>
+								<tr>
+									<td>20/05/2022 10:00</td>
+									<td>20/05/2022 10:30</td>
+									<td>María Ledezma</td>
+									<td>Koko Lala</td>
+									<td>Martín Díaz</td>
+									<td>Renault R9 ASD-432</td>
+									<td>Sin comentarios</td>
+									<td>Renault R9 ASD-432</td>
+									<td>Sin comentarios</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+
+
+				</div>
+
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<footer th:replace="plantilla/template :: footer"></footer>
+
+	<script type="text/javascript">
+		var datatable;
+		var language = {
+			"decimal" : "",
+			"emptyTable" : "No hay información",
+			"info" : "Mostrando _START_ a _END_ de _TOTAL_ Registros",
+			"infoEmpty" : "Mostrando 0 to 0 of 0 Entradas",
+			"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
+			"infoPostFix" : "",
+			"thousands" : ",",
+			"lengthMenu" : "Mostrar _MENU_ Registros",
+			"loadingRecords" : "Cargando...",
+			"processing" : "Procesando...",
+			"search" : "Buscar:",
+			"zeroRecords" : "Sin resultados encontrados",
+			"paginate" : {
+				"first" : "Primero",
+				"last" : "Ultimo",
+				"next" : "Siguiente",
+				"previous" : "Anterior"
+			}
+		};
+
+		$(document).ready(function() {
+
+			datatable = $('#table_id').DataTable({
+				language : language,
+				"columnDefs" : [ {
+					"className" : "dt-center",
+					"targets" : "_all"
+				} ]
+			});
+
+			datatable = $('#table_id2').DataTable({
+				language : language,
+				"columnDefs" : [ {
+					"className" : "dt-center",
+					"targets" : "_all"
+				} ]
+			});
+
+			datatable = $('#table_id3').DataTable({
+				language : language,
+				"columnDefs" : [ {
+					"className" : "dt-center",
+					"targets" : "_all"
+				} ]
+			});
+
+		});
+
+		function ocultar(idtabla, idbtn) {
+
+			if (idtabla == 'primerTabla') {
+				$("#primerTabla").show();
+				$("#segundaTabla").hide();
+				$("#tercerTabla").hide();
+
+				$("#" + idbtn).addClass('btn-primary');
+				$("#" + idbtn).removeClass('btn-secondary');
+
+				$("#ocultarBtn2").addClass('btn-secondary');
+				$("#ocultarBtn2").removeClass('btn-primary');
+
+				$("#ocultarBtn3").addClass('btn-secondary');
+				$("#ocultarBtn3").removeClass('btn-primary');
+
+				$("#spanTitulo").text("Registros de Ingresos de Empleados:");
+
+			} else if (idtabla == 'segundaTabla') {
+				console.log("hola");
+				$("#segundaTabla").show();
+				$("#primerTabla").hide();
+				$("#tercerTabla").hide();
+
+				$("#" + idbtn).addClass('btn-primary');
+				$("#" + idbtn).removeClass('btn-secondary');
+
+				$("#ocultarBtn1").addClass('btn-secondary');
+				$("#ocultarBtn1").removeClass('btn-primary');
+
+				$("#ocultarBtn3").addClass('btn-secondary');
+				$("#ocultarBtn3").removeClass('btn-primary');
+
+				$("#spanTitulo").text("Registros de Ingresos de Proveedores:");
+
+			} else if (idtabla == 'tercerTabla') {
+				console.log("hola");
+				$("#tercerTabla").show();
+				$("#primerTabla").hide();
+				$("#segundaTabla").hide();
+
+				$("#" + idbtn).addClass('btn-primary');
+				$("#" + idbtn).removeClass('btn-secondary');
+
+				$("#ocultarBtn1").addClass('btn-secondary');
+				$("#ocultarBtn1").removeClass('btn-primary');
+
+				$("#ocultarBtn2").addClass('btn-secondary');
+				$("#ocultarBtn2").removeClass('btn-primary');
+
+				$("#spanTitulo").text("Registros de Tránsitos:");
+			}
+
+		}
+	</script>
+</body>
+</html>

@@ -17,9 +17,16 @@ public class IngresosEmpleadosController {
 	}
 	
 	@GetMapping("/egreso")
-	public String listarAsistenciasYTransitos(Model model) {
+	public String listarAsistenciasParaEgreso(Model model) {
 						
 		return "/views/asistencias/RegistrarEgresoEmpleado";
 	}
+	
+	@GetMapping("/registros")
+	public String listarAsistenciasYTransitos(Model model) {
+						
+		return "/views/asistencias/VerRegistrosDeIngresos";
+	}
+	
 	
 }

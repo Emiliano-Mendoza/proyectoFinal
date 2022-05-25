@@ -86,3 +86,47 @@
 		        "opens": "center"
 		    });
 	});
+	$('#date_range3').daterangepicker();
+	let today3 = new Date()
+	let tomorrow3 = new Date(today)
+		tomorrow3.setDate(tomorrow3.getDate() + 1)
+		$(function () {
+		    $('#date_range3').daterangepicker({
+		        "locale": {
+		            "format": "DD/MM/YYYY",
+		            "separator": "-",
+		            "applyLabel": "Guardar",
+		            "cancelLabel": "Cancelar",
+		            "fromLabel": "Desde",
+		            "toLabel": "Hasta",
+		            "customRangeLabel": "Personalizar",
+		            "daysOfWeek": [
+		                "Do",
+		                "Lu",
+		                "Ma",
+		                "Mi",
+		                "Ju",
+		                "Vi",
+		                "Sa"
+		            ],
+		            "monthNames": [
+		                "Enero",
+		                "Febrero",
+		                "Marzo",
+		                "Abril",
+		                "Mayo",
+		                "Junio",
+		                "Julio",
+		                "Agosto",
+		                "Setiembre",
+		                "Octubre",
+		                "Noviembre",
+		                "Diciembre"
+		            ],
+		            "firstDay": 1
+		        },
+		        "startDate": today,
+		        "endDate" : today,
+		        "opens": "center"
+		    });
+	});
