@@ -24,15 +24,49 @@
 				<div class="row d-md-flex justify-content-center">
 					<div class=" col-8" id="nuevoCard" style="display: none;">
 						<div class="card">
-							<div class="card-header bg-dark text-white">Agregar nuevo
-								empleado:</div>
+							<div class="card-header bg-dark text-white">Crear Nuevo
+								Empleado:</div>
 
 							<div class="card-body row">
 
-								<div class="col-6">hola</div>
-								<div class="col-6">hola</div>
+								<div class="col-6">
+
+									<label>Número de Legajo:</label> <input type="number"
+										class="form-control"> <label class="mt-2">Nombre:</label>
+									<input type="text" class="form-control"> <label
+										class="mt-2">Apellido:</label> <input type="text"
+										class="form-control"> <label class="mt-2">Sector
+										de Trabajo:</label> <select class="form-select">
+										<option value=1 selected>Mantenimento</option>
+										<option value=2>Guardia</option>
+										<option value=3>Troquelado</option>
+									</select>
+
+
+
+								</div>
+								<div class="col-6">
+
+									<label>Foto del Empleado:</label> <input type="file"
+										class="form-control">
+
+									<div class="d-md-flex justify-content-center mt-3 g-0 ">
+										<div class="col-md-6">
+											<img src="/images/anonimo.jpg" width="100%" height="auto">
+										</div>
+									</div>
+
+								</div>
 
 							</div>
+
+
+							<div
+								class="card-footer d-md-flex justify-content-between bg-dark text-white">
+								<button class="btn btn-secondary" onclick="cerrarNuevo()">Cancelar</button>
+								<button class="btn btn-primary">Guardar</button>
+							</div>
+
 						</div>
 					</div>
 
@@ -41,7 +75,7 @@
 					<div class="card col-8" id="editarCard" style="display: none;"></div>
 				</div>
 
-				<div class="card mb-4">
+				<div class="card mb-4 mt-3">
 					<div class="card-header d-md-flex justify-content-between">
 						<div class="">
 							<i class="fa-solid fa-table mt-2"></i> Listado de Empleados:
@@ -148,6 +182,20 @@
 			$("#nuevoCard").show();
 
 		}
+
+		function cerrarNuevo() {
+
+			$("#nuevoCard").hide();
+
+		}
+
+		$("#table_id tbody").on("click", '.btn-editar', function() {
+			let filaSeleccionada = (this).closest("tr");
+			let data = datatable.row(filaSeleccionada).data();
+
+			console.log(data);
+
+		});
 	</script>
 </body>
 </html>
