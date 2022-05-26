@@ -6,28 +6,148 @@
 <body class="sb-nav-fixed">
 
 	<header th:replace="plantilla/template :: header"></header>
-	
+
 	<div id="layoutSidenav">
-	
-		<div th:replace="plantilla/template :: sidenav_nav"> </div>
-		
+
+		<div th:replace="plantilla/template :: sidenav_nav"></div>
+
 		<div id="layoutSidenav_content">
-			
+
 			<div class="container-fluid px-4 mt-3">
-				 
-				 <h1>AdministrarEmpleado</h1>
-				
+
+				<h1 class="">Administrar Empleados</h1>
+				<ol class="breadcrumb mb-4">
+					<li class="breadcrumb-item active"><i
+						class="fa-solid fa-people-group"></i> Empleados</li>
+				</ol>
+
+				<div class="row d-md-flex justify-content-center">
+					<div class=" col-8" id="nuevoCard" style="display: none;">
+						<div class="card">
+							<div class="card-header bg-dark text-white">Agregar nuevo
+								empleado:</div>
+
+							<div class="card-body row">
+
+								<div class="col-6">hola</div>
+								<div class="col-6">hola</div>
+
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class="card col-8" id="editarCard" style="display: none;"></div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-header d-md-flex justify-content-between">
+						<div class="">
+							<i class="fa-solid fa-table mt-2"></i> Listado de Empleados:
+						</div>
+						<div>
+							<button class="btn btn-primary btn-sm" onclick="nuevoCard()">Nuevo
+								Empleado</button>
+						</div>
+					</div>
+					<div class="card-body">
+
+						<table id="table_id" class="display">
+							<thead>
+								<tr>
+									<th>Legajo</th>
+									<th>Nombre</th>
+									<th>Apellido</th>
+									<th>Sector de Trabajo</th>
+									<th>Acción</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>1</td>
+									<td>Emiliano</td>
+									<td>Mendoza</td>
+									<td>Mantenimiento</td>
+									<td>
+										<button class="btn btn-sm btn-success btn-editar">Editar</button>
+									</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td>Mariano</td>
+									<td>Mendoza</td>
+									<td>Guardia</td>
+									<td>
+										<button class="btn btn-sm btn-success btn-editar">Editar</button>
+									</td>
+								</tr>
+
+								<tr>
+									<td>3</td>
+									<td>Celina</td>
+									<td>Del Turco</td>
+									<td>Secretaria</td>
+									<td>
+										<button class="btn btn-sm btn-success btn-editar">Editar</button>
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+
+
 			</div>
-			
+
 		</div>
-	
+
 	</div>
-	
+
 	<footer th:replace="plantilla/template :: footer"></footer>
-	
+
 	<script type="text/javascript">
-		
-	
+		var datatable;
+		const card1 = document.getElementById("nuevoCard");
+
+		$(document).ready(function() {
+
+			datatable = $('#table_id').DataTable({
+				language : {
+					"decimal" : "",
+					"emptyTable" : "No hay informaci�n",
+					"info" : "Mostrando _START_ a _END_ de _TOTAL_ Empleados",
+					"infoEmpty" : "Mostrando 0 to 0 of 0 Entradas",
+					"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
+					"infoPostFix" : "",
+					"thousands" : ",",
+					"lengthMenu" : "Mostrar _MENU_ Empleados",
+					"loadingRecords" : "Cargando...",
+					"processing" : "Procesando...",
+					"search" : "Buscar:",
+					"zeroRecords" : "Sin resultados encontrados",
+					"paginate" : {
+						"first" : "Primero",
+						"last" : "Ultimo",
+						"next" : "Siguiente",
+						"previous" : "Anterior"
+					}
+				},
+				"columnDefs" : [ {
+					"className" : "dt-center",
+					"targets" : "_all"
+				} ]
+			});
+
+		});
+
+		function nuevoCard() {
+
+			$("#nuevoCard").show();
+
+		}
 	</script>
 </body>
 </html>
