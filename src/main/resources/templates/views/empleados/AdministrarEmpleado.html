@@ -184,54 +184,53 @@
 
 		});
 
+
 		function nuevoCard() {
-			
+
 			$("#editLegajo").val("");
 			$("#editNombre").val("");
 			$("#editApellido").val("");
 			$("#editSector").val(1);
 			$("#editActivo").val(1);
-			
-						
+
 			$("#editLegajo").prop('disabled', false);
 			$("#tituloCard").text("Crear Nuevo Empleado");
 			$("#file-ip-1-preview").attr('src', "/images/anonimo.jpg");
-			
-			
+
 			$("#editarCard").show();
 
 		}
 
 		function cerrarNuevo() {
-			
+
 			$("#editImagen").val("");
 			$("#file-ip-1-preview").attr('src', "/images/anonimo.jpg");
-						
+
 			$("#editarCard").hide();
 		}
 
 		$("#table_id tbody").on("click", '.btn-editar', function() {
 			let filaSeleccionada = (this).closest("tr");
 			let data = datatable.row(filaSeleccionada).data();
-			
+
 			$("#editLegajo").val(data[0]);
 			$("#editNombre").val(data[1]);
-			$("#editApellido").val(data[2]); 
-			
+			$("#editApellido").val(data[2]);
+
 			//Por ahora lo hago así, despues deberia recorrer la lista de sectores de trabajo y preguntar uno por uno si coinsiden
-			if(data[3] == "Mantenimiento"){
-				$("#editSector").val(1); 
-			}else if(data[3] == "Guardia"){
-				$("#editSector").val(2); 
-			}else if(data[3] == "Troquelado"){
-				$("#editSector").val(3); 
-			}	
-			
-			$("#editActivo").val(data[4] == "Sí" ? 1 : 0); 
-			
+			if (data[3] == "Mantenimiento") {
+				$("#editSector").val(1);
+			} else if (data[3] == "Guardia") {
+				$("#editSector").val(2);
+			} else if (data[3] == "Troquelado") {
+				$("#editSector").val(3);
+			}
+
+			$("#editActivo").val(data[4] == "Sí" ? 1 : 0);
+
 			$("#editLegajo").prop('disabled', true);
 			$("#tituloCard").text("Editar Empleado");
-			
+
 			$("#editarCard").show();
 		});
 

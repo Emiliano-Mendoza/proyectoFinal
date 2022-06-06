@@ -6,28 +6,212 @@
 <body class="sb-nav-fixed">
 
 	<header th:replace="plantilla/template :: header"></header>
-	
+
 	<div id="layoutSidenav">
-	
-		<div th:replace="plantilla/template :: sidenav_nav"> </div>
-		
+
+		<div th:replace="plantilla/template :: sidenav_nav"></div>
+
 		<div id="layoutSidenav_content">
-			
+
 			<div class="container-fluid px-4 mt-3">
-				 
-				 <h1>AdministrarUsuario</h1>
-				
+
+				<h1 class="">Administrar Usuarios</h1>
+				<ol class="breadcrumb mb-3">
+					<li class="breadcrumb-item active"><i
+						class="fa-solid fa-user-group"></i> Usuarios</li>
+				</ol>
+
+				<div class="row d-md-flex justify-content-center">
+
+					<div class="col-8" id="editarCard" style="display: none;">
+						<div class="card">
+							<div class="card-header bg-dark text-white" id="tituloCard">Editar
+								Usuario:</div>
+
+							<div class="card-body row mb-2">
+
+								<div class="col-6">
+
+									<label>Nombre de usuario:</label> <input type="text" id="editUser"
+										class="form-control"> <label class="mt-2">Contraseña:</label>
+									<input id="editPass" type="text" class="form-control">
+
+
+									<label class="mt-2">Roles:</label> <select id="editRoles"
+										multiple aria-label="multiple select example"
+										class="form-select">
+										<option value=1 selected>Guardia</option>
+										<option value=2>Autorizador</option>
+										<option value=3>Notificador</option>
+										<option value=4>Administrador</option>
+									</select> <label class="mt-2">Activo:</label> <select id="editActivo"
+										class="form-select">
+										<option value=1 selected>Sí</option>
+										<option value=0>No</option>
+									</select>
+
+
+								</div>
+								<div class="col-6 mt-2">
+
+									<div class="d-md-flex justify-content-center mt-4  g-0 ">
+										<div class="col-md-6">
+											<img id="file-ip-1-preview" src="/images/nueva-entidad.jpg"
+												width="100%" height="auto">
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+
+
+							<div
+								class="card-footer d-md-flex justify-content-between bg-dark text-white">
+								<button class="btn btn-secondary" onclick="cerrarNuevo()">Cancelar</button>
+								<button class="btn btn-primary">Guardar</button>
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+				<div class="card mb-4 mt-3">
+					<div class="card-header d-md-flex justify-content-between">
+						<div class="">
+							<i class="fa-solid fa-table mt-2"></i> Listado de Usuarios:
+						</div>
+						<div>
+							<button class="btn btn-primary btn-sm" onclick="nuevoCard()">Nuevo
+								Usuario</button>
+						</div>
+					</div>
+					<div class="card-body">
+
+						<table id="table_id" class="display">
+							<thead>
+								<tr>
+									<th>Username</th>
+									<th>Contraseña</th>
+									<th>Roles</th>
+									<th>Activo</th>
+									<th>Acción</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>emi123</td>
+									<td>***</td>
+									<td>Admin</td>
+									<td>Sí</td>
+									<td>
+										<button class="btn btn-sm btn-success btn-editar">Editar</button>
+									</td>
+								</tr>
+								<tr>
+									<td>celi456</td>
+									<td>*****</td>
+									<td>Guardia</td>
+									<td>Sí</td>
+									<td>
+										<button class="btn btn-sm btn-success btn-editar">Editar</button>
+									</td>
+								</tr>
+
+								<tr>
+									<td>312rio</td>
+									<td>*******</td>
+									<td>Guardia-Autorizador</td>
+									<td>No</td>
+									<td>
+										<button class="btn btn-sm btn-success btn-editar">Editar</button>
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+
+
 			</div>
-			
+
 		</div>
-	
+
 	</div>
-	
+
 	<footer th:replace="plantilla/template :: footer"></footer>
-	
+
 	<script type="text/javascript">
-		
-	
+		var datatable;
+
+		$(document).ready(function() {
+
+			datatable = $('#table_id').DataTable({
+				language : {
+					"decimal" : "",
+					"emptyTable" : "No hay información",
+					"info" : "Mostrando _START_ a _END_ de _TOTAL_ Usuarios",
+					"infoEmpty" : "Mostrando 0 to 0 of 0 Usuarios",
+					"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
+					"infoPostFix" : "",
+					"thousands" : ",",
+					"lengthMenu" : "Mostrar _MENU_ Usuarios",
+					"loadingRecords" : "Cargando...",
+					"processing" : "Procesando...",
+					"search" : "Buscar:",
+					"zeroRecords" : "Sin resultados encontrados",
+					"paginate" : {
+						"first" : "Primero",
+						"last" : "Ultimo",
+						"next" : "Siguiente",
+						"previous" : "Anterior"
+					}
+				},
+				"columnDefs" : [ {
+					"className" : "dt-center",
+					"targets" : "_all"
+				} ]
+			});
+		});
+
+		function nuevoCard() {
+
+			$("#editUser").val("");
+			$("#editPass").val("");
+
+			$("#editActivo").val(1);
+
+			$("#tituloCard").text("Crear Nuevo Usuario");
+			$("#file-ip-1-preview").attr('src', "/images/nueva-entidad.jpg");
+
+			$("#editarCard").show();
+
+		}
+
+		$("#table_id tbody").on("click", '.btn-editar', function() {
+			let filaSeleccionada = (this).closest("tr");
+			let data = datatable.row(filaSeleccionada).data();
+
+			$("#editUser").val(data[0]);
+			$("#editPass").val(data[1]);
+
+			$("#editActivo").val(data[3] == "Sí" ? 1 : 0);
+
+			$("#tituloCard").text("Editar Usuario");
+
+			$("#editarCard").show();
+		});
+
+		function cerrarNuevo() {
+
+			$("#editImagen").val("");
+
+			$("#editarCard").hide();
+		}
 	</script>
 </body>
 </html>
