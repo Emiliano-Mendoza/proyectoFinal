@@ -15,6 +15,8 @@
 
 			<div class="container-fluid px-4 mt-3">
 
+				<div th:replace="plantilla/template :: mensajes"></div>
+
 				<h1 class="">Administrar Proveedores</h1>
 				<ol class="breadcrumb mb-3">
 					<li class="breadcrumb-item active"><i
@@ -24,47 +26,52 @@
 				<div class="row d-md-flex justify-content-center">
 
 					<div class="col-8" id="editarCard" style="display: none;">
-						<div class="card">
-							<div class="card-header bg-dark text-white" id="tituloCard">Editar
-								Proveedor:</div>
+						<form method="post" id="formId">
+							<div class="card">
+								<div class="card-header bg-dark text-white" id="tituloCard">Editar
+									Proveedor:</div>
 
-							<div class="card-body row mb-2">
+								<div class="card-body row mb-2">
+									
+									<input type="hidden" id="IdInput" value="0" name="idProveedor">
+									
+									<div class="col-6">
+				
+										<label>Proveedor:</label> <input type="text" id="editProv"
+											name="nombreProveedor" class="form-control"> <label
+											class="mt-2">Descripción:</label> <input id="editDesc"
+											type="text" class="form-control" name="descripcion">
+										<label class="mt-2">Activo:</label> <select id="editActivo"
+											name="activo" class="form-select">
+											<option value=1 selected>Sí</option>
+											<option value=0>No</option>
+										</select>
 
-								<div class="col-6">
 
-									<label>Proveedor:</label> <input type="text" id="editProv"
-										class="form-control"> <label class="mt-2">Descripción:</label>
-									<input id="editDesc" type="text" class="form-control">
-									<label class="mt-2">Activo:</label> <select id="editActivo"
-										class="form-select">
-										<option value=1 selected>Sí</option>
-										<option value=0>No</option>
-									</select>
+									</div>
+									<div class="col-6">
 
-
-								</div>
-								<div class="col-6">
-
-									<div class="d-md-flex justify-content-center  g-0 ">
-										<div class="col-md-6">
-											<img id="file-ip-1-preview" src="/images/proveedor.jpg"
-												width="100%" height="auto">
+										<div class="d-md-flex justify-content-center  g-0 ">
+											<div class="col-md-6">
+												<img id="file-ip-1-preview" src="/images/proveedor.jpg"
+													width="100%" height="auto">
+											</div>
 										</div>
+
 									</div>
 
 								</div>
 
+
+								<div
+									class="card-footer d-md-flex justify-content-between bg-dark text-white">
+									<button class="btn btn-secondary" type="button"
+										onclick="cerrarNuevo()">Cancelar</button>
+									<button class="btn btn-primary" type="submit">Guardar</button>
+								</div>
+
 							</div>
-
-
-							<div
-								class="card-footer d-md-flex justify-content-between bg-dark text-white">
-								<button class="btn btn-secondary" onclick="cerrarNuevo()">Cancelar</button>
-								<button class="btn btn-primary">Guardar</button>
-							</div>
-
-						</div>
-
+						</form>
 					</div>
 
 				</div>
@@ -91,32 +98,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>Emiliano Awita</td>
-									<td>Proveedores de bidones de agua</td>
-									<td>Sí</td>
-									<td>
-										<button class="btn btn-sm btn-success btn-editar">Editar</button>
-									</td>
-								</tr>
-								<tr>
-									<td>Pablito Palets</td>
-									<td>Proveedor de palets</td>
-									<td>Sí</td>
-									<td>
-										<button class="btn btn-sm btn-success btn-editar">Editar</button>
-									</td>
-								</tr>
-
-								<tr>
-									<td>Cerca Derca</td>
-									<td>Proveedor de verduras</td>
-									<td>No</td>
-									<td>
-										<button class="btn btn-sm btn-success btn-editar">Editar</button>
-									</td>
-								</tr>
-
+								
 							</tbody>
 						</table>
 
@@ -132,16 +114,20 @@
 
 	<footer th:replace="plantilla/template :: footer"></footer>
 
-	<script type="text/javascript">
+	<script th:inline="javascript">
+		
 		var datatable;
-
+				
 		$(document)
 				.ready(
 						function() {
-
+							
+							let listaProveedores = /*[[${listaProveedores}]]*/'default';
+														
 							datatable = $('#table_id')
 									.DataTable(
-											{
+											{	
+												data: listaProveedores,
 												language : {
 													"decimal" : "",
 													"emptyTable" : "No hay información",
@@ -166,17 +152,38 @@
 													"className" : "dt-center",
 													"targets" : "_all"
 												} ]
+												,
+												columns: [
+								                    { data: 'proveedor' },
+								                    { data: 'descripcion' },
+								                    {
+								                        "data":"activo", "render": function (valor){
+								                            if(valor) return '<span>Sí</span>';
+								                            else return '<span>No</span>';
+								                        }
+								                    },
+								                    {
+								                    "defaultContent": '<button type="button" class=" btn btn-success btn-sm btn-editar"><i class="fas fa-pen"></i></button>',
+								                    "orderable": false,
+								                    "searcheble": false,
+								                    "width": "90px"
+								                    }
+								                ]
 											});
 						});
-
+		
+				
 		function nuevoCard() {
-
+			
+			$("#IdInput").val(0);
 			$("#editProv").val("");
 			$("#editDesc").val("");
 			$("#editActivo").val(1);
 
 			$("#tituloCard").text("Crear Nuevo Proveedor");
 			$("#file-ip-1-preview").attr('src', "/images/proveedor.jpg");
+
+			$('#formId').attr('action', '/views/proveedor/crear');
 
 			$("#editarCard").show();
 
@@ -185,13 +192,16 @@
 		$("#table_id tbody").on("click", '.btn-editar', function() {
 			let filaSeleccionada = (this).closest("tr");
 			let data = datatable.row(filaSeleccionada).data();
-
-			$("#editProv").val(data[0]);
-			$("#editDesc").val(data[1]);
-			$("#editActivo").val(data[2] == "Sí" ? 1 : 0);
-
+			
+			$("#IdInput").val(data.idProveedor);
+			$("#editProv").val(data.proveedor);
+			$("#editDesc").val(data.descripcion);
+			$("#editActivo").val(data.activo ? 1 : 0);
+			
 			$("#tituloCard").text("Editar Proveedor");
-
+			
+			$('#formId').attr('action', '/views/proveedor/editar');
+			
 			$("#editarCard").show();
 		});
 

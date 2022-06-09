@@ -86,21 +86,7 @@
 			</ul>
 		</nav>
 
-		<!-- MENSAJES -->
-		<div
-			class="alert alert-success alert-dismissable gap-2 d-md-flex justify-content-between"
-			th:if="${success != null}" role="alert">
-			<label th:text="${success}"></label>
-			<button type="button" class="btn-close mr-auto"
-				data-bs-dismiss="alert" aria-label="Close"></button>
-		</div>
-		<div
-			class="alert alert-danger alert-dismissable gap-2 d-md-flex justify-content-between"
-			th:if="${error != null}" role="alert">
-			<label th:text="${error}"></label>
-			<button type="button" class="btn-close mr-auto"
-				data-bs-dismiss="alert" aria-label="Close"></button>
-		</div>
+
 	</header>
 
 	<div id="layoutSidenav_nav" th:fragment="sidenav_nav">
@@ -274,7 +260,25 @@
 		</nav>
 	</div>
 
+	<div th:fragment="mensajes">
 
+		<!-- MENSAJES -->
+		<div
+			class="alert alert-success alert-dismissable gap-2 d-md-flex justify-content-between"
+			th:if="${success != null}" role="alert">
+			<label th:text="${success}"></label>
+			<button type="button" class="btn-close mr-auto"
+				data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+		<div
+			class="alert alert-danger alert-dismissable gap-2 d-md-flex justify-content-between"
+			th:if="${error != null}" role="alert">
+			<label th:text="${error}"></label>
+			<button type="button" class="btn-close mr-auto"
+				data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+
+	</div>
 
 
 	<!-- CONTENIDO -->
@@ -298,7 +302,8 @@
 		<script type="text/javascript" th:src="@{/js/toastr.min.js}"></script>
 		<script type="text/javascript" th:src="@{/js/all.min.js}"></script>
 		<script type="text/javascript" th:src="@{/js/jquery.dataTables.js}"></script>
-		<script type="text/javascript" th:src="@{/js/dataTables.responsive.js}"></script>
+		<script type="text/javascript"
+			th:src="@{/js/dataTables.responsive.js}"></script>
 
 
 		<script th:inline="javascript">
