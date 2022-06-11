@@ -27,8 +27,8 @@
 
 					<div class="col-8" id="editarCard" style="display: none;">
 
-						<form th:object="${empleado}" th:action="@{/views/empleado/crear}"
-							method="post" enctype="multipart/form-data">
+						<form th:object="${empleado}" id="formId" method="post"
+							enctype="multipart/form-data">
 
 							<div class="card">
 								<div class="card-header bg-dark text-white" id="tituloCard">Editar
@@ -38,27 +38,32 @@
 
 									<div class="col-6">
 
+
 										<div>
+
+
 											<label>Número de Legajo:</label> <input type="number"
-												required th:field="*{nroLegajo}" id="editLegajo" disabled
-												class="form-control"> <small
+												required th:field="*{nroLegajo}" id="editLegajo"
+												class="form-control"> <input type="number"
+												id="hiddenLegajo" disabled class="form-control"> <small
 												class="form-text text-danger"
 												th:if="${#fields.hasErrors('nroLegajo')}"
-												th:errors="*{nroLegajo}"></small>
+												th:errors="*{nroLegajo}" id="errorLegajo"></small>
 										</div>
 										<div>
 											<label class="mt-1">Nombre:</label> <input id="editNombre"
-												th:field="*{nombre}" type="text" class="form-control">
+												th:field="*{nombre}" type="text" class="form-control" required>
 											<small class="form-text text-danger"
-												th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></small>
+												th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"
+												id="errorNombre"></small>
 										</div>
 										<div>
-											<label class="mt-1">Apellido:</label> <input
+											<label class="mt-1">Apellido:</label> <input required
 												id="editApellido" type="text" class="form-control"
 												th:field="*{apellido}"> <small
 												class="form-text text-danger"
 												th:if="${#fields.hasErrors('apellido')}"
-												th:errors="*{apellido}"></small>
+												th:errors="*{apellido}" id="errorApellido"></small>
 										</div>
 
 
@@ -152,15 +157,17 @@
 		const card1 = document.getElementById("nuevoCard");
 		let sectoresTrabajo;
 		let error = /*[[${error}]]*/'default';
-
+		let empleado = /*[[${empleado}]]*/'default';
+		let listaEmpleados = /*[[${listaEmpleados}]]*/'default';
+		
+		let empleadoSelec;
+		
 		if (error) {
-			nuevoCard();
+			nuevoCard();					
 		}
 
 		$(document).ready(function() {
-			
-			let listaEmpleados = /*[[${listaEmpleados}]]*/'default';
-			
+									
 			datatable = $('#table_id').DataTable({
 				data: listaEmpleados,
 				language : {
@@ -238,15 +245,17 @@
 		function nuevoCard() {
 
 			$("#editLegajo").val("");
+			$("#editLegajo").show();
 			$("#editNombre").val("");
 			$("#editApellido").val("");
 			$("#editSector").val(1);
 			$("#editActivo").val(1);
 
-			$("#editLegajo").prop('disabled', false);
 			$("#tituloCard").text("Crear Nuevo Empleado");
 			$("#file-ip-1-preview").attr('src', "/images/anonimo.jpg");
-
+			$('#formId').attr('action', '/views/empleado/crear');
+			
+			$("#hiddenLegajo").hide();
 			$("#editarCard").show();
 
 		}
@@ -264,6 +273,11 @@
 			let data = datatable.row(filaSeleccionada).data();
 			
 			
+			$("#hiddenLegajo").val(data.nroLegajo);
+			$("#hiddenLegajo").show();
+			$("#editLegajo").hide();
+			
+			
 			$("#editLegajo").val(data.nroLegajo);
 			$("#editNombre").val(data.nombre);
 			$("#editApellido").val(data.apellido);
@@ -279,7 +293,6 @@
 
 			$("#editActivo").val(data.activo ? 1 : 0);
 
-			$("#editLegajo").prop('disabled', true);
 			$("#tituloCard").text("Editar Empleado");
 
 			
@@ -290,12 +303,22 @@
 				
 				$("#file-ip-1-preview").attr('src', imagenEmpleado);
 				
+			}else{
+				$("#file-ip-1-preview").attr('src', "/images/anonimo.jpg");
 			}
+			
+						
+			$("#errorLegajo").hide();
+			$("#errorNombre").hide();
+			$("#errorApellido").hide();
+			$('#formId').attr('action', '/views/empleado/editar');
 			
 			
 			$("#editarCard").show();
+			
+			window.scroll(0, 0);
 		});
-
+										
 		function showPreview(event) {
 
 			if (event.target.files.length > 0) {

@@ -49,8 +49,8 @@ public class EmpleadoController {
 	public String crearEmpleado(@Valid @ModelAttribute Empleado empleado, BindingResult result, Model model,
 			@RequestParam(name = "file") MultipartFile imagen, @RequestParam(name = "activo") int activo, @RequestParam(name = "sector") int sector,
 			RedirectAttributes atributos) {
-		
-		if(empleadoServ.validarDatos(empleado.getNroLegajo())) {
+				
+		if(empleadoServ.validarDatos(empleado)) {
 			result.rejectValue("nroLegajo", "error.empleado", "Número de legajo existente");
 		}
 				
@@ -100,5 +100,59 @@ public class EmpleadoController {
 		}
 
 	}
+	
+	
+	@PostMapping("/editar")
+	public String editarEmpleado(@Valid @ModelAttribute Empleado empleado, BindingResult result, Model model,
+			@RequestParam(name = "file") MultipartFile imagen, @RequestParam(name = "activo") int activo, @RequestParam(name = "sector") int sector,
+			RedirectAttributes atributos) {
 
+		
+		if(!empleadoServ.validarDatos(empleado)) {
+			result.rejectValue("nroLegajo", "error.empleado", "Empleado no encontrado.");
+		}
+		
+		if (result.hasErrors()) {
+
+			List<Empleado> listaEmpleados = empleadoServ.obtenerTodos();
+
+			model.addAttribute("empleado", empleado);
+			model.addAttribute("listaEmpleados", listaEmpleados);
+			model.addAttribute("error", "Datos inválidos. No se pudo editar el empleado.");
+
+			return "/views/empleados/AdministrarEmpleado";
+
+		}else {
+
+			if (!imagen.isEmpty()) {
+				String rutaAbsoluta = "C://Guardia//Empleados//recursos";
+
+				try {
+					byte[] bytesImg = imagen.getBytes();
+					Path rutaCompleta = Paths.get(rutaAbsoluta + "//" + imagen.getOriginalFilename());
+					Files.write(rutaCompleta, bytesImg);
+
+					empleado.setImagen(imagen.getOriginalFilename());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			empleado.setActivo(activo == 1 ? true : false);
+						
+			try {
+				empleadoServ.editarEmpleado(empleado, sector);
+			} catch (Exception e) {
+				atributos.addFlashAttribute("error", "No se pudo editar el empleado");
+				return "redirect:/views/empleado/administrar";
+			}
+			
+						
+			atributos.addFlashAttribute("success", "Empleado editado exitosamente!");
+			return "redirect:/views/empleado/administrar";
+
+		}		
+		
+	}
+	
 }

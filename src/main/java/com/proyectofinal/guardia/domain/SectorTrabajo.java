@@ -41,6 +41,11 @@ public class SectorTrabajo {
 	public void setActivo(Boolean activo) {
 		this.activo = activo;
 	}
+
+	@Override
+	public String toString() {
+		return "SectorTrabajo [idSector=" + idSector + ", sector=" + sector + ", activo=" + activo + "]";
+	}
 	
 	
 }

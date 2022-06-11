@@ -20,10 +20,10 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 	private SectorTrabajoJPARepository sectorRepo;
 	
 	@Override
-	public Boolean validarDatos(int nroLegajo) {
+	public Boolean validarDatos(Empleado empleado) {
 		
-		
-		return empleadoRepo.existsById(nroLegajo);
+		return empleadoRepo.existsById(empleado.getNroLegajo());
+				
 	}
 
 	@Override
@@ -60,10 +60,20 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 	}
 
 	@Override
-	public Empleado editarEmpleado(int nroLegajo, String nombre, String apellido, int idSector, String imagen,
-			Boolean activo) {
-		// TODO Auto-generated method stub
-		return null;
+	public Empleado editarEmpleado(Empleado empleado, int idSector) {
+		
+		Empleado empActual = empleadoRepo.getById(empleado.getNroLegajo());
+		
+		if(empleado.getImagen() == null) {
+						
+			empleado.setImagen(empActual.getImagen());
+			
+		}
+		empleado.setEnPlanta(empActual.getEnPlanta());
+							
+		empleado.setSector(sectorRepo.getById(idSector));
+				
+		return empleadoRepo.save(empleado);
 	}
 
 }
