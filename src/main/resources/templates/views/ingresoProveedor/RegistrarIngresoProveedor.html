@@ -14,7 +14,9 @@
 		<div id="layoutSidenav_content">
 
 			<div class="container-fluid px-4 mt-3">
-
+				
+				<div th:replace="plantilla/template :: mensajes"></div>
+				
 				<h1 class="">Registro de Ingreso</h1>
 				<ol class="breadcrumb mb-4">
 					<li class="breadcrumb-item active"><i class="fa-solid fa-truck-field"></i>  Proveedores</li>
@@ -42,28 +44,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>Pablito Camiones</td>
-									<td>Logistica re locooo</td>
-									<td>
-										<button class="btn btn-sm btn-success btn-ingreso">Ingreso</button>
-									</td>
-								</tr>
-								<tr>
-									<td>Emiliano Awita</td>
-									<td>Proveedor de agua</td>
-									<td>
-										<button class="btn btn-sm btn-success btn-ingreso">Ingreso</button>
-									</td>
-								</tr>
-
-								<tr>
-									<td>Palets Piolas</td>
-									<td>Proveedor de palets</td>
-									<td>
-										<button class="btn btn-sm btn-success btn-ingreso">Ingreso</button>
-									</td>
-								</tr>
+								
 
 							</tbody>
 						</table>
@@ -77,7 +58,7 @@
 
 	<footer th:replace="plantilla/template :: footer"></footer>
 
-	<script type="text/javascript">
+	<script th:inline="javascript">
 		
 		const cardAsis = document.querySelector('#cardAsis');
 		
@@ -85,9 +66,13 @@
 		$(document)
 				.ready(
 						function() {
+							
+							let listaProveedores = /*[[${listaProveedores}]]*/'default';
+																					
 							datatable = $('#table_id')
 									.DataTable(
-											{
+											{	
+												data: listaProveedores,
 												language : {
 													"decimal" : "",
 													"emptyTable" : "No hay informaci�n",
@@ -112,6 +97,16 @@
 													"className" : "dt-center",
 													"targets" : "_all"
 												} ]
+												,columns: [
+								                    { data: 'proveedor' },
+								                    { data: 'descripcion' },								                    
+								                    {
+								                    "defaultContent": '<button type="button" class=" btn btn-sm btn-success btn-ingreso">Ingreso</button>',
+								                    "orderable": false,
+								                    "searcheble": false,
+								                    "width": "90px"
+								                    }
+								                ]
 											});
 	
 		});
@@ -119,7 +114,11 @@
 		$("#table_id tbody").on("click", '.btn-ingreso', function() {
 			let filaSeleccionada = (this).closest("tr");
 			let data = datatable.row(filaSeleccionada).data();
-				
+			
+			console.log(data);
+			
+			let action = "/views/ingresos-proveedor/ingreso/" + data.idProveedor;
+			
 			cardAsis.innerHTML = `
 				<div class="col-md-8" >
 					<div class="card text-dark bg-light mb-3">
@@ -136,13 +135,13 @@
 									<h5 class="card-title">Registrar ingreso de proveedor:</h5>
 																		
 									<ul class="list-group list-group-flush mt-2">
-									  <li class="list-group-item bg-light">Proveedor: ${data[0]}</li>
+									  <li class="list-group-item bg-light">Proveedor: ${data.proveedor}</li>
 									  <li class="list-group-item bg-light">Planta: </li>
 									  <li class="list-group-item bg-light">Fecha y hora del ingreso: <small class="text-muted"><span
 										id='date-time'></span></small></li>
 									  <li class="list-group-item bg-light">
-									  		<label>Nomber del chofer: </label>
-									  		<input type="text" class="form-control" name="nombreChofer" form="myform">
+									  		<label>Nombre del chofer: </label>
+									  		<input type="text" class="form-control" name="chofer" form="myform">
 									  </li>
 									  <li class="list-group-item bg-light">
 								  		<label>Patente del vehículo: </label>
@@ -153,7 +152,7 @@
 								</div>
 							</div>
 						</div>
-						<form 	
+						<form 	action=${action}
 								method="post"								
 								id="myform">
 							<div

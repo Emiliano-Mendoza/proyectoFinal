@@ -15,6 +15,8 @@
 
 			<div class="container-fluid px-4 mt-3">
 
+				<div th:replace="plantilla/template :: mensajes"></div>
+
 				<h1 class="">Administrar Empleados</h1>
 				<ol class="breadcrumb mb-3">
 					<li class="breadcrumb-item active"><i
@@ -22,57 +24,83 @@
 				</ol>
 
 				<div class="row d-md-flex justify-content-center">
-					
+
 					<div class="col-8" id="editarCard" style="display: none;">
-						<div class="card">
-							<div class="card-header bg-dark text-white" id="tituloCard">Editar
-								Empleado:</div>
 
-							<div class="card-body row">
+						<form th:object="${empleado}" th:action="@{/views/empleado/crear}"
+							method="post" enctype="multipart/form-data">
 
-								<div class="col-6">
+							<div class="card">
+								<div class="card-header bg-dark text-white" id="tituloCard">Editar
+									Empleado:</div>
 
-									<label>Número de Legajo:</label> <input type="number" id="editLegajo" disabled
-										class="form-control"> <label class="mt-1">Nombre:</label>
-									<input id="editNombre" type="text" class="form-control"> <label
-										class="mt-1">Apellido:</label> <input id="editApellido" type="text"
-										class="form-control"> <label class="mt-1">Sector
-										de Trabajo:</label> <select id="editSector" class="form-select">
-										<option value=1 selected>Mantenimento</option>
-										<option value=2>Guardia</option>
-										<option value=3>Troquelado</option>
-									</select> <label class="mt-1">Activo:</label> <select id="editActivo"
-										class="form-select">
-										<option value=1 selected>Sí</option>
-										<option value=0>No</option>
-									</select>
+								<div class="card-body row">
 
+									<div class="col-6">
 
-								</div>
-								<div class="col-6">
-
-									<label>Foto del Empleado:</label> <input type="file" id="editImagen"
-										class="form-control" onchange="showPreview(event);">
-
-									<div class="d-md-flex justify-content-center mt-4 g-0 ">
-										<div class="col-md-6">
-											<img id="file-ip-1-preview" src="/images/anonimo.jpg"
-												width="100%" height="auto">
+										<div>
+											<label>Número de Legajo:</label> <input type="number"
+												required th:field="*{nroLegajo}" id="editLegajo" disabled
+												class="form-control"> <small
+												class="form-text text-danger"
+												th:if="${#fields.hasErrors('nroLegajo')}"
+												th:errors="*{nroLegajo}"></small>
 										</div>
+										<div>
+											<label class="mt-1">Nombre:</label> <input id="editNombre"
+												th:field="*{nombre}" type="text" class="form-control">
+											<small class="form-text text-danger"
+												th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></small>
+										</div>
+										<div>
+											<label class="mt-1">Apellido:</label> <input
+												id="editApellido" type="text" class="form-control"
+												th:field="*{apellido}"> <small
+												class="form-text text-danger"
+												th:if="${#fields.hasErrors('apellido')}"
+												th:errors="*{apellido}"></small>
+										</div>
+
+
+										<label class="mt-1">Sector de Trabajo:</label> <select
+											id="editSector" class="form-select" name="sector">
+
+										</select> <label class="mt-1">Activo:</label> <select id="editActivo"
+											name="activo" class="form-select">
+											<option value=1 selected>Sí</option>
+											<option value=0>No</option>
+										</select>
+
+
+									</div>
+									<div class="col-6">
+
+										<label>Foto del Empleado:</label> <input type="file"
+											id="editImagen" class="form-control"
+											onchange="showPreview(event);" name="file">
+
+										<div class="d-md-flex justify-content-center mt-4 g-0 ">
+											<div class="col-md-6">
+												<img id="file-ip-1-preview" src="/images/anonimo.jpg"
+													width="100%" height="auto">
+											</div>
+										</div>
+
 									</div>
 
 								</div>
 
+
+								<div
+									class="card-footer d-md-flex justify-content-between bg-dark text-white">
+									<button class="btn btn-secondary" type="button"
+										onclick="cerrarNuevo()">Cancelar</button>
+									<button class="btn btn-primary" type="submit">Guardar</button>
+								</div>
+
 							</div>
 
-
-							<div
-								class="card-footer d-md-flex justify-content-between bg-dark text-white">
-								<button class="btn btn-secondary" onclick="cerrarNuevo()">Cancelar</button>
-								<button class="btn btn-primary">Guardar</button>
-							</div>
-
-						</div>
+						</form>
 
 					</div>
 
@@ -102,37 +130,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>1</td>
-									<td>Emiliano</td>
-									<td>Mendoza</td>
-									<td>Mantenimiento</td>
-									<td>Sí</td>
-									<td>
-										<button class="btn btn-sm btn-success btn-editar">Editar</button>
-									</td>
-								</tr>
-								<tr>
-									<td>2</td>
-									<td>Mariano</td>
-									<td>Mendoza</td>
-									<td>Guardia</td>
-									<td>Sí</td>
-									<td>
-										<button class="btn btn-sm btn-success btn-editar">Editar</button>
-									</td>
-								</tr>
 
-								<tr>
-									<td>3</td>
-									<td>Celina</td>
-									<td>Del Turco</td>
-									<td>Troquelado</td>
-									<td>No</td>
-									<td>
-										<button class="btn btn-sm btn-success btn-editar">Editar</button>
-									</td>
-								</tr>
 
 							</tbody>
 						</table>
@@ -149,16 +147,25 @@
 
 	<footer th:replace="plantilla/template :: footer"></footer>
 
-	<script type="text/javascript">
+	<script th:inline="javascript">
 		var datatable;
 		const card1 = document.getElementById("nuevoCard");
+		let sectoresTrabajo;
+		let error = /*[[${error}]]*/'default';
+
+		if (error) {
+			nuevoCard();
+		}
 
 		$(document).ready(function() {
-
+			
+			let listaEmpleados = /*[[${listaEmpleados}]]*/'default';
+			
 			datatable = $('#table_id').DataTable({
+				data: listaEmpleados,
 				language : {
 					"decimal" : "",
-					"emptyTable" : "No hay informaci�n",
+					"emptyTable" : "No hay información",
 					"info" : "Mostrando _START_ a _END_ de _TOTAL_ Empleados",
 					"infoEmpty" : "Mostrando 0 to 0 of 0 Entradas",
 					"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
@@ -180,10 +187,53 @@
 					"className" : "dt-center",
 					"targets" : "_all"
 				} ]
+				,
+				columns: [
+                    { data: 'nroLegajo' },
+                    { data: 'nombre' },
+                    { data: 'apellido' },
+                    { data: 'sector.sector' },
+                    {
+                        "data":"activo", "render": function (valor){
+                            if(valor) return '<span>Sí</span>';
+                            else return '<span>No</span>';
+                        }
+                    },
+                    {
+                    "defaultContent": '<button type="button" class=" btn btn-success btn-sm btn-editar"><i class="fas fa-pen"></i></button>',
+                    "orderable": false,
+                    "searcheble": false,
+                    "width": "90px"
+                    }
+                ]
 			});
+			
+			jQuery.ajax({
+				url : '/views/sector-trabajo',
+				type : "GET",
+				dataType : "json",
+				contentType : "application/json; charset=utf-8",
+				success : function(data) {
+															
+					$("#editSector").html(function() {
+																		
+						let aux = '';
+						for(let sector of data){
+														
+							aux += `<option value=${sector.idSector}>${sector.sector}</option>`;
+						}
+						
+						return aux;
+					});
+					
+					sectoresTrabajo = data;
+					
+				}
+			});
+			
+			
 
 		});
-
 
 		function nuevoCard() {
 
@@ -212,25 +262,37 @@
 		$("#table_id tbody").on("click", '.btn-editar', function() {
 			let filaSeleccionada = (this).closest("tr");
 			let data = datatable.row(filaSeleccionada).data();
-
-			$("#editLegajo").val(data[0]);
-			$("#editNombre").val(data[1]);
-			$("#editApellido").val(data[2]);
-
-			//Por ahora lo hago así, despues deberia recorrer la lista de sectores de trabajo y preguntar uno por uno si coinsiden
-			if (data[3] == "Mantenimiento") {
-				$("#editSector").val(1);
-			} else if (data[3] == "Guardia") {
-				$("#editSector").val(2);
-			} else if (data[3] == "Troquelado") {
-				$("#editSector").val(3);
+			
+			
+			$("#editLegajo").val(data.nroLegajo);
+			$("#editNombre").val(data.nombre);
+			$("#editApellido").val(data.apellido);
+			
+			for(let sector of sectoresTrabajo){
+				
+				if(data.sector.idSector == sector.idSector){
+					$("#editSector").val(sector.idSector);
+				}
+				
 			}
+			
 
-			$("#editActivo").val(data[4] == "Sí" ? 1 : 0);
+			$("#editActivo").val(data.activo ? 1 : 0);
 
 			$("#editLegajo").prop('disabled', true);
 			$("#tituloCard").text("Editar Empleado");
 
+			
+			if (data.imagen != null && data.imagen != "Sin imagen") {
+				
+				let imagenAux = data.imagen.replace(/\s/g, "%20");
+				let imagenEmpleado= `/recursos/${imagenAux}` ;
+				
+				$("#file-ip-1-preview").attr('src', imagenEmpleado);
+				
+			}
+			
+			
 			$("#editarCard").show();
 		});
 

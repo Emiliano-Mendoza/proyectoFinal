@@ -20,20 +20,16 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 	private SectorTrabajoJPARepository sectorRepo;
 	
 	@Override
-	public Boolean validarDatos(int nroLegajo, String nombre, String apellido, int idSector, String imagen) {
+	public Boolean validarDatos(int nroLegajo) {
 		
-		return true;
+		
+		return empleadoRepo.existsById(nroLegajo);
 	}
 
 	@Override
-	public Empleado crearEmpleado(int nroLegajo, String nombre, String apellido, int idSector, String imagen, Boolean activo) {
+	public Empleado crearEmpleado(Empleado empleado, int idSector) {
 
-		Empleado empleado = new Empleado();
-		empleado.setActivo(activo);
-		empleado.setApellido(apellido);
-		empleado.setNombre(nombre);
-		empleado.setEnPlanta(false);
-		empleado.setImagen(imagen);
+
 		empleado.setSector(sectorRepo.getById(idSector));
 					
 		return empleadoRepo.save(empleado);

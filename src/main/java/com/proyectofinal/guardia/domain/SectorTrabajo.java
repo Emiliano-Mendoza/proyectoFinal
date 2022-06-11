@@ -15,6 +15,8 @@ public class SectorTrabajo {
 	private int idSector;
 	
 	private String sector;
+	
+	private Boolean activo;
 
 	public int getIdSector() {
 		return idSector;
@@ -30,6 +32,14 @@ public class SectorTrabajo {
 
 	public void setSector(String sector) {
 		this.sector = sector;
+	}
+
+	public Boolean getActivo() {
+		return activo;
+	}
+
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
 	}
 	
 	

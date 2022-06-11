@@ -14,7 +14,9 @@
 		<div id="layoutSidenav_content">
 
 			<div class="container-fluid px-4 mt-3">
-
+				
+				<div th:replace="plantilla/template :: mensajes"></div>
+				
 				<h1 class="">Registro de Egreso</h1>
 				<ol class="breadcrumb mb-4">
 					<li class="breadcrumb-item active"><i class="fa-solid fa-truck-field"></i>  Proveedores</li>
@@ -31,116 +33,7 @@
 				</div>
 
 				<div class="row mt-3" id="cardEgreso">
-					<div class="col-sm-6 mt-3">
-						<div class="card text-dark  mb-3">
-							<div class="card-header bg-dark text-white">Registro de
-								Egreso de la Planta</div>
-							<div class="row g-0 card-body">
-								<div class="col-md-4">
-									<img src='/images/proveedor.jpg' width="100%" height="auto"
-										onerror="this.onerror=null;this.src='/images/anonimo.jpg';">
-								</div>
-								<div class=" col-md-8">
-									<div style="margin-left: 18px;">
-										<h5 class="card-title">Proveedor ingresado:</h5>
-
-										<ul class="list-group list-group-flush">
-											<li class="list-group-item">Proveedor: Emiliano awita</li>
-											<li class="list-group-item">Fecha y hora del ingreso:
-												22/05/2022 09:23</li>
-											<li class="list-group-item" id='idChofer'>Chofer:
-												Emiliano Mendoza</li>
-											<li class="list-group-item" id='idPatente'>Patente del
-												Vehículo: ADM-242</li>
-										</ul>
-									</div>
-								</div>
-							</div>
-
-							<div
-								class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-md-end">
-								<form >
-
-									<input type="submit" class="btn btn-primary btn-sm"
-										value="Registrar Egreso" />
-								</form>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-sm-6 mt-3">
-						<div class="card text-dark  mb-3">
-							<div class="card-header bg-dark text-white">Registro de
-								Egreso de la Planta</div>
-							<div class="row g-0 card-body">
-								<div class="col-md-4">
-									<img src='/images/proveedor.jpg' width="100%" height="auto"
-										onerror="this.onerror=null;this.src='/images/anonimo.jpg';">
-								</div>
-								<div class=" col-md-8">
-									<div style="margin-left: 18px;">
-										<h5 class="card-title">Proveedor ingresado:</h5>
-
-										<ul class="list-group list-group-flush">
-											<li class="list-group-item">Proveedor: Emiliano awita</li>
-											<li class="list-group-item">Fecha y hora del ingreso:
-												22/05/2022 09:23</li>
-											<li class="list-group-item" id='idChofer'>Chofer:
-												Emiliano Mendoza</li>
-											<li class="list-group-item" id='idPatente'>Patente del
-												Vehículo: ADM-242</li>
-										</ul>
-									</div>
-								</div>
-							</div>
-
-							<div
-								class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-md-end">
-								<form >
-
-									<input type="submit" class="btn btn-primary btn-sm"
-										value="Registrar Egreso" />
-								</form>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-sm-6 mt-3">
-						<div class="card text-dark  mb-3">
-							<div class="card-header bg-dark text-white">Registro de
-								Egreso de la Planta</div>
-							<div class="row g-0 card-body">
-								<div class="col-md-4">
-									<img src='/images/proveedor.jpg' width="100%" height="auto"
-										onerror="this.onerror=null;this.src='/images/anonimo.jpg';">
-								</div>
-								<div class=" col-md-8">
-									<div style="margin-left: 18px;">
-										<h5 class="card-title">Proveedor ingresado:</h5>
-
-										<ul class="list-group list-group-flush">
-											<li class="list-group-item">Proveedor: Emiliano awita</li>
-											<li class="list-group-item">Fecha y hora del ingreso:
-												22/05/2022 09:23</li>
-											<li class="list-group-item" id='idChofer'>Chofer:
-												Emiliano Mendoza</li>
-											<li class="list-group-item" id='idPatente'>Patente del
-												Vehículo: ADM-242</li>
-										</ul>
-									</div>
-								</div>
-							</div>
-
-							<div
-								class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-md-end">
-								<form >
-
-									<input type="submit" class="btn btn-primary btn-sm"
-										value="Registrar Egreso" />
-								</form>
-							</div>
-						</div>
-					</div>
+					
 
 				</div>
 			</div>
@@ -151,8 +44,106 @@
 
 	<footer th:replace="plantilla/template :: footer"></footer>
 
-	<script type="text/javascript">
+	<script th:inline="javascript">
 		
+		let listaIngresos = /*[[${listaIngresos}]]*/'default';
+		
+		const formulario = document.querySelector('#buscador');
+		const resultado = document.querySelector('#cardEgreso');
+		
+		console.log(listaIngresos);
+		
+		function filtrar(){
+			
+			resultado.innerHTML = '';
+			const texto = formulario.value.toLowerCase();
+			
+			for(let ingreso of listaIngresos){
+				
+				let proveedor = ingreso.proveedor.proveedor.toLowerCase();
+				
+				if(proveedor.indexOf(texto) !== -1){
+					
+					let urlEgreso= '/views/ingresos-proveedor/egreso/' + ingreso.idIngreso;
+					let idChofer = 'chofer' + ingreso.idIngreso;
+					let idPatente = 'patente' + ingreso.idIngreso;
+					
+					//le doy el formato correcto a la fecha
+					let d = new Date(ingreso.ingreso);
+					dformat = `${
+					    d.getDate().toString().padStart(2, '0')}/${
+					    (d.getMonth()+1).toString().padStart(2, '0')}/${
+					    d.getFullYear().toString().padStart(4, '0')} ${
+					    d.getHours().toString().padStart(2, '0')}:${
+					    d.getMinutes().toString().padStart(2, '0')}`;
+					    
+					resultado.innerHTML += `
+						<div class="col-sm-6 mt-3">
+							<div class="card text-dark  mb-3" >
+								<div class="card-header bg-dark text-white">Registro de Egreso
+								de Planta</div>
+								<div class="row g-0 card-body">
+									<div class="col-md-4 mt-3" >
+											<img src='/images/proveedor.jpg'
+												width="100%" height="auto"
+												onerror="this.onerror=null;this.src='/images/anonimo.jpg';">
+									</div>
+										<div class=" col-md-8">
+											<div style="margin-left: 18px;">
+												<h5 class="card-title">Proveedor ingresado:</h5>
+												
+												<ul class="list-group list-group-flush">
+												  <li class="list-group-item">Proveedor: ${ingreso.proveedor.proveedor}</li>
+												  <li class="list-group-item">Planta: ${ingreso.planta}</li>
+												  <li class="list-group-item">Fecha y hora del ingreso: ${dformat}</li>
+												  <li class="list-group-item" id=${idChofer}>Chofer: ${ingreso.nombreChofer}</li>
+												  <li class="list-group-item" id=${idPatente}>Patente del Vehículo: ${ingreso.patenteVehiculo}</li>
+												</ul>																			
+											</div>											
+										</div>
+									</div>
+								
+								<div
+								class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-md-end">
+								
+									<form 
+									action=${urlEgreso}
+									method="post"  
+										>
+									
+										<input type="submit" class="btn btn-primary btn-sm"
+											value="Registrar Egreso" />
+									
+									</form>
+								
+								</div>
+								
+						</div>
+					</div>
+					`;
+					
+					if(ingreso.nombreChofer == null || ingreso.nombreChofer == ''){
+						document.getElementById(idChofer).innerHTML = 'Chofer: No registrado';
+					}
+					if(ingreso.patenteVehiculo == null || ingreso.patenteVehiculo == ''){
+						document.getElementById(idPatente).innerHTML = 'Patente del Vehículo: No registrada';
+					}
+					
+				}
+				
+				
+			}
+			
+		}
+		
+		formulario.addEventListener('keyup', function(event) {
+		    event.preventDefault();
+		    if (event.keyCode === 13) {
+		        filtrar();
+		    }
+		});
+		
+		filtrar();
 	</script>
 </body>
 </html>

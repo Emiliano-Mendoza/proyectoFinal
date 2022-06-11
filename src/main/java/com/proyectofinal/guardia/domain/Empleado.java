@@ -1,16 +1,19 @@
 package com.proyectofinal.guardia.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name="Empleado")
 public class Empleado {
 	
+	@Min(1)
 	@Id
 	private int nroLegajo;
 		
