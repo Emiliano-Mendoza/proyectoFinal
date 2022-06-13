@@ -57,13 +57,20 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 	@Override
 	public void marcarAsistenciaEnTransito(int idAsistencia) {
-		// TODO Auto-generated method stub
+		
+		Asistencia asistencia = asisRepo.getById(idAsistencia);
+		asistencia.setEnTransito(true);
+		
+		asisRepo.save(asistencia);
 
 	}
 
 	@Override
 	public void removerMarcarEnTransito(int idAsistencia) {
-		// TODO Auto-generated method stub
+		Asistencia asistencia = asisRepo.getById(idAsistencia);
+		asistencia.setEnTransito(false);
+		
+		asisRepo.save(asistencia);
 
 	}
 

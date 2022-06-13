@@ -43,11 +43,11 @@ public class Transito {
 	
 	@ManyToOne
 	@JoinColumn(name = "ID_Empleado")
-	private Vehiculo empleado;
+	private Empleado empleado;
 	
 	@ManyToOne
 	@JoinColumn(name = "ID_Asistencia")
-	private Vehiculo asistencia;
+	private Asistencia asistencia;
 
 	public int getIdTransito() {
 		return idTransito;
@@ -113,19 +113,19 @@ public class Transito {
 		this.segundoVehiculo = segundoVehiculo;
 	}
 
-	public Vehiculo getEmpleado() {
+	public Empleado getEmpleado() {
 		return empleado;
 	}
 
-	public void setEmpleado(Vehiculo empleado) {
+	public void setEmpleado(Empleado empleado) {
 		this.empleado = empleado;
 	}
 
-	public Vehiculo getAsistencia() {
+	public Asistencia getAsistencia() {
 		return asistencia;
 	}
 
-	public void setAsistencia(Vehiculo asistencia) {
+	public void setAsistencia(Asistencia asistencia) {
 		this.asistencia = asistencia;
 	}
 	

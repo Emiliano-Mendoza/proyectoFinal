@@ -98,6 +98,13 @@ public class Asistencia {
 	public void setEmpleado(Empleado empleado) {
 		this.empleado = empleado;
 	}
+
+	@Override
+	public String toString() {
+		return "Asistencia [idAsistencia=" + idAsistencia + ", ingreso=" + ingreso + ", egreso=" + egreso + ", planta="
+				+ planta + ", enTransito=" + enTransito + ", usuarioIngreso=" + usuarioIngreso + ", usuarioEgreso="
+				+ usuarioEgreso + ", empleado=" + empleado + "]";
+	}
 	
 		
 }

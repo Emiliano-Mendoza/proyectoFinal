@@ -72,6 +72,7 @@ public class IngresosEmpleadosController {
 		try {
 			Date egreso = new Date();			
 			Asistencia asis = asisServ.egresoAsistencia(idAsistencia, egreso);
+			
 			empleadoServ.marcarEmpleadoEgresadoDePlanta(asis.getEmpleado().getNroLegajo());
 			
 		}catch(Exception e){
@@ -83,4 +84,19 @@ public class IngresosEmpleadosController {
 		return "redirect:/views/ingresos-empleado/egreso";
 	}
 	
+	@PostMapping("/egreso/transito/{idAsistencia}")
+	public String registrarEgresoTransitorio(@PathVariable("idAsistencia") int idAsistencia, RedirectAttributes atributos) {
+		
+		try {
+			Date egresoTransitorio = new Date();			
+			
+			
+		}catch(Exception e){
+			atributos.addFlashAttribute("error", "No se pudo registrar el egreso transitorio.");
+		}
+		
+		atributos.addFlashAttribute("success", "Egreso transitorio registrado exitosamente.");
+		
+		return "redirect:/views/ingresos-empleado/egreso";
+	}
 }
