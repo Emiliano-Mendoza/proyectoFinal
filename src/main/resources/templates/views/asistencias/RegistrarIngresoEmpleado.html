@@ -15,6 +15,8 @@
 
 			<div class="container-fluid px-4 mt-3">
 				
+				<div th:replace="plantilla/template :: mensajes"></div>
+				
 				<div class="d-md-flex justify-content-between">
 
 					<h1 class="">Registro de Ingreso</h1>
@@ -55,34 +57,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>1</td>
-									<td>Emiliano</td>
-									<td>Mendoza</td>
-									<td>Mantenimiento</td>
-									<td>
-										<button class="btn btn-sm btn-success btn-ingreso">Ingreso</button>
-									</td>
-								</tr>
-								<tr>
-									<td>2</td>
-									<td>Mariano</td>
-									<td>Mendoza</td>
-									<td>Guardia</td>
-									<td>
-										<button class="btn btn-sm btn-success btn-ingreso">Ingreso</button>
-									</td>
-								</tr>
-
-								<tr>
-									<td>3</td>
-									<td>Celina</td>
-									<td>Del Turco</td>
-									<td>Secretaria</td>
-									<td>
-										<button class="btn btn-sm btn-success btn-ingreso">Ingreso</button>
-									</td>
-								</tr>
+								
 
 							</tbody>
 						</table>
@@ -102,11 +77,14 @@
 		var datatable;
 		$(document).ready(function() {
 			
+			let listaEmpleados = /*[[${listaEmpleados}]]*/'default';
+			
 			datatable = $('#table_id').DataTable(
-			{
+			{		
+					data: listaEmpleados,
 					language : {
 						"decimal" : "",
-						"emptyTable" : "No hay informaci�n",
+						"emptyTable" : "No hay información",
 						"info" : "Mostrando _START_ a _END_ de _TOTAL_ Empleados",
 						"infoEmpty" : "Mostrando 0 to 0 of 0 Entradas",
 						"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
@@ -128,6 +106,19 @@
 						"className" : "dt-center",
 						"targets" : "_all"
 					} ]
+					,
+					columns: [
+	                    { data: 'nroLegajo' },
+	                    { data: 'nombre' },
+	                    { data: 'apellido' },
+	                    { data: 'sector.sector' },	                    
+	                    {
+	                    "defaultContent": '<button class="btn btn-sm btn-success btn-ingreso">Ingreso</button>',
+	                    "orderable": false,
+	                    "searcheble": false,
+	                    "width": "90px"
+	                    }
+	                ]
 			});
 
 		});
@@ -135,15 +126,20 @@
 		$("#table_id tbody").on("click", '.btn-ingreso', function() {
 			let filaSeleccionada = (this).closest("tr");
 			let data = datatable.row(filaSeleccionada).data();
-				
+			
+			let imagenAux = data.imagen.replace(/\s/g, "%20");
+			let imagenEmpleado= `/recursos/${imagenAux}` ;
+			
+			let action = "/views/ingresos-empleado/ingreso/" + data.nroLegajo;
+			
 			cardAsis.innerHTML = `
 				<div class="col-md-8" >
 					<div class="card text-dark bg-light mb-3">
 						<p class="card-header bg-dark text-white ">Registro de Ingreso
 						a la Planta</p>
 						<div class="row g-0 card-body ">
-							<div class="col-md-4 mt-1" id="imagen">
-								<img src="/images/relocoo.jpg" width="100%" height="auto"
+							<div class="col-md-4 mt-2" id="imagen">
+								<img src=${imagenEmpleado} width="100%" height="250px" 
 								
 								onerror="this.onerror=null;this.src='/images/anonimo.jpg';">
 							</div>
@@ -151,11 +147,11 @@
 								<div style="margin-left: 18px;">
 									<h5 class="card-title">Registrar asistencia:</h5>
 																		
-									<ul class="list-group list-group-flush mt-3">
-									  <li class="list-group-item bg-light">Empleado: ${data[1]} ${data[2]}</li>
-									  <li class="list-group-item bg-light">Número de Legajo: ${data[0]}</li>
-									  <li class="list-group-item bg-light">Sector de trabajo: ${data[3]}</li>
-									  <li class="list-group-item bg-light">Planta: </li>
+									<ul class="list-group list-group-flush mt-3 ">
+									  <li class="list-group-item bg-light">Empleado: ${data.nombre} ${data.apellido}</li>
+									  <li class="list-group-item bg-light">Número de Legajo: ${data.nroLegajo}</li>
+									  <li class="list-group-item bg-light">Sector de trabajo: ${data.sector.sector}</li>
+									  <li class="list-group-item bg-light">Planta: Planta I - Av. Facundo</li>
 									  <li class="list-group-item bg-light">Fecha y hora del ingreso: <small class="text-muted"><span
 										id='date-time'></span></small></li>
 									</ul>
@@ -164,7 +160,7 @@
 							</div>
 						</div>
 						<form 	
-							
+							action=${action}
 							method="post"
 							>
 							<div

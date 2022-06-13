@@ -14,7 +14,9 @@
 		<div id="layoutSidenav_content">
 
 			<div class="container-fluid px-4 mt-3">
-
+				
+				<div th:replace="plantilla/template :: mensajes"></div>
+				
 				<h1 class="">Registro de Egreso</h1>
 				<ol class="breadcrumb mb-4">
 					<li class="breadcrumb-item active"><i class="fa-solid fa-people-group" ></i>  Empleados</li>
@@ -33,261 +35,7 @@
 
 				<div class="row mt-3" id="cardEgreso">
 
-					<div class="col-sm-6 mt-3">
-						<div class="card text-dark  mb-3">
-							<div class="card-header bg-dark text-white">Registro de
-								Egreso de la Planta</div>
-							<div class="row g-0 card-body">
-								<div class="col-md-4 ">
-									<img src='/images/asd.jpg' id='idFoo' width="100%"
-										height="auto"
-										onerror="this.onerror=null;this.src='/images/anonimo.jpg';">
-								</div>
-								<div class="col-md-8">
-									<div style="margin-left: 18px;">
-										<h5 class="card-title">Empleado ingresado:</h5>
-
-										<ul class="list-group list-group-flush">
-											<li class="list-group-item">Empleado: Emiliano Mendoza</li>
-											<li class="list-group-item">Número de legajo: 1</li>
-											<li class="list-group-item">Sector de trabajo:
-												Mantemimiento</li>
-											<li class="list-group-item">Fecha y hora que ingresó:
-												12/06/2022 08:58</li>
-											<li id='idDiv' class="list-group-item" hidden></li>
-											<li id='idComentario' class="list-group-item" hidden></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div
-								class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-md-end">
-								<form >
-
-									<button type="button" class="btn btn-secondary btn-sm"
-										id='idCancelarButton' onclick="filtrar()" hidden>Cancelar</button>
-
-									<button type="button" class="btn btn-secondary btn-sm">Egreso
-										Transitorio</button>
-
-									<input type="submit" class="btn btn-secondary btn-sm"
-										id='idConfirmarButton' hidden value="Confirmar" />
-
-								</form>
-								<form >
-
-									<input type="submit" class="btn btn-primary btn-sm"
-										id='idButtonEgreso' value="Registrar Egreso" />
-
-								</form>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-6 mt-3">
-						<div class="card text-dark  mb-3">
-							<div class="card-header bg-dark text-white">Registro de
-								Egreso de la Planta</div>
-							<div class="row g-0 card-body">
-								<div class="col-md-4 ">
-									<img src='/images/asd.jpg' id='idFoo' width="100%"
-										height="auto"
-										onerror="this.onerror=null;this.src='/images/anonimo.jpg';">
-								</div>
-								<div class="col-md-8">
-									<div style="margin-left: 18px;">
-										<h5 class="card-title">Empleado ingresado:</h5>
-
-										<ul class="list-group list-group-flush">
-											<li class="list-group-item">Empleado: Emiliano Mendoza</li>
-											<li class="list-group-item">Número de legajo: 1</li>
-											<li class="list-group-item">Sector de trabajo:
-												Mantemimiento</li>
-											<li class="list-group-item">Fecha y hora que ingresó:
-												12/06/2022 08:58</li>
-											<li id='idDiv' class="list-group-item" hidden></li>
-											<li id='idComentario' class="list-group-item" hidden></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div
-								class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-md-end">
-								<form >
-
-									<button type="button" class="btn btn-secondary btn-sm"
-										id='idCancelarButton' onclick="filtrar()" hidden>Cancelar</button>
-
-									<button type="button" class="btn btn-secondary btn-sm">Egreso
-										Transitorio</button>
-
-									<input type="submit" class="btn btn-secondary btn-sm"
-										id='idConfirmarButton' hidden value="Confirmar" />
-
-								</form>
-								<form >
-
-									<input type="submit" class="btn btn-primary btn-sm"
-										id='idButtonEgreso' value="Registrar Egreso" />
-
-								</form>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-6 mt-3">
-						<div class="card text-dark  mb-3">
-							<div class="card-header bg-dark text-white">Registro de
-								Egreso de la Planta</div>
-							<div class="row g-0 card-body">
-								<div class="col-md-4 ">
-									<img src='/images/asd.jpg' id='idFoo' width="100%"
-										height="auto"
-										onerror="this.onerror=null;this.src='/images/anonimo.jpg';">
-								</div>
-								<div class="col-md-8">
-									<div style="margin-left: 18px;">
-										<h5 class="card-title">Empleado ingresado:</h5>
-
-										<ul class="list-group list-group-flush">
-											<li class="list-group-item">Empleado: Emiliano Mendoza</li>
-											<li class="list-group-item">Número de legajo: 1</li>
-											<li class="list-group-item">Sector de trabajo:
-												Mantemimiento</li>
-											<li class="list-group-item">Fecha y hora que ingresó:
-												12/06/2022 08:58</li>
-											<li id='idDiv' class="list-group-item" hidden></li>
-											<li id='idComentario' class="list-group-item" hidden></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div
-								class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-md-end">
-								<form method="post" id='idForm1'>
-
-									<button type="button" class="btn btn-secondary btn-sm"
-										id='idCancelarButton' onclick="filtrar()" hidden>Cancelar</button>
-
-									<button type="button" class="btn btn-secondary btn-sm">Egreso
-										Transitorio</button>
-
-									<input type="submit" class="btn btn-secondary btn-sm"
-										id='idConfirmarButton' hidden value="Confirmar" />
-
-								</form>
-								<form >
-
-									<input type="submit" class="btn btn-primary btn-sm"
-										id='idButtonEgreso' value="Registrar Egreso" />
-
-								</form>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-6 mt-3">
-						<div class="card text-dark  mb-3">
-							<div class="card-header bg-dark text-white">Registro de
-								Egreso de la Planta</div>
-							<div class="row g-0 card-body">
-								<div class="col-md-4 ">
-									<img src='/images/asd.jpg' id='idFoo' width="100%"
-										height="auto"
-										onerror="this.onerror=null;this.src='/images/anonimo.jpg';">
-								</div>
-								<div class="col-md-8">
-									<div style="margin-left: 18px;">
-										<h5 class="card-title">Empleado ingresado:</h5>
-
-										<ul class="list-group list-group-flush">
-											<li class="list-group-item">Empleado: Emiliano Mendoza</li>
-											<li class="list-group-item">Número de legajo: 1</li>
-											<li class="list-group-item">Sector de trabajo:
-												Mantemimiento</li>
-											<li class="list-group-item">Fecha y hora que ingresó:
-												12/06/2022 08:58</li>
-											<li id='idDiv' class="list-group-item" hidden></li>
-											<li id='idComentario' class="list-group-item" hidden></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div
-								class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-md-end">
-								<form >
-
-									<button type="button" class="btn btn-secondary btn-sm"
-										id='idCancelarButton' onclick="filtrar()" hidden>Cancelar</button>
-
-									<button type="button" class="btn btn-secondary btn-sm">Egreso
-										Transitorio</button>
-
-									<input type="submit" class="btn btn-secondary btn-sm"
-										id='idConfirmarButton' hidden value="Confirmar" />
-
-								</form>
-								<form method="post">
-
-									<input type="submit" class="btn btn-primary btn-sm"
-										id='idButtonEgreso' value="Registrar Egreso" />
-
-								</form>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-6 mt-3">
-						<div class="card text-dark  mb-3">
-							<div class="card-header bg-dark text-white">Registro de
-								Egreso de la Planta</div>
-							<div class="row g-0 card-body">
-								<div class="col-md-4 ">
-									<img src='/images/asd.jpg' id='idFoo' width="100%"
-										height="auto"
-										onerror="this.onerror=null;this.src='/images/anonimo.jpg';">
-								</div>
-								<div class="col-md-8">
-									<div style="margin-left: 18px;">
-										<h5 class="card-title">Empleado ingresado:</h5>
-
-										<ul class="list-group list-group-flush">
-											<li class="list-group-item">Empleado: Emiliano Mendoza</li>
-											<li class="list-group-item">Número de legajo: 1</li>
-											<li class="list-group-item">Sector de trabajo:
-												Mantemimiento</li>
-											<li class="list-group-item">Fecha y hora que ingresó:
-												12/06/2022 08:58</li>
-											<li id='idDiv' class="list-group-item" hidden></li>
-											<li id='idComentario' class="list-group-item" hidden></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div
-								class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-md-end">
-								<form >
-
-									<button type="button" class="btn btn-secondary btn-sm"
-										id='idCancelarButton' onclick="filtrar()" hidden>Cancelar</button>
-
-									<button type="button" class="btn btn-secondary btn-sm">Egreso
-										Transitorio</button>
-
-									<input type="submit" class="btn btn-secondary btn-sm"
-										id='idConfirmarButton' hidden value="Confirmar" />
-
-								</form>
-								<form method="post">
-
-									<input type="submit" class="btn btn-primary btn-sm"
-										id='idButtonEgreso' value="Registrar Egreso" />
-
-								</form>
-							</div>
-						</div>
-					</div>
-
-
 				</div>
-
-
 
 			</div>
 
@@ -296,7 +44,154 @@
 
 	<footer th:replace="plantilla/template :: footer"></footer>
 
-	<script type="text/javascript">
+	<script th:inline="javascript">
+		
+		let listaAsistencias = /*[[${listaAsistencias}]]*/'default';
+		
+		console.log(listaAsistencias);
+		
+		const formulario = document.querySelector('#buscador');
+		const resultado = document.querySelector('#cardEgreso');
+		
+		
+		function filtrar(){
+			
+			resultado.innerHTML = '';
+			const texto = formulario.value.toLowerCase();
+			
+			for(let asis of listaAsistencias){
+				
+				let nombre = asis.empleado.nombre.toLowerCase();
+				let apellido = asis.empleado.apellido.toLowerCase();
+				let empleado = asis.empleado.nombre.toLowerCase() + " " + asis.empleado.apellido.toLowerCase();
+				
+				if(empleado.indexOf(texto) !== -1 || nombre.indexOf(texto) !== -1 || apellido.indexOf(texto) !== -1){
+					
+					let urlEgreso = '/views/ingresos-empleado/egreso/' + asis.idAsistencia;
+					
+					let imagenAux = asis.empleado.imagen.replace(/\s/g, "%20");
+					let imagenEmpleado = `/recursos/${imagenAux}` ;
+					
+					let idDiv = 'vehiculo' + asis.empleado.nroLegajo;
+					let idComentario = 'coment' + asis.empleado.nroLegajo;
+					
+					let idButtonEgreso = 'idButtonEgreso' + asis.empleado.nroLegajo;
+					let idCancelarButton = 'idCancelarButton' + asis.empleado.nroLegajo;
+					let idConfirmarButton = 'idConfirmarButton' + asis.empleado.nroLegajo;
+					let idEgresoTransitorio = 'idEgresoTransitorio' + asis.empleado.nroLegajo; 
+															
+					//le doy el formato correcto a la fecha
+					let d = new Date(asis.ingreso);
+					dformat = `${
+					    d.getDate().toString().padStart(2, '0')}/${
+					    (d.getMonth()+1).toString().padStart(2, '0')}/${
+					    d.getFullYear().toString().padStart(4, '0')} ${
+					    d.getHours().toString().padStart(2, '0')}:${
+					    d.getMinutes().toString().padStart(2, '0')}`;
+					    
+					resultado.innerHTML += `
+						<div class="col-sm-6 mt-3">
+							<div class="card text-dark  mb-3">
+								<div class="card-header bg-dark text-white">Registro de
+									Egreso de la Planta</div>
+								<div class="row g-0 card-body" >									
+									<div class="col-md-4 mt-3">
+									
+										<img src=${imagenEmpleado} id='idFoo' width="100%" height="200px"												
+											onerror="this.onerror=null;this.src='/images/anonimo.jpg';">									
+																			
+									</div>
+									<div class="col-md-8">
+										<div style="margin-left: 18px;">
+											<h5 class="card-title">Empleado ingresado:</h5>
+	
+											<ul class="list-group list-group-flush list-font">
+												<li class="list-group-item">Empleado: ${asis.empleado.nombre} ${asis.empleado.apellido}</li>
+												<li class="list-group-item">Número de legajo: ${asis.empleado.nroLegajo}</li>
+												<li class="list-group-item">Sector de trabajo:
+													${asis.empleado.sector.sector}</li>
+												<li class="list-group-item">Planta: ${asis.planta}</li>
+												<li class="list-group-item">Fecha y hora que ingresó:
+													${dformat}</li>
+												<li id=${idDiv} class="list-group-item" hidden></li>
+												<li id=${idComentario} class="list-group-item" hidden></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div
+									class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-md-end">
+									<form >
+	
+										<button type="button" class="btn btn-secondary btn-sm"
+											id=${idCancelarButton} onclick="filtrar()" hidden>Cancelar</button>
+	
+										<button type="button" class="btn btn-secondary btn-sm" id=${idEgresoTransitorio}
+										onclick="mostrarListaVehiculos('${asis.empleado.nroLegajo}')"
+										>Egreso Transitorio</button>
+	
+										<input type="submit" class="btn btn-secondary btn-sm"
+											id=${idConfirmarButton} hidden value="Confirmar" />
+	
+									</form>
+									<form method="post" action=${urlEgreso}>
+	
+										<input type="submit" class="btn btn-primary btn-sm"
+											id=${idButtonEgreso} value="Registrar Egreso" />
+	
+									</form>
+								</div>
+							</div>
+						</div>
+					`;
+										
+				}								
+			}			
+		}
+		
+		function mostrarListaVehiculos(nroLegajo){
+			
+			const divVehiculos = document.getElementById('vehiculo' + nroLegajo);
+			const divComentario = document.getElementById('coment'+ nroLegajo);
+			
+			divVehiculos.hidden = false;
+			divComentario.hidden = false;
+			
+			if(document.getElementById('idButtonEgreso' + nroLegajo) != null){
+				document.getElementById('idButtonEgreso' + nroLegajo).hidden = true;
+				$('#idButtonEgreso' + nroLegajo).show();
+			}
+			
+			document.getElementById('idCancelarButton' + nroLegajo).hidden = false;
+			document.getElementById('idEgresoTransitorio' + nroLegajo).hidden = true;
+			document.getElementById('idConfirmarButton' + nroLegajo).hidden = false;
+			
+			idSelect = nroLegajo +'selec111';
+			idForm = 'idForm' + nroLegajo; 
+			
+			divVehiculos.innerHTML = `
+				<label>Vehículo utilizado:</label>
+				<select name="vehiculo" form=${idForm} class="form-select mt-2" id=${idSelect} forEach>
+				<option value="-1">Sin vehículo</option>
+				</select>
+			`;
+						
+			divComentario.innerHTML = `
+				<label>Comentario:</label>
+				<input type="text" name="comentario" class="form-control" form=${idForm}>
+			`;
+			
+		}
+				
+		formulario.addEventListener('keyup', function(event) {
+		    event.preventDefault();
+		    if (event.keyCode === 13) {
+		        filtrar();
+		    }
+		});
+		
+		filtrar();
+		
 		
 	</script>
 </body>
