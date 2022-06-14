@@ -47,19 +47,40 @@
 	<script th:inline="javascript">
 		
 		let listaAsistencias = /*[[${listaAsistencias}]]*/'default';
+		let listaTransitos = /*[[${listaTransitos}]]*/'default';
 		
-		console.log(listaAsistencias);
+		let listaAux = listaTransitos;
+		Array.prototype.push.apply(listaAux, listaAsistencias);		
+		console.log(listaAux);
+		
+		let listaVehiculos;
 		
 		const formulario = document.querySelector('#buscador');
 		const resultado = document.querySelector('#cardEgreso');
 		
+		$(document).ready(function() {
+
+			jQuery.ajax({
+				url : '/views/vehiculo',
+				type : "GET",
+				dataType : "json",
+				contentType : "application/json; charset=utf-8",
+				success : function(data) {
+																				
+					listaVehiculos = data;
+					
+				}
+			});						
+		});
 		
 		function filtrar(){
 			
 			resultado.innerHTML = '';
 			const texto = formulario.value.toLowerCase();
 			
-			for(let asis of listaAsistencias){
+			for(let asis of listaAux){
+				
+				console.log(asis);
 				
 				let nombre = asis.empleado.nombre.toLowerCase();
 				let apellido = asis.empleado.apellido.toLowerCase();
@@ -67,84 +88,159 @@
 				
 				if(empleado.indexOf(texto) !== -1 || nombre.indexOf(texto) !== -1 || apellido.indexOf(texto) !== -1){
 					
-					let urlEgreso = '/views/ingresos-empleado/egreso/' + asis.idAsistencia;
-					let urlEgresoTransitorio = '/views/ingresos-empleado/egreso/transito/' + asis.idAsistencia;
 					
 					let imagenAux = asis.empleado.imagen.replace(/\s/g, "%20");
 					let imagenEmpleado = `/recursos/${imagenAux}` ;
 					
 					let idDiv = 'vehiculo' + asis.empleado.nroLegajo;
 					let idComentario = 'coment' + asis.empleado.nroLegajo;
-					
+					idForm = 'idForm' + asis.empleado.nroLegajo;
 					let idButtonEgreso = 'idButtonEgreso' + asis.empleado.nroLegajo;
 					let idCancelarButton = 'idCancelarButton' + asis.empleado.nroLegajo;
 					let idConfirmarButton = 'idConfirmarButton' + asis.empleado.nroLegajo;
-					let idEgresoTransitorio = 'idEgresoTransitorio' + asis.empleado.nroLegajo; 
+					let idEgresoTransitorio = 'idEgresoTransitorio' + asis.empleado.nroLegajo;
 															
-					//le doy el formato correcto a la fecha
-					let d = new Date(asis.ingreso);
-					dformat = `${
-					    d.getDate().toString().padStart(2, '0')}/${
-					    (d.getMonth()+1).toString().padStart(2, '0')}/${
-					    d.getFullYear().toString().padStart(4, '0')} ${
-					    d.getHours().toString().padStart(2, '0')}:${
-					    d.getMinutes().toString().padStart(2, '0')}`;
-					    
-					resultado.innerHTML += `
-						<div class="col-sm-6 mt-3">
-							<div class="card text-dark  mb-3">
-								<div class="card-header bg-dark text-white">Registro de
-									Egreso de la Planta</div>
-								<div class="row g-0 card-body" >									
-									<div class="col-md-4 mt-3">
-									
-										<img src=${imagenEmpleado} id='idFoo' width="100%" height="200px"												
-											onerror="this.onerror=null;this.src='/images/anonimo.jpg';">									
-																			
-									</div>
-									<div class="col-md-8">
-										<div style="margin-left: 18px;">
-											<h5 class="card-title">Empleado ingresado:</h5>
-	
-											<ul class="list-group list-group-flush list-font">
-												<li class="list-group-item">Empleado: ${asis.empleado.nombre} ${asis.empleado.apellido}</li>
-												<li class="list-group-item">Número de legajo: ${asis.empleado.nroLegajo}</li>
-												<li class="list-group-item">Sector de trabajo:
-													${asis.empleado.sector.sector}</li>
-												<li class="list-group-item">Planta: ${asis.planta}</li>
-												<li class="list-group-item">Fecha y hora que ingresó:
-													${dformat}</li>
-												<li id=${idDiv} class="list-group-item" hidden></li>
-												<li id=${idComentario} class="list-group-item" hidden></li>
-											</ul>
+					if(asis.enTransito !== undefined && !asis.enTransito){
+						
+						let urlEgreso = '/views/ingresos-empleado/egreso/' + asis.idAsistencia;
+						let urlEgresoTransitorio = '/views/ingresos-empleado/egreso/transito/' + asis.idAsistencia;
+											 															
+						//le doy el formato correcto a la fecha
+						let d = new Date(asis.ingreso);
+						dformat = `${
+						    d.getDate().toString().padStart(2, '0')}/${
+						    (d.getMonth()+1).toString().padStart(2, '0')}/${
+						    d.getFullYear().toString().padStart(4, '0')} ${
+						    d.getHours().toString().padStart(2, '0')}:${
+						    d.getMinutes().toString().padStart(2, '0')}`;
+						    
+						resultado.innerHTML += `
+							<div class="col-sm-6 mt-3">
+								<div class="card text-dark  mb-3">
+									<div class="card-header bg-dark text-white">Registro de
+										Egreso de la Planta</div>
+									<div class="row g-0 card-body" >									
+										<div class="col-md-4 mt-3">
+										
+											<img src=${imagenEmpleado} id='idFoo' width="100%" height="200px"												
+												onerror="this.onerror=null;this.src='/images/anonimo.jpg';">									
+																				
+										</div>
+										<div class="col-md-8">
+											<div style="margin-left: 18px;">
+												<h5 class="card-title">Empleado ingresado:</h5>
+		
+												<ul class="list-group list-group-flush list-font">
+													<li class="list-group-item">Empleado: ${asis.empleado.nombre} ${asis.empleado.apellido}</li>
+													<li class="list-group-item">Número de legajo: ${asis.empleado.nroLegajo}</li>
+													<li class="list-group-item">Sector de trabajo:
+														${asis.empleado.sector.sector}</li>
+													<li class="list-group-item">Planta: ${asis.planta}</li>
+													<li class="list-group-item">Fecha y hora que ingresó:
+														${dformat}</li>
+													<li id=${idDiv} class="list-group-item" hidden></li>
+													<li id=${idComentario} class="list-group-item" hidden></li>
+												</ul>
+											</div>
 										</div>
 									</div>
-								</div>
-								<div
-									class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-md-end">
-									<form method="post" action=${urlEgresoTransitorio}>
-	
-										<button type="button" class="btn btn-secondary btn-sm"
-											id=${idCancelarButton} onclick="filtrar()" hidden>Cancelar</button>
-	
-										<button type="button" class="btn btn-secondary btn-sm" id=${idEgresoTransitorio}
-										onclick="mostrarListaVehiculos('${asis.empleado.nroLegajo}')"
-										>Egreso Transitorio</button>
-	
-										<input type="submit" class="btn btn-secondary btn-sm"
-											id=${idConfirmarButton} hidden value="Confirmar" />
-	
-									</form>
-									<form method="post" action=${urlEgreso}>
-	
-										<input type="submit" class="btn btn-primary btn-sm"
-											id=${idButtonEgreso} value="Registrar Egreso" />
-	
-									</form>
+									<div
+										class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-md-end">
+										<form method="post" action=${urlEgresoTransitorio} id=${idForm}>
+		
+											<button type="button" class="btn btn-secondary btn-sm"
+												id=${idCancelarButton} onclick="cancelar('${asis.empleado.nroLegajo}')" hidden>Cancelar</button>
+		
+											<button type="button" class="btn btn-secondary btn-sm" id=${idEgresoTransitorio}
+											onclick="mostrarListaVehiculos('${asis.empleado.nroLegajo}')"
+											>Egreso Transitorio</button>
+		
+											<input type="submit" class="btn btn-secondary btn-sm"
+												id=${idConfirmarButton} hidden value="Confirmar" />
+		
+										</form>
+										<form method="post" action=${urlEgreso}>
+		
+											<input type="submit" class="btn btn-primary btn-sm"
+												id=${idButtonEgreso} value="Registrar Egreso" />
+		
+										</form>
+									</div>
 								</div>
 							</div>
-						</div>
-					`;
+						`;
+						
+					}else{
+						
+						let urlReingreso = '/views/ingresos-empleado/egreso/transito/reingreso/' + asis.idTransito;
+						
+						//le doy el formato correcto a la fecha
+						let d = new Date(asis.egreso);
+						dformat = `${
+						    d.getDate().toString().padStart(2, '0')}/${
+						    (d.getMonth()+1).toString().padStart(2, '0')}/${
+						    d.getFullYear().toString().padStart(4, '0')} ${
+						    d.getHours().toString().padStart(2, '0')}:${
+						    d.getMinutes().toString().padStart(2, '0')}`;
+						    
+						resultado.innerHTML += `
+							<div class="col-sm-6 mt-3">
+								<div class="card text-dark  mb-3">
+									<div class="card-header text-dark" style="background-color: #dcdcdc">Registro de
+										Egreso de la Planta</div>
+									<div class="row g-0 card-body" >									
+										<div class="col-md-4 mt-3">
+										
+											<img src=${imagenEmpleado} id='idFoo' width="100%" height="200px"												
+												onerror="this.onerror=null;this.src='/images/anonimo.jpg';">									
+																				
+										</div>
+										<div class="col-md-8">
+											<div style="margin-left: 18px;">
+												<h5 class="card-title">Empleado en tránsito:</h5>
+		
+												<ul class="list-group list-group-flush list-font">
+													<li class="list-group-item">Empleado: ${asis.empleado.nombre} ${asis.empleado.apellido}</li>
+													<li class="list-group-item">Número de legajo: ${asis.empleado.nroLegajo}</li>
+													<li class="list-group-item">Sector de trabajo:
+														${asis.empleado.sector.sector}</li>
+													<li class="list-group-item">Planta: ${asis.asistencia.planta}</li>
+													<li class="list-group-item">Egreso transitorio: 
+														${dformat}</li>
+													<li id=${idDiv} class="list-group-item" hidden></li>
+													<li id=${idComentario} class="list-group-item" hidden></li>
+												</ul>
+											</div>
+										</div>
+									</div>
+									<div
+										class="card-footer d-grid gap-2 d-md-flex justify-content-md-end" style="background-color: #dcdcdc">
+										<form method="post" id=${idForm} action=${urlReingreso}>
+		
+										<button type="button" class="btn btn-secondary btn-sm"
+											id=${idCancelarButton}
+											onclick="cancelar('${asis.empleado.nroLegajo}')"
+											hidden>Cancelar</button>
+									
+										<button type="button" class="btn btn-secondary btn-sm" 
+											onclick="mostrarListaVehiculos('${asis.empleado.nroLegajo}')"		
+											id=${idEgresoTransitorio}
+											>Reingreso</button>
+									
+										<input type="submit" class="btn btn-secondary btn-sm"
+											id=${idConfirmarButton} hidden
+											value="Confirmar" />
+		
+										</form>
+										
+									</div>
+								</div>
+							</div>
+						`;
+						
+					}
+															
+					
 										
 				}								
 			}			
@@ -160,7 +256,6 @@
 			
 			if(document.getElementById('idButtonEgreso' + nroLegajo) != null){
 				document.getElementById('idButtonEgreso' + nroLegajo).hidden = true;
-				$('#idButtonEgreso' + nroLegajo).show();
 			}
 			
 			document.getElementById('idCancelarButton' + nroLegajo).hidden = false;
@@ -176,14 +271,36 @@
 				<option value="-1">Sin vehículo</option>
 				</select>
 			`;
-						
+			
+			const mySelect = document.getElementById(idSelect);			
+			listaVehiculos.forEach(v => mySelect.innerHTML+=`<option value=${v.idVehiculo}>${v.marca} ${v.modelo} - Patente: ${v.patente}</option>`);
+			
 			divComentario.innerHTML = `
 				<label>Comentario:</label>
 				<input type="text" name="comentario" class="form-control" form=${idForm}>
 			`;
 			
 		}
-				
+		
+		function cancelar(nroLegajo){
+			
+			
+			const divVehiculos = document.getElementById('vehiculo' + nroLegajo);
+			const divComentario = document.getElementById('coment'+ nroLegajo);
+			
+			divVehiculos.hidden = true;
+			divComentario.hidden = true;
+			
+			if(document.getElementById('idButtonEgreso' + nroLegajo) != null){
+				document.getElementById('idButtonEgreso' + nroLegajo).hidden = false;
+			}
+			
+			document.getElementById('idCancelarButton' + nroLegajo).hidden = true;
+			document.getElementById('idEgresoTransitorio' + nroLegajo).hidden = false;
+			document.getElementById('idConfirmarButton' + nroLegajo).hidden = true;
+			
+		}
+		
 		formulario.addEventListener('keyup', function(event) {
 		    event.preventDefault();
 		    if (event.keyCode === 13) {

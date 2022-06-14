@@ -46,13 +46,13 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	@Override
 	public List<Asistencia> listarAsistenciasSinEgresoSinTransito() {
 		
-		return asisRepo.findAll().stream().filter(a -> a.getEgreso() == null && a.getEnTransito()).collect(Collectors.toList());
+		return asisRepo.findAllByOrderByIngresoAsc().stream().filter(a -> a.getEgreso() == null && !a.getEnTransito()).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<Asistencia> listarAsistenciasSinEgreso() {
 	
-		return asisRepo.findAll().stream().filter(a -> a.getEgreso() == null).collect(Collectors.toList());
+		return asisRepo.findAllByOrderByIngresoAsc().stream().filter(a -> a.getEgreso() == null).collect(Collectors.toList());
 	}
 
 	@Override

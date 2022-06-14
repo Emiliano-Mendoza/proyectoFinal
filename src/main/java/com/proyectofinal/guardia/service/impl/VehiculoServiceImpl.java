@@ -1,6 +1,7 @@
 package com.proyectofinal.guardia.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,12 @@ public class VehiculoServiceImpl implements VehiculoService {
 	public List<Vehiculo> obtenerDisponibles() {
 
 		return vehiculoRepo.findAllDisponibles();
+	}
+
+	@Override
+	public Optional<Vehiculo> obtenerVehiculo(int idVehiculo) {
+		
+		return vehiculoRepo.findById(idVehiculo);
 	}
 
 }
