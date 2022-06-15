@@ -24,6 +24,8 @@ public class Material {
 	
 	private String material;
 	
+	private Boolean activo;
+	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "materiales")
 	@JsonBackReference
 	private Set<AutorizacionRetiroMaterial> retiro = new HashSet<>();
@@ -50,6 +52,14 @@ public class Material {
 
 	public void setRetiro(Set<AutorizacionRetiroMaterial> retiro) {
 		this.retiro = retiro;
+	}
+
+	public Boolean getActivo() {
+		return activo;
+	}
+
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
 	}
 	
 	

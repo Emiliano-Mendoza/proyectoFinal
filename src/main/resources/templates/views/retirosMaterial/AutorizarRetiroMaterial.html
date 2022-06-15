@@ -44,34 +44,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>1</td>
-									<td>Emiliano</td>
-									<td>Mendoza</td>
-									<td>Mantenimiento</td>
-									<td>
-										<button class="btn btn-info btn-sm fw-bold btn-autorizar">Autorizar</button>
-									</td>
-								</tr>
-								<tr>
-									<td>2</td>
-									<td>Mariano</td>
-									<td>Mendoza</td>
-									<td>Guardia</td>
-									<td>
-										<button class="btn btn-info btn-sm fw-bold btn-autorizar">Autorizar</button>
-									</td>
-								</tr>
-
-								<tr>
-									<td>3</td>
-									<td>Celina</td>
-									<td>Del Turco</td>
-									<td>Secretaria</td>
-									<td>
-										<button class="btn btn-info btn-sm fw-bold btn-autorizar">Autorizar</button>
-									</td>
-								</tr>
+								
 								
 							</tbody>
 						</table>
@@ -85,15 +58,19 @@
 
 	<footer th:replace="plantilla/template :: footer"></footer>
 
-	<script type="text/javascript">
+	<script th:inline="javascript">
 		const cardAutorization = document.querySelector('#cardAutorization');
 		var datatable;
 		
 		$(document).ready(function() {
+			
+			let listaEmpleados = /*[[${listaEmpleados}]]*/'default';
+			
 			datatable = $('#table_id').DataTable({
+				data: listaEmpleados,
 				language : {
 					"decimal" : "",
-					"emptyTable" : "No hay informaci�n",
+					"emptyTable" : "No hay información",
 					"info" : "Mostrando _START_ a _END_ de _TOTAL_ Empleados",
 					"infoEmpty" : "Mostrando 0 to 0 of 0 Entradas",
 					"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
@@ -115,6 +92,19 @@
 					"className" : "dt-center",
 					"targets" : "_all"
 				} ]
+				,
+				columns: [
+                    { data: 'nroLegajo' },
+                    { data: 'nombre' },
+                    { data: 'apellido' },
+                    { data: 'sector.sector' },	                    
+                    {
+                    "defaultContent": '<button class="btn btn-info btn-sm fw-bold btn-autorizar">Autorizar</button>',
+                    "orderable": false,
+                    "searcheble": false,
+                    "width": "90px"
+                    }
+                ]
 			});
 
 		});
@@ -122,8 +112,6 @@
 		$("#table_id tbody").on("click", '.btn-autorizar', function() {
 			let filaSeleccionada = (this).closest("tr");
 			let data = datatable.row(filaSeleccionada).data();
-			
-			console.log(data);
 			
 			cardAutorization.innerHTML = `
 				<div class="card text-dark bg-light mb-3">
@@ -133,7 +121,7 @@
 						</div>
 						<div class="card-body">
 							
-							<p>Empleado autorizado: ${data[1]} ${data[2]}</p>					
+							<p>Empleado autorizado: ${data.nombre} ${data.apellido}</p>					
 								
 							<div class="mb-3">
 								<label for="exampleInputEmail1" class="form-label">Descripción:</label>
