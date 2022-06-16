@@ -14,22 +14,70 @@
 		<div id="layoutSidenav_content">
 
 			<div class="container-fluid px-4 mt-3">
-
+				
+				<div th:replace="plantilla/template :: mensajes"></div>
+				
 				<h1 class="">Autorización de Retiro</h1>
 				<ol class="breadcrumb mb-4">
 					<li class="breadcrumb-item active"><i
 						class="fa-solid fa-boxes"></i> Retiro de Material</li>
 				</ol>
 
-				<div class="mt-3" id="cardAutorization"></div>
+				<div class="mt-3" id="cardAutorization" style="display: none;">
+
+					<div class="card text-dark bg-light mb-3">
+						<form id="formAut" method="post" th:action="@{/views/retiro-material/nueva-autorizacion/crear}">
+							<div class="card-header fw-bold">Nueva Autorización:</div>
+							<div class="card-body">
+
+								<p id="empAut">Empleado autorizado:</p>
+
+								<div class="mb-3">
+									<label for="exampleInputEmail1" class="form-label">Descripción:</label>
+									<textarea class="form-control" id="desc" name="desc" rows="2"
+										required></textarea>
+								</div>
+								<div class="mb-3">
+									<label for="materiales" class="form-label">Materiales:
+									</label> <small class="text-muted"><span> (Ctrl + click
+											para selección múltiple)</span></small> <select class="form-select" multiple
+										aria-label="multiple select example" name="materiales" required
+										id="materiales">
+
+									</select>
+								</div>
+								<div class="">
+									<label for="fechaLimite" class="form-label">Fecha
+										Límite: </label> <input type="date" id="fechaLimite"
+										name="fechaLimite" required>
+								</div>
+								<div>
+									<input type="hidden" id="nroLegajo" name="nroLegajo" value="">
+								</div>
+							</div>
+
+							<div class="card-footer d-md-flex justify-content-between">
+								<button type="button" class="btn btn-secondary "
+									onclick="CloseCard()">Cancelar</button>
+								<input type="submit" class="btn btn-secondary "
+									value="Confirmar" />
+							</div>
+
+						</form>
+					</div>
+
+				</div>
 
 				<div class="card mb-4">
 					<div class="card-header">
 						<div class="d-md-flex justify-content-between">
-							<div><i class="fa-solid fa-table mt-2"></i> Listado de Empleados:</div>
-							<button class="btn btn-info btn-sm fw-bold" onclick="autorizarRetiroExterno()">Retiro Externo</button>
+							<div>
+								<i class="fa-solid fa-table mt-2"></i> Listado de Empleados:
+							</div>
+							<button class="btn btn-info btn-sm fw-bold"
+								onclick="autorizarRetiroExterno()">Retiro Externo</button>
 						</div>
-						
+
 					</div>
 					<div class="card-body">
 
@@ -44,8 +92,8 @@
 								</tr>
 							</thead>
 							<tbody>
-								
-								
+
+
 							</tbody>
 						</table>
 
@@ -61,6 +109,7 @@
 	<script th:inline="javascript">
 		const cardAutorization = document.querySelector('#cardAutorization');
 		var datatable;
+		let materiales;
 		
 		$(document).ready(function() {
 			
@@ -106,113 +155,84 @@
                     }
                 ]
 			});
+			
+			jQuery.ajax({
+				url : '/views/material',
+				type : "GET",
+				dataType : "json",
+				contentType : "application/json; charset=utf-8",
+				success : function(data) {
+															
+					$("#materiales").html(function() {
+						
+						let aux = '';
+						for(let material of data){
+														
+							aux += `<option value=${material.idMaterial}>${material.material}</option>`;
+						}
+						
+						return aux;
+					});
+					
+					materiales = data;
+					
+				}
+			});
 
 		});
 		
 		$("#table_id tbody").on("click", '.btn-autorizar', function() {
 			let filaSeleccionada = (this).closest("tr");
 			let data = datatable.row(filaSeleccionada).data();
+
 			
-			cardAutorization.innerHTML = `
-				<div class="card text-dark bg-light mb-3">
-					<form id="formAut" method="post">
-						<div class="card-header">
-							Nueva Autorización:
-						</div>
-						<div class="card-body">
-							
-							<p>Empleado autorizado: ${data.nombre} ${data.apellido}</p>					
-								
-							<div class="mb-3">
-								<label for="exampleInputEmail1" class="form-label">Descripción:</label>
-								<textarea class="form-control" id="desc" name="desc"
-									rows="2" required></textarea>
-							</div>
-							<div class="mb-3">
-							<label for="materiales" class="form-label">Materiales: </label>
-							<small class="text-muted"><span> (Ctrl + click para selección múltiple)</span></small>
-							<select class="form-select"
-								multiple aria-label="multiple select example" name="materiales"
-								id="materiales">
+			$("#empAut").text('Empleado autorizado: ' + data.nombre + " " + data.apellido);
+			$("#nroLegajo").val(data.nroLegajo);
+			$("#cardAutorization").show();
 			
-							</select>
-							</div>
-							<div class="">
-								<label for="fechaLimite" class="form-label">Fecha Límite:  </label>
-								<input type="date" id="fechaLimite" name="fechaLimite"
-						       		>
-							</div>
-							<div>
-								<input type="hidden" id="nroLegajo" name="nroLegajo" value="">
-							</div>																				
-						</div>
-						
-						<div class="card-footer d-md-flex justify-content-between">
-							<button type="button" class="btn btn-secondary " onclick="CloseCard()"
-								>Cancelar</button> 
-								<input type="submit"
-								class="btn btn-secondary " value="Confirmar" />
-						</div>	
-						
-					</form>
-				</div>
-				`;
-				window.scroll(0, 0);
+			window.scroll(0, 0);
 																
 		});
 			
 		function CloseCard(){
-			cardAutorization.innerHTML = '';
+			$("#empAut").text('');
+			$("#cardAutorization").hide();
 		}
 		
 		
 		function autorizarRetiroExterno(){
 			
-			cardAutorization.innerHTML = `
-				<div class="card text-dark bg-light mb-3">
-					<form id="formAut" method="post">
-						<div class="card-header">
-							Nueva Autorización:
-						</div>
-						<div class="card-body">
-							
-							<p>Retiro Externo</p>					
-								
-							<div class="mb-3">
-								<label for="exampleInputEmail1" class="form-label">Descripción:</label>
-								<textarea class="form-control" id="desc" name="desc"
-									rows="2" required></textarea>
-							</div>
-							<div class="mb-3">
-							<label for="materiales" class="form-label">Materiales: </label>
-							<small class="text-muted"><span> (Ctrl + click para selección múltiple)</span></small>
-							<select class="form-select"
-								multiple aria-label="multiple select example" name="materiales"
-								id="materiales">
+			$("#empAut").text('Retiro Externo');
+			$("#nroLegajo").val(-1);
+			$("#cardAutorization").show();
 			
-							</select>
-							</div>
-							<div class="">
-								<label for="fechaLimite" class="form-label">Fecha Límite:  </label>
-								<input type="date" id="fechaLimite" name="fechaLimite"
-						       		>
-							</div>
-							<div>
-								<input type="hidden" id="nroLegajo" name="nroLegajo" value="">
-							</div>																				
-						</div>
-						
-						<div class="card-footer d-md-flex justify-content-between">
-							<button type="button" class="btn btn-secondary " onclick="CloseCard()"
-								>Cancelar</button> 
-								<input type="submit"
-								class="btn btn-secondary " value="Confirmar" />
-						</div>	
-						
-					</form>
-				</div>
-			`;
+			window.scroll(0, 0);
 		}
+		
+		function SetDate(){
+			
+			const today = new Date()
+			let tomorrow = new Date(today)
+			tomorrow.setDate(tomorrow.getDate() + 1)
+			
+			let dd = tomorrow.getDate();
+			let mm = tomorrow.getMonth() + 1; //January is 0!
+			let yyyy = tomorrow.getFullYear();
+			
+			if (dd < 10) {
+			   dd = '0' + dd;
+			}
+			if (mm < 10) {
+			   mm = '0' + mm;
+			} 
+			    
+			tomorrow = yyyy + '-' + mm + '-' + dd;
+			
+			document.getElementById('fechaLimite').setAttribute("min", tomorrow);
+			document.getElementById('fechaLimite').setAttribute("value", tomorrow);
+			
+		}
+		SetDate();
 		
 	</script>
 </body>

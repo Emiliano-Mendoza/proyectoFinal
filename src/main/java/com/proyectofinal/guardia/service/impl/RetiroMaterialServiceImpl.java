@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.proyectofinal.guardia.dao.AutorizacionJPARepository;
+import com.proyectofinal.guardia.dao.EmpleadoJPARepository;
+import com.proyectofinal.guardia.dao.MaterialJPARepository;
 import com.proyectofinal.guardia.dao.RetiroJPARepository;
 import com.proyectofinal.guardia.domain.AutorizacionRetiroMaterial;
 import com.proyectofinal.guardia.domain.Empleado;
@@ -24,16 +26,30 @@ public class RetiroMaterialServiceImpl implements RetiroMaterialService {
 	@Autowired
 	private AutorizacionJPARepository autRepo;
 	
+	@Autowired
+	private EmpleadoJPARepository empleadoRepo;
+	
+	@Autowired
+	private MaterialJPARepository materialRepo;
+	
 	
 	@Override
-	public AutorizacionRetiroMaterial crearAsistencia(Empleado empleado, List<Integer> materiales, String fechaLimite,
+	public AutorizacionRetiroMaterial crearAutorizacion(int nroLegajo, List<Integer> materiales, String fechaLimite,
 			String descripcion) {
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		try {			
-			AutorizacionRetiroMaterial autorizacion = new AutorizacionRetiroMaterial();			
-			autorizacion.setEmpleado(empleado);
+			AutorizacionRetiroMaterial autorizacion = new AutorizacionRetiroMaterial();
+			
+			if(nroLegajo > 0) {
+				autorizacion.setEmpleado(empleadoRepo.findById(nroLegajo).orElseThrow());
+			}else {
+				autorizacion.setEmpleado(null);
+			}
+			
+			materiales.forEach((mat)->{autorizacion.getMateriales().add(materialRepo.findById(mat).get());});
+						
 			autorizacion.setDescripcion(descripcion);
 			
 			Date fecha = formatter.parse(fechaLimite + " 23:59:59");
@@ -61,7 +77,7 @@ public class RetiroMaterialServiceImpl implements RetiroMaterialService {
 		autorizacion.setRetiro(retiro);
 		autRepo.save(autorizacion);
 		
-		return retiroRepo.save(retiro);
+		return autRepo.save(autorizacion).getRetiro();
 	}
 
 	@Override

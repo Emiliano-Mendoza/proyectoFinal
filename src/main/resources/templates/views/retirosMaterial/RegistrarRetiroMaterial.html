@@ -14,7 +14,9 @@
 		<div id="layoutSidenav_content">
 
 			<div class="container-fluid px-4 mt-3">
-
+				
+				<div th:replace="plantilla/template :: mensajes"></div>
+				
 				<h1 class="">Registrar Retiro</h1>
 				<ol class="breadcrumb mb-4">
 					<li class="breadcrumb-item active"><i
@@ -28,122 +30,7 @@
 
 				<div class="row mt-3" id="cardRetiro">
 
-					<div class="col-sm-6 mt-3">
-						<div class="card text-dark bg-light mb-3">
-							<h5 class="card-header">Autorización de retiro:</h5>
-							<div class="card-body">
-
-								<ul class="list-group list-group-flush">
-									<li class="list-group-item bg-light">Empleado autorizado:
-										Emiliano Mendoza</li>
-									<li class="list-group-item bg-light">Autorizante: Celina
-										Del Turco</li>
-									<li class="list-group-item bg-light">Descripción: Retira
-										lo que quiera</li>
-									<li class="list-group-item bg-light"><label
-										for="exampleInput1" class="form-label">Materiales:</label> <select
-										class="form-select" multiple
-										aria-label="multiple select example" disabled>
-									</select></li>
-									<li class="list-group-item bg-light">Fecha límite:
-										22/05/2022</li>
-									<li class="list-group-item bg-light"><label
-										for="observacionGuardia">Observación:</label> <input
-										type="text" class="form-control" id="observacionGuardia"
-										name="observacionGuardia"></li>
-								</ul>
-
-							</div>
-							<div class="card-footer">
-								<form method="post">
-
-									<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-										<input type="submit" class="btn btn-primary btn-sm "
-											value="Confirmar Retiro" />
-									</div>
-
-								</form>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-sm-6 mt-3">
-						<div class="card text-dark bg-light mb-3">
-							<h5 class="card-header">Autorización de retiro:</h5>
-							<div class="card-body">
-
-								<ul class="list-group list-group-flush">
-									<li class="list-group-item bg-light">Empleado autorizado:
-										Emiliano Mendoza</li>
-									<li class="list-group-item bg-light">Autorizante: Celina
-										Del Turco</li>
-									<li class="list-group-item bg-light">Descripción: Retira
-										lo que quiera</li>
-									<li class="list-group-item bg-light"><label
-										for="exampleInput1" class="form-label">Materiales:</label> <select
-										class="form-select" multiple
-										aria-label="multiple select example" disabled>
-									</select></li>
-									<li class="list-group-item bg-light">Fecha límite:
-										22/05/2022</li>
-									<li class="list-group-item bg-light"><label
-										for="observacionGuardia">Observación:</label> <input
-										type="text" class="form-control" id="observacionGuardia"
-										name="observacionGuardia"></li>
-								</ul>
-
-							</div>
-							<div class="card-footer">
-								<form method="post">
-
-									<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-										<input type="submit" class="btn btn-primary btn-sm "
-											value="Confirmar Retiro" />
-									</div>
-
-								</form>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-6 mt-3">
-						<div class="card text-dark bg-light mb-3">
-							<h5 class="card-header">Autorización de retiro:</h5>
-							<div class="card-body">
-
-								<ul class="list-group list-group-flush">
-									<li class="list-group-item bg-light">Empleado autorizado:
-										Emiliano Mendoza</li>
-									<li class="list-group-item bg-light">Autorizante: Celina
-										Del Turco</li>
-									<li class="list-group-item bg-light">Descripción: Retira
-										lo que quiera</li>
-									<li class="list-group-item bg-light"><label
-										for="exampleInput1" class="form-label">Materiales:</label> <select
-										class="form-select" multiple
-										aria-label="multiple select example" disabled>
-									</select></li>
-									<li class="list-group-item bg-light">Fecha límite:
-										22/05/2022</li>
-									<li class="list-group-item bg-light"><label
-										for="observacionGuardia">Observación:</label> <input
-										type="text" class="form-control" id="observacionGuardia"
-										name="observacionGuardia"></li>
-								</ul>
-
-							</div>
-							<div class="card-footer">
-								<form method="post">
-
-									<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-										<input type="submit" class="btn btn-primary btn-sm "
-											value="Confirmar Retiro" />
-									</div>
-
-								</form>
-							</div>
-						</div>
-					</div>
-
+					
 
 				</div>
 
@@ -155,8 +42,154 @@
 
 	<footer th:replace="plantilla/template :: footer"></footer>
 
-	<script type="text/javascript">
+	<script th:inline="javascript">
 		
+		let listaAutorizaciones = /*[[${listaAutorizaciones}]]*/ 'default';
+			
+		const formulario = document.querySelector('#formulario');
+		const resultado = document.querySelector('#cardRetiro');
+	
+		const filtrar = () => {
+			resultado.innerHTML = ''
+			
+			const texto = formulario.value.toLowerCase();
+			
+			for(let aut of listaAutorizaciones){
+				
+				let urlRetiro= "/views/retiro-material/retiro/" + aut.idAutorizacion;
+				let materialesId = 'materiales' + aut.idAutorizacion;
+				let myform = 'myform' + aut.idAutorizacion;
+				
+				//le doy el formato correcto a la fecha
+				let d = new Date(aut.fechaLimite);
+				dformat = [d.getDate(),
+	  				d.getMonth()+1,
+	               d.getFullYear()].join('/')+' '+
+	              [d.getHours(),
+	               d.getMinutes()].join(':');			
+				
+				if(aut.empleado != null){
+					let nombre = aut.empleado.nombre.toLowerCase();
+					let apellido = aut.empleado.apellido.toLowerCase();
+					let empleado = aut.empleado.nombre.toLowerCase(); + " " + aut.empleado.apellido.toLowerCase();
+					
+					if(nombre.indexOf(texto) !== -1 || apellido.indexOf(texto) !== -1 || empleado.indexOf(texto) !== -1){
+											
+						resultado.innerHTML += `
+							<div class="col-sm-6 mt-3">
+								<form action=${urlRetiro} method="post"
+								 id=${myform}>
+									<div class="card text-dark bg-light mb-3" >
+										<h5 class="card-header">Autorización de retiro:</h5>
+									<div class="card-body">
+										
+										
+										<ul class="list-group list-group-flush">
+										  <li class="list-group-item bg-light">Empleado autorizado: ${aut?.empleado?.nombre}
+											${aut?.empleado?.apellido}</li>
+										  <li class="list-group-item bg-light">Autorizante: ${aut?.usuarioSector?.nombre} ${aut?.usuarioSector?.apellido}</li>
+										  <li class="list-group-item bg-light">Descripción: ${aut?.descripcion}</li>
+										  <li class="list-group-item bg-light">
+										  	<label for="exampleInput1" class="form-label">Materiales:</label>
+											<select class="form-select"
+												multiple aria-label="multiple select example" name=${materialesId}
+												id=${materialesId} disabled>
+												</select>
+										  </li>
+										  <li class="list-group-item bg-light">Fecha límite: ${dformat}</li>
+										  <li class="list-group-item bg-light">
+										  	<label for="observacionGuardia">Observación:</label> <input type="text"
+												class="form-control" id="observacionGuardia"
+												name="observacionGuardia" form=${myform}>
+										  </li>
+										</ul>
+										
+										<input type="text" name="planta" value="Planta I - Av. Facundo" hidden required>
+										
+									</div>
+									<div class="card-footer" > 
+														
+											<div class="d-grid gap-2 d-md-flex justify-content-md-end"> 
+												<input type="submit" class="btn btn-primary btn-sm "
+													value="Confirmar Retiro" />
+											</div>
+														
+									</div>
+								</div>
+							</form>
+						</div>
+						`;
+						
+						SetMateriales(materialesId, aut);
+					}
+				}
+				else{
+					let retiroExterno = 'retiro externo'.toLowerCase();
+					
+					if(retiroExterno.indexOf(texto) !== -1){
+						
+						resultado.innerHTML += `
+							<div class="col-sm-6 mt-3">
+								<form action=${urlRetiro} method="post"
+								 id=${myform}>
+									<div class="card text-dark bg-light mb-3">
+										<h5 class="card-header" >Autorización de retiro:</h5>
+									<div class="card-body">							
+										<ul class="list-group list-group-flush">
+										  <li class="list-group-item bg-light">Retiro Externo</li>
+										  <li class="list-group-item bg-light">Autorizante: ${aut?.usuarioSector?.nombre} ${aut?.usuarioSector?.apellido}</li>
+										  <li class="list-group-item bg-light">Descripción: ${aut?.descripcion}</li>
+										  <li class="list-group-item bg-light">
+										  	<label for="exampleInput1" class="form-label">Materiales:</label>
+											<select class="form-select"
+												multiple aria-label="multiple select example" name=${materialesId}
+												id=${materialesId} disabled>
+											</select>
+										  </li>
+										  <li class="list-group-item bg-light">Fecha límite: ${dformat}</li>
+										  <li class="list-group-item bg-light">
+										  	<label for="observacionGuardia">Observación:</label> <input type="text"
+												class="form-control" id="observacionGuardia"
+												name="observacionGuardia" form=${myform}>
+										  </li>
+										</ul>
+										
+										<input type="text" name="planta" value="Planta I - Av. Facundo" hidden required>
+										
+									</div>
+									<div class="card-footer" > 																		
+										<div class="d-grid gap-2 d-md-flex justify-content-md-end"> 
+											<input type="submit" class="btn btn-primary btn-sm "
+												value="Confirmar Retiro" />
+										</div>											
+									</div>									
+								</div>
+							</form>
+						</div>
+						`;
+						
+						SetMateriales(materialesId, aut);
+						
+					}
+				}
+				
+			}
+		}
+		
+		function SetMateriales(materialesId, aut){
+			
+			const materialSelect = document.getElementById(materialesId);
+					
+			for(let mat of aut.materiales){
+				
+				materialSelect.innerHTML += `<option value=${mat.id_material}>${mat.material}</option>`;
+			} 				
+		}
+		
+		
+		formulario.addEventListener('keyup', filtrar);
+		filtrar();
+	
 	</script>
 </body>
 </html>

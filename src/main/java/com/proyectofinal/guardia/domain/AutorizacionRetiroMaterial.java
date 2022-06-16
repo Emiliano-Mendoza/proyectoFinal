@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -33,12 +34,12 @@ public class AutorizacionRetiroMaterial {
 	@JoinColumn(name = "ID_UsuarioAutorizador")
 	private Usuario usuario;
 	
-	@ManyToOne
+	@OneToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "ID_Retiro")
 	private Retiro retiro;
 	
 	@ManyToOne
-	@JoinColumn(name = "ID_Personal")
+	@JoinColumn(name = "ID_Empleado")
 	private Empleado empleado;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

@@ -10,7 +10,7 @@ import com.proyectofinal.guardia.domain.Retiro;
 
 public interface RetiroMaterialService {
 	
-	public AutorizacionRetiroMaterial crearAsistencia(Empleado empleado, List<Integer> materiales, String fechaLimite, String descripcion);
+	public AutorizacionRetiroMaterial crearAutorizacion(int nroLegajo, List<Integer> materiales, String fechaLimite, String descripcion);
 	public Retiro registrarRetiro(int idAutorizacion, Date fechaRetiro, String observacion, String planta);
 	public List<AutorizacionRetiroMaterial> obtenerAutorizacionesActivas();
 	public List<AutorizacionRetiroMaterial> obtenerAutorizaciones();

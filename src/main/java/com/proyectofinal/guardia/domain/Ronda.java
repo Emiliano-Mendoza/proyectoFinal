@@ -67,7 +67,11 @@ public class Ronda {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	
-	
+	@Override
+	public String toString() {
+		return "Ronda [idRonda=" + idRonda + ", fechaRonda=" + fechaRonda + ", ronda=" + ronda + ", descripcion="
+				+ descripcion + ", planta=" + planta + ", usuario=" + usuario + "]";
+	}
+		
 	
 }

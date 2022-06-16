@@ -23,7 +23,7 @@ public class Retiro {
 	private String planta; 
 	
 	@ManyToOne
-	@JoinColumn(name = "ID_UsuarioAutorizado")
+	@JoinColumn(name = "ID_UsuarioGuardia")
 	private Usuario usuario;
 
 	public int getIdRetiro() {

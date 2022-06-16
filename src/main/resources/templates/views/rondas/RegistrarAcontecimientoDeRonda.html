@@ -15,12 +15,13 @@
 
 			<div class="container-fluid px-4 mt-3">
 
+				<div th:replace="plantilla/template :: mensajes"></div>
 
 				<div class="d-md-flex justify-content-between">
 
 					<h1 class="">Registrar Rondas</h1>
 
-					<a  class="nav-link" th:href="@{/views/ronda/registros}"><i
+					<a class="nav-link" th:href="@{/views/ronda/registros}"><i
 						class="fa-solid fa-file-circle-check"></i> Ver Registros</a>
 
 				</div>
@@ -37,21 +38,26 @@
 
 					<div class="card-body">
 
-						<form method="post">
+						<form method="post" th:action="@{/views/ronda/crear}">
 							<div class="mb-3">
 								<label class="ronda">Ronda: </label>
 								<div></div>
 								<input id="rondaAux" type="time" class="form-control" disabled>
 
-								<input id="ronda" type="time" class="form-control" hidden>
+								<input id="ronda" name="ronda" type="time" class="form-control"
+									hidden>
 							</div>
 
 							<div class="mb-3">
 								<label for="descripcion" class="form-label">Descripción:
 								</label>
-								<textarea class="form-control" id="descripcion" rows="3"></textarea>
+								<textarea class="form-control" id="descripcion" rows="3"
+									name="desc" required></textarea>
 
 							</div>
+
+							<input type="text" hidden value="Planta I - Av. Facundo"
+								name="planta" required>
 
 							<div class=" d-md-flex justify-content-end">
 								<button type="submit" class="btn btn-secondary">Registrar</button>
@@ -71,38 +77,18 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
 
-							<th>00:00</th>
-							<td>Se avistaron animales</td>
-							<td>22/05/2022</td>
-							<td>Emiliano Mendoza</td>
+						<tr th:each="ac:${listaRondas}">
 
-						</tr>
-						<tr>
-
-							<th>08:00</th>
-							<td>Olores extraños</td>
-							<td>22/05/2022</td>
-							<td>Emiliano Mendoza</td>
+							<th scope="row" th:text="${ac.ronda}" style="text-align: center;"></th>
+							<td th:text="${ac.descripcion}" style="text-align: center;"></td>
+							<td th:text="${#dates.format(ac.fechaRonda, 'dd/MM/yyyy')}"
+								style="text-align: center;"></td>
+							<td style="text-align: center;">[[${ac?.usuario?.nombre}]]
+								[[${ac?.usuario?.apellido}]]</td>
 
 						</tr>
-						<tr>
 
-							<th>09:00</th>
-							<td>Personas sospechosas</td>
-							<td>22/05/2022</td>
-							<td>Emiliano Mendoza</td>
-
-						</tr>
-						<tr>
-
-							<th>10:00</th>
-							<td>Sin novedades</td>
-							<td>22/05/2022</td>
-							<td>Emiliano Mendoza</td>
-
-						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -113,8 +99,22 @@
 	</div>
 	<footer th:replace="plantilla/template :: footer"></footer>
 
-	<script type="text/javascript">
-		
+	<script th:inline="javascript">
+		let listaRondas = /*[[${listaRondas}]]*/'default';
+
+		console.log(listaRondas);
+
+		function SetTimeRonda() {
+
+			let date = new Date();
+			var currentTime = date.toString().substring(16, 21);
+
+			document.getElementById('ronda').value = currentTime;
+			document.getElementById('rondaAux').value = currentTime;
+
+		}
+
+		SetTimeRonda();
 	</script>
 </body>
 </html>
