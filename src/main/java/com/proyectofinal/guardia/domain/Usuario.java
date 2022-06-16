@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -28,6 +29,7 @@ public class Usuario {
 	@NotEmpty
 	private String username;
 	@NotEmpty
+	@JsonIgnore
 	private String contraseña;	
 	private Boolean activo;
 	@NotEmpty
