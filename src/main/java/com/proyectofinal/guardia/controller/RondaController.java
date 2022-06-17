@@ -3,9 +3,11 @@ package com.proyectofinal.guardia.controller;
 
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -54,5 +56,15 @@ public class RondaController {
 
 		atributos.addFlashAttribute("success", "Ronda registrada exitosamente!");
 		return "redirect:/views/ronda";
+	}
+	
+	@GetMapping("/cantidad-rondas-diarias")
+	public ResponseEntity<Map<String,?>> cantidadRondasDiarias(Model model) {
+		
+		 Map<String, Object> map = new HashMap<String, Object>();
+		 
+		 map.put("cant_rondas", rondaServ.listarRondasHoy().size());
+		
+		return ResponseEntity.ok(map);
 	}
 }

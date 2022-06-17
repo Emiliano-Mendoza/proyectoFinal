@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.proyectofinal.guardia.dao.AsistenciaJPARepository;
 import com.proyectofinal.guardia.dao.EmpleadoJPARepository;
+import com.proyectofinal.guardia.dao.UsuarioJPARepository;
 import com.proyectofinal.guardia.domain.Asistencia;
 import com.proyectofinal.guardia.domain.Empleado;
 import com.proyectofinal.guardia.service.AsistenciaService;
@@ -21,6 +24,9 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 	//@Autowired
 	//private EmpleadoJPARepository empleadoRepo;
+	
+	@Autowired
+	private UsuarioJPARepository usuarioRepo;
 
 	@Override
 	public Asistencia crearAsistencia(Empleado empleado, Date ingreso, String planta) {
@@ -30,6 +36,9 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		asistencia.setEmpleado(empleado);
 		asistencia.setPlanta(planta);
 		asistencia.setEnTransito(false);
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		asistencia.setUsuarioIngreso(usuarioRepo.findByUsername(auth.getName()));
 
 		return asisRepo.save(asistencia);
 	}
@@ -39,6 +48,9 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		
 		Asistencia asistencia = asisRepo.getById(idAsistencia);
 		asistencia.setEgreso(egreso);
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		asistencia.setUsuarioEgreso(usuarioRepo.findByUsername(auth.getName()));
 		
 		return asisRepo.save(asistencia);
 	}

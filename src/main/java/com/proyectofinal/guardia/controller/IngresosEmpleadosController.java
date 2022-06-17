@@ -1,9 +1,12 @@
 package com.proyectofinal.guardia.controller;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -148,4 +151,26 @@ public class IngresosEmpleadosController {
 
 		return "redirect:/views/ingresos-empleado/egreso";
 	}
+	
+	
+	@GetMapping("/cantidad-ingresados")
+	public ResponseEntity<Map<String,?>> ingresosActivos(Model model) {
+		
+		 Map<String, Object> map = new HashMap<String, Object>();
+		 
+		 map.put("cant_empleados_ingresados", asisServ.listarAsistenciasSinEgreso().size());
+		
+		return ResponseEntity.ok(map);
+	}
+	
+	@GetMapping("/cantidad-transitos")
+	public ResponseEntity<Map<String,?>> transitosActivos(Model model) {
+		
+		 Map<String, Object> map = new HashMap<String, Object>();
+		 
+		 map.put("cant_empleados_transito", transitoServ.obtenerTransitosActivos().size());
+		
+		return ResponseEntity.ok(map);
+	}
+	
 }

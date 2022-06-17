@@ -44,7 +44,7 @@
 							<div class="card-footer">
 								<div class="row">
 									<a class="btn  btn-sm col-6" type="button"
-										th:href="@{/views/ingresos-empleado}">Ingreso</a> <a
+										th:href="@{/views/ingresos-empleado/egreso}">Reingreso</a> <a
 										class="btn  btn-sm col-6" type="button"
 										th:href="@{/views/ingresos-empleado/egreso}">Egreso</a>
 								</div>
@@ -90,9 +90,18 @@
 					<div class="col-6">
 						<div class="card mb-4">
 							<div class="card-header">
-								<i class="fa-solid fa-calendar-days"></i> Eventos Próximos:
+																
+								<div class="d-md-flex justify-content-between">
+									<div>
+										<i class="fa-solid fa-calendar-days"></i> Eventos Próximos:
+									</div>
+									
+									<a th:href="@{/views/evento/ocurrencia}" style="color:grey"><i class="fa-solid fa-circle-arrow-right"></i></a>
+								</div>
+								
 							</div>
-							<div class="card-body">
+																												
+							<div class="card-body" style="overflow-x: hidden; overflow-y: auto; height: 40vh;">
 								<ul>
 									<li>Evento 1</li>
 									<li>Evento 2</li>
@@ -111,18 +120,20 @@
 					<div class="col-6">
 						<div class="card mb-4">
 							<div class="card-header">
-								<i class="fa-solid fa-boxes-stacked"></i> Autorizaciones de
-								Retiro:
+
+								<div class="d-md-flex justify-content-between">
+									<div>
+										<i class="fa-solid fa-boxes-stacked"></i> Autorizaciones de
+										Retiro:
+									</div>
+									
+									<a th:href="@{/views/retiro-material/autorizaciones}" style="color:grey"><i class="fa-solid fa-circle-arrow-right"></i></a>
+								</div>
+
 							</div>
-							<div class="card-body">
-								<ul>
-									<li>Autorizacion 1</li>
-									<li>Autorizacion 2</li>
-									<li>Autorizacion 3</li>
-									<li>Autorizacion 4</li>
-									<li>Autorizacion 5</li>
-									<li>Autorizacion 6</li>
-									<li>Autorizacion 7</li>
+							<div class="card-body"
+								style="overflow-x: hidden; overflow-y: auto; height: 40vh;">
+								<ul id="autId">
 
 								</ul>
 							</div>
@@ -137,6 +148,31 @@
 	<footer th:replace="plantilla/template :: footer"></footer>
 
 	<script th:inline="javascript">
+		
+	
+		jQuery.ajax({
+			url : '/views/ingresos-empleado/cantidad-ingresados',
+			type : "GET",
+			dataType : "json",
+			contentType : "application/json; charset=utf-8",
+			success : function(data) {
+	
+				$("#cantEmpleadosEnPlanta").text(data.cant_empleados_ingresados);
+								
+			}
+		});
+		
+		jQuery.ajax({
+			url : '/views/ingresos-empleado/cantidad-transitos',
+			type : "GET",
+			dataType : "json",
+			contentType : "application/json; charset=utf-8",
+			success : function(data) {
+	
+				$("#cantEmpleadosEnTransito").text(data.cant_empleados_transito);
+								
+			}
+		});	
 	
 		jQuery.ajax({
 			url : '/views/ingresos-proveedor/cantidad-ingresados',
@@ -149,6 +185,58 @@
 								
 			}
 		});
+		
+		jQuery.ajax({
+			url : '/views/ronda/cantidad-rondas-diarias',
+			type : "GET",
+			dataType : "json",
+			contentType : "application/json; charset=utf-8",
+			success : function(data) {
+
+				$("#cantRondas").text(data.cant_rondas);
+								
+			}
+		});
+		
+		jQuery.ajax({
+			url : '/views/retiro-material/autorizaciones/listar',
+			type : "GET",
+			dataType : "json",
+			contentType : "application/json; charset=utf-8",
+			success : function(data) {
+
+				console.log(data);
+				$("#autId").html(function(){
+					let aux = '';
+					
+					for(let aut of data){
+						
+						let d = new Date(aut.fechaLimite);
+						dformat = `${
+						    d.getDate().toString().padStart(2, '0')}/${
+						    (d.getMonth()+1).toString().padStart(2, '0')}/${
+						    d.getFullYear().toString().padStart(4, '0')}`;
+
+						    
+						aux += `<li>${dformat} - Retira: ${aut.empleado != null ? aut.empleado.nombre + ' ' + aut.empleado.apellido : 'Retiro Externo'}
+						 - Autoriza: ${aut.usuario.nombre} ${aut.usuario.apellido} - Materiales: ${formatMaterial(aut.materiales)}
+						</li>`;
+					}
+					
+					return aux;
+				});								
+			}
+		});
+		
+		function formatMaterial(lista){
+			let materiales = '';
+			
+			for(let mat of lista){
+				materiales += mat.material + ' ';
+			}
+			
+			return materiales;
+		}
 		
 	</script>
 </body>

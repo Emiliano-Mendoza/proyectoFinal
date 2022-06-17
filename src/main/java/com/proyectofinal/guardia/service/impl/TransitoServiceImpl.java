@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.proyectofinal.guardia.dao.AsistenciaJPARepository;
 import com.proyectofinal.guardia.dao.TipoTransitoJPARepository;
 import com.proyectofinal.guardia.dao.TransitoJPARepository;
+import com.proyectofinal.guardia.dao.UsuarioJPARepository;
 import com.proyectofinal.guardia.domain.Asistencia;
 import com.proyectofinal.guardia.domain.Transito;
 import com.proyectofinal.guardia.domain.Vehiculo;
@@ -26,6 +29,9 @@ public class TransitoServiceImpl implements TransitoService {
 
 	@Autowired
 	private AsistenciaJPARepository asisRepo;
+	
+	@Autowired
+	private UsuarioJPARepository usuarioRepo;
 
 	@Override
 	public Transito crearTransito(int idAsistencia, Date salida, Vehiculo vehiculo) {
@@ -38,6 +44,9 @@ public class TransitoServiceImpl implements TransitoService {
 		transito.setEmpleado(asis.getEmpleado());
 		transito.setTipo(tipoRepo.getById(1));
 		transito.setPrimerVehiculo(vehiculo);
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		transito.setUsuarioEgreso(usuarioRepo.findByUsername(auth.getName()));
 
 		return transitoRepo.save(transito);
 	}
@@ -48,7 +57,11 @@ public class TransitoServiceImpl implements TransitoService {
 		Transito transito = transitoRepo.getById(idTransito);
 		transito.setIngreso(reingreso);
 		transito.setSegundoVehiculo(vehiculo);
-
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		transito.setUsuarioIngreso(usuarioRepo.findByUsername(auth.getName()));
+		
+		
 		return transitoRepo.save(transito);
 
 	}

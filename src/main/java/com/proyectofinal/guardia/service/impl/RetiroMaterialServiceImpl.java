@@ -6,12 +6,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.proyectofinal.guardia.dao.AutorizacionJPARepository;
 import com.proyectofinal.guardia.dao.EmpleadoJPARepository;
 import com.proyectofinal.guardia.dao.MaterialJPARepository;
 import com.proyectofinal.guardia.dao.RetiroJPARepository;
+import com.proyectofinal.guardia.dao.UsuarioJPARepository;
 import com.proyectofinal.guardia.domain.AutorizacionRetiroMaterial;
 import com.proyectofinal.guardia.domain.Empleado;
 import com.proyectofinal.guardia.domain.Retiro;
@@ -32,6 +35,8 @@ public class RetiroMaterialServiceImpl implements RetiroMaterialService {
 	@Autowired
 	private MaterialJPARepository materialRepo;
 	
+	@Autowired
+	private UsuarioJPARepository usuarioRepo;
 	
 	@Override
 	public AutorizacionRetiroMaterial crearAutorizacion(int nroLegajo, List<Integer> materiales, String fechaLimite,
@@ -55,6 +60,9 @@ public class RetiroMaterialServiceImpl implements RetiroMaterialService {
 			Date fecha = formatter.parse(fechaLimite + " 23:59:59");
 			autorizacion.setFechaLimite(fecha);
 			
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			autorizacion.setUsuario(usuarioRepo.findByUsername(auth.getName()));
+			
 			return autRepo.save(autorizacion);
 			
 		}catch(Exception e){
@@ -73,23 +81,25 @@ public class RetiroMaterialServiceImpl implements RetiroMaterialService {
 		retiro.setObservacion(observacion);
 		retiro.setPlanta(planta);
 		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		retiro.setUsuario(usuarioRepo.findByUsername(auth.getName()));
+		
 		AutorizacionRetiroMaterial autorizacion = autRepo.findById(idAutorizacion).orElseThrow();
 		autorizacion.setRetiro(retiro);
-		autRepo.save(autorizacion);
-		
+						
 		return autRepo.save(autorizacion).getRetiro();
 	}
 
 	@Override
 	public List<AutorizacionRetiroMaterial> obtenerAutorizacionesActivas() {
 		
-		return autRepo.findAll().stream().filter(a -> a.getFechaLimite().after(new Date()) && a.getRetiro() == null).collect(Collectors.toList());
+		return autRepo.findAllByOrderByFechaLimiteAsc().stream().filter(a -> a.getFechaLimite().after(new Date()) && a.getRetiro() == null).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<AutorizacionRetiroMaterial> obtenerAutorizaciones() {
 		// TODO Auto-generated method stub
-		return autRepo.findAll();
+		return autRepo.findAllByOrderByFechaLimiteAsc();
 	}
 
 }
