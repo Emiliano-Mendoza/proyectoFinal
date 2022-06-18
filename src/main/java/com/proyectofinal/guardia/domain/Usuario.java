@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
@@ -44,7 +45,11 @@ public class Usuario {
 	@JsonManagedReference
 	private Set<Rol> roles = new HashSet<>();
 	
-		
+	
+	 @OneToMany(mappedBy = "usuarioNotificado", cascade = CascadeType.ALL)
+	 private Set<NotiUsuario> notiUsuario = new HashSet<>();
+	
+	
 	public int getIdUsuario() {
 		return idUsuario;
 	}
@@ -101,6 +106,15 @@ public class Usuario {
 		this.roles = roles;
 	}
 	
+	public String nombreCompleto() {
+		return nombre + ' ' + apellido;
+	}
+
+	@Override
+	public String toString() {
+		return "Usuario [idUsuario=" + idUsuario + ", username=" + username + ", activo=" + activo + ", nombre="
+				+ nombre + ", apellido=" + apellido + ", roles=" + roles + "]";
+	}
 	
 	
 }

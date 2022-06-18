@@ -205,7 +205,6 @@
 			contentType : "application/json; charset=utf-8",
 			success : function(data) {
 
-				console.log(data);
 				$("#autId").html(function(){
 					let aux = '';
 					
@@ -218,7 +217,7 @@
 						    d.getFullYear().toString().padStart(4, '0')}`;
 
 						    
-						aux += `<li>${dformat} - Retira: ${aut.empleado != null ? aut.empleado.nombre + ' ' + aut.empleado.apellido : 'Retiro Externo'}
+						aux += `<li class="mb-1">${dformat} - Retira: ${aut.empleado != null ? aut.empleado.nombre + ' ' + aut.empleado.apellido : 'Retiro Externo'}
 						 - Autoriza: ${aut.usuario.nombre} ${aut.usuario.apellido} - Materiales: ${formatMaterial(aut.materiales)}
 						</li>`;
 					}

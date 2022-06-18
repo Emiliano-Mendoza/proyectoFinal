@@ -71,6 +71,7 @@ public class UsuarioController {
 			@RequestParam(name = "activo") int activo, @RequestParam(name = "roles") List<Integer> roles,
 			RedirectAttributes atributos, Model model) {
 		
+		
 		// verifico si existe el usuario
 		if (usuarioServ.findById(idUsuario) == null) {
 			

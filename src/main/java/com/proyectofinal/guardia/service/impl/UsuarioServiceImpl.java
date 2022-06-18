@@ -60,7 +60,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 		String passCrip = new BCryptPasswordEncoder().encode(contraseña);
 
 		usuarioNuevo.setContraseña(passCrip);
-
+		
+		usuarioNuevo.getRoles().clear();
+		
 		roles.forEach((rol) -> {
 			usuarioNuevo.getRoles().add(rolesRepo.findById(rol).get());
 		});
@@ -82,7 +84,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 			String passCrip = new BCryptPasswordEncoder().encode(contraseña);
 			us.setContraseña(passCrip);
 		}
-								
+		
+		us.getRoles().clear();
+		
 		roles.forEach((rol) -> {
 			us.getRoles().add(rolesRepo.findById(rol).get());
 		});
