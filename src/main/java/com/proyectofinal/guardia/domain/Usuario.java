@@ -1,6 +1,7 @@
 package com.proyectofinal.guardia.domain;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -47,6 +48,7 @@ public class Usuario {
 	
 	
 	 @OneToMany(mappedBy = "usuarioNotificado", cascade = CascadeType.ALL)
+	 @JsonIgnore
 	 private Set<NotiUsuario> notiUsuario = new HashSet<>();
 	
 	
@@ -115,6 +117,8 @@ public class Usuario {
 		return "Usuario [idUsuario=" + idUsuario + ", username=" + username + ", activo=" + activo + ", nombre="
 				+ nombre + ", apellido=" + apellido + ", roles=" + roles + "]";
 	}
+
 	
+
 	
 }

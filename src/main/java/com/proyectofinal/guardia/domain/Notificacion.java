@@ -3,6 +3,7 @@ package com.proyectofinal.guardia.domain;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,9 +20,19 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+
 
 @Entity
 @Table(name="Notificacion")
@@ -42,6 +53,7 @@ public class Notificacion {
 	
 	
 	@OneToMany(mappedBy = "notificacion", cascade = CascadeType.ALL)
+	@JsonIgnore
     private Set<NotiUsuario> notiUsuario;
 	
 	
@@ -53,7 +65,7 @@ public class Notificacion {
 	        this.notiUsuario = Stream.of(notiUsuario).collect(Collectors.toSet());
 	 }
 	
-	
+	public Notificacion() {}
 	
 	/*
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -97,8 +109,16 @@ public class Notificacion {
 		this.notificante = notificante;
 	}
 
-	
-	
+	/*	
+	public Set<NotiUsuario> getNotiUsuario() {
+		return notiUsuario;
+	}
+
+	public void setNotiUsuario(Set<NotiUsuario> notiUsuario) {
+		this.notiUsuario = notiUsuario;
+	}
+	*/
+
 	@Override
 	public String toString() {
 		return "Notificacion [idNotificacion=" + idNotificacion + ", descripcion=" + descripcion + ", tipo=" + tipo
@@ -106,5 +126,7 @@ public class Notificacion {
 	}
 
 
-	
+
 }
+
+

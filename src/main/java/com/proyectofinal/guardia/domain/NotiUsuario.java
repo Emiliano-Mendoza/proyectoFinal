@@ -1,6 +1,8 @@
 package com.proyectofinal.guardia.domain;
 
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity(name = "NotiUsuario")
 @Table(name = "Noti_Usuario")
 public class NotiUsuario {
@@ -22,13 +35,16 @@ public class NotiUsuario {
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "noti_id")
+	@JsonIgnore
     private Notificacion notificacion;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private Usuario usuarioNotificado;		
     
-             
+    public NotiUsuario() {}
+    
 	public NotiUsuario(Usuario usuarioNotificado, Boolean leido) {
 		super();
 		this.leido = leido;
@@ -72,6 +88,8 @@ public class NotiUsuario {
 	public String toString() {
 		return "NotiUsuario [id=" + id + ", leido=" + leido + "]";
 	}
-
+	
+	
+	
 	
 }
