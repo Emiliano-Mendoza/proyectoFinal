@@ -1,5 +1,7 @@
 package com.proyectofinal.guardia.helpers;
 
+import java.util.Date;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,7 @@ public class NotificacionHelper {
 	private int idNotiUsuario;
 	private Boolean leido;
 	private String mensaje;
+	private Date fecha;
 	
 	public int getIdNotiUsuario() {
 		return idNotiUsuario;
@@ -32,6 +35,12 @@ public class NotificacionHelper {
 	@Override
 	public String toString() {
 		return "NotificacionHelper [idNotiUsuario=" + idNotiUsuario + ", leido=" + leido + ", mensaje=" + mensaje + "]";
+	}
+	public Date getFecha() {
+		return fecha;
+	}
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
 	}
 	
 	

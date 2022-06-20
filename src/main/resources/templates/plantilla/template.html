@@ -114,6 +114,9 @@ Popup Arrow
 #notificationsBody {
 	padding: 33px 0px 0px 0px !important;
 	min-height: 300px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	height: 52.5vh;
 }
 
 #notificationFooter {
@@ -166,7 +169,7 @@ Popup Arrow
 	
 					<div id="notificationContainer">
 						<div id="notificationTitle">Notificationes</div>
-						<div id="notificationsBody" class="notifications"></div>
+						<div id="notificationsBody" class="notifications "></div>
 						<div id="notificationFooter">
 							<a href="#" id="marcarLeida">Marcar como leídas</a>
 						</div>
@@ -474,7 +477,8 @@ Popup Arrow
 			$("#marcarLeida").click(function()
 			{
 				$("#notification_count").fadeOut("slow");
-				
+				$("#notificationsBody").html('');
+								
 				var listaIds = new Array();
 				
 				for(let noti of listaNotificaciones){
@@ -491,22 +495,26 @@ Popup Arrow
 					dataType: 'application/json',
 				    contentType: 'application/json; charset=utf-8',
 					success : function(data) {
-
-						console.log(data);
 														
 					}
 				});
 								
 			});
 							
+			solicitarNotificaciones();
+			setInterval(solicitarNotificaciones, 10000);			
+			
+		});
+		
+		
+		function solicitarNotificaciones(){
+			
 			jQuery.ajax({
 				url : '/notificaciones',
 				type : "GET",
 				dataType : "json",
 				contentType : "application/json; charset=utf-8",
 				success : function(data) {
-
-					console.log(data);
 					
 					if(data.length == 0){
 						$("#notification_count").text(data.length);
@@ -515,13 +523,56 @@ Popup Arrow
 						$("#notification_count").show();
 					}
 					
+					//ordeno de la más reciente a la más antigua
+					data.sort(function (a, b) {
+						
+						let dateA = new Date(a.fecha);
+						let dateB = new Date(b.fecha);
+						
+						if (dateA < dateB) {
+						   return 1;
+						}
+						if (dateA > dateB) {
+						   return -1;
+						}
+						 
+						return 0;
+					});
+					
+					
+					$("#notificationsBody").html(function(){
+						let htmlAux = '';
+						
+						data.forEach(dato => {
+							
+							let d = new Date(dato.fecha);
+							dformat = `${
+							    d.getDate().toString().padStart(2, '0')}/${
+							    (d.getMonth()+1).toString().padStart(2, '0')}/${
+							    d.getFullYear().toString().padStart(4, '0')} ${
+							    d.getHours().toString().padStart(2, '0')}:${
+							    d.getMinutes().toString().padStart(2, '0')}`;
+							
+							
+							htmlAux +=
+							`<div class="card text-dark mt-1">
+								 
+								  <div class="card-body">
+								 	 <div>${dformat} - ${dato.mensaje}</div>
+								  </div>
+							</div>
+							`;						
+							
+						});
+						
+						return htmlAux;
+					});
+					
 					listaNotificaciones = data;			
 				}
 			});
-						
 			
-		});
-		
+		}
 		
 		
 		

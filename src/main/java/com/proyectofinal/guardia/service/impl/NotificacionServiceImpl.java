@@ -48,6 +48,7 @@ public class NotificacionServiceImpl implements NotificacionService {
 			notiHelper.setIdNotiUsuario(nu.getId());
 			notiHelper.setLeido(nu.getLeido());
 			notiHelper.setMensaje(nu.getNotificacion().getDescripcion());
+			notiHelper.setFecha(nu.getNotificacion().getFecha());
 			
 			listaNotis.add(notiHelper);
 			

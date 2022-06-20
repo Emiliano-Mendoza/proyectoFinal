@@ -154,7 +154,7 @@ public class RetiroMaterialServiceImpl implements RetiroMaterialService {
 			notisUsuarios.toArray(notisArreglo);
 						
 			notiRepo.save(new Notificacion(usuarioAutorizador.nombreCompleto() + " ha creado una nueva autorización de retiro."
-					,"Autorización de retiro", usuarioAutorizador, notisArreglo));
+					,"Autorización de retiro", usuarioAutorizador, new Date(), notisArreglo));
 			
 		}catch(Exception e) {
 			return false;

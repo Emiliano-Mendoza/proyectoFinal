@@ -1,6 +1,7 @@
 package com.proyectofinal.guardia.domain;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -15,23 +16,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+
 import javax.validation.constraints.NotEmpty;
 
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonView;
 
 
 @Entity
@@ -47,6 +41,8 @@ public class Notificacion {
 	@NotEmpty
 	private String tipo;
 	
+	private Date fecha;
+	
 	@ManyToOne
 	@JoinColumn(name = "ID_Notificante")
 	private Usuario notificante;
@@ -57,10 +53,11 @@ public class Notificacion {
     private Set<NotiUsuario> notiUsuario;
 	
 	
-	 public Notificacion(String descripcion, String tipo, Usuario notificante, NotiUsuario... notiUsuario) {
+	 public Notificacion(String descripcion, String tipo, Usuario notificante, Date fecha, NotiUsuario... notiUsuario) {
 	        this.descripcion = descripcion;
 	        this.tipo = tipo;
 	        this.notificante = notificante;
+	        this.fecha = fecha;
 	        for(NotiUsuario nu : notiUsuario) nu.setNotificacion(this);
 	        this.notiUsuario = Stream.of(notiUsuario).collect(Collectors.toSet());
 	 }
@@ -118,11 +115,21 @@ public class Notificacion {
 		this.notiUsuario = notiUsuario;
 	}
 	*/
-
+	
+	
+	
 	@Override
 	public String toString() {
 		return "Notificacion [idNotificacion=" + idNotificacion + ", descripcion=" + descripcion + ", tipo=" + tipo
 				+ ", notificante=" + notificante + "]";
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
 	}
 
 
