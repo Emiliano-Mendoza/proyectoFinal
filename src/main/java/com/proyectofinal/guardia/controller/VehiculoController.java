@@ -101,4 +101,10 @@ public class VehiculoController {
 		
 		return ResponseEntity.ok(vehiculoServ.obtenerDisponibles());
 	}
+	
+	@GetMapping("/listar-todos")
+	public ResponseEntity<List<Vehiculo>> listarTodosVehiculos(){
+		
+		return ResponseEntity.ok(vehiculoServ.obtenerTodos());
+	}
 }

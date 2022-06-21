@@ -157,6 +157,6 @@ public class EmpleadoController {
 	@GetMapping
 	public ResponseEntity<List<Empleado>> listarEmpleadosDisponibles(){
 		
-		return ResponseEntity.ok(empleadoServ.obtenerDisponibles());
+		return ResponseEntity.ok(empleadoServ.obtenerTodos());
 	}
 }

@@ -11,5 +11,6 @@ public interface IngresoProveedorService {
 	public IngresoProveedor egresoProveedor(int idIngreso, Date egreso);
 	public List<IngresoProveedor> obtenerIngresos();
 	public List<IngresoProveedor> obtenerIngresosActivos();
+	public List<IngresoProveedor> listarIngresos();
 	
 }

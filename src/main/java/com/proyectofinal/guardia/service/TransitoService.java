@@ -8,8 +8,8 @@ import com.proyectofinal.guardia.domain.Vehiculo;
 
 public interface TransitoService {
 
-	public Transito crearTransito(int idAsistencia, Date salida, Vehiculo vehiculo);
-	public Transito reingresoTransito(int idTransito, Date reingreso, Vehiculo vehiculo);
+	public Transito crearTransito(int idAsistencia, Date salida, Vehiculo vehiculo, String comentario);
+	public Transito reingresoTransito(int idTransito, Date reingreso, Vehiculo vehiculo, String comentario);
 	public List<Transito> obtenerTransitos();
 	public List<Transito> obtenerTransitosActivos();
 			

@@ -20,6 +20,8 @@ public class Transito {
 	
 	private Date ingreso;
 	private Date egreso;
+	private String primerComentario;
+	private String segundoComentario;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_TipoTransito")
@@ -127,6 +129,22 @@ public class Transito {
 
 	public void setAsistencia(Asistencia asistencia) {
 		this.asistencia = asistencia;
+	}
+
+	public String getPrimerComentario() {
+		return primerComentario;
+	}
+
+	public void setPrimerComentario(String primerComentario) {
+		this.primerComentario = primerComentario;
+	}
+
+	public String getSegundoComentario() {
+		return segundoComentario;
+	}
+
+	public void setSegundoComentario(String segundoComentario) {
+		this.segundoComentario = segundoComentario;
 	}
 	
 	

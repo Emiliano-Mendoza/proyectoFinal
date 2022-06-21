@@ -109,7 +109,7 @@ public class Usuario {
 	}
 	
 	public String nombreCompleto() {
-		return nombre + ' ' + apellido;
+		return apellido + ' ' +  nombre;
 	}
 
 	@Override

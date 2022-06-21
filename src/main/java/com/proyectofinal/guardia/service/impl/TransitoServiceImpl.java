@@ -34,7 +34,7 @@ public class TransitoServiceImpl implements TransitoService {
 	private UsuarioJPARepository usuarioRepo;
 
 	@Override
-	public Transito crearTransito(int idAsistencia, Date salida, Vehiculo vehiculo) {
+	public Transito crearTransito(int idAsistencia, Date salida, Vehiculo vehiculo, String comentario) {
 
 		Transito transito = new Transito();
 		Asistencia asis = asisRepo.getById(idAsistencia);
@@ -44,6 +44,7 @@ public class TransitoServiceImpl implements TransitoService {
 		transito.setEmpleado(asis.getEmpleado());
 		transito.setTipo(tipoRepo.getById(1));
 		transito.setPrimerVehiculo(vehiculo);
+		transito.setPrimerComentario(comentario);
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		transito.setUsuarioEgreso(usuarioRepo.findByUsername(auth.getName()));
@@ -52,11 +53,12 @@ public class TransitoServiceImpl implements TransitoService {
 	}
 
 	@Override
-	public Transito reingresoTransito(int idTransito, Date reingreso, Vehiculo vehiculo) {
+	public Transito reingresoTransito(int idTransito, Date reingreso, Vehiculo vehiculo, String comentario) {
 
 		Transito transito = transitoRepo.getById(idTransito);
 		transito.setIngreso(reingreso);
 		transito.setSegundoVehiculo(vehiculo);
+		transito.setSegundoComentario(comentario);
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		transito.setUsuarioIngreso(usuarioRepo.findByUsername(auth.getName()));

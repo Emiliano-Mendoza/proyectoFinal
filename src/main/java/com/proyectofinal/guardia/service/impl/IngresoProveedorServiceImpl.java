@@ -4,10 +4,13 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.proyectofinal.guardia.dao.IngresoProveedorJPARepository;
 import com.proyectofinal.guardia.dao.ProveedorJPARepository;
+import com.proyectofinal.guardia.dao.UsuarioJPARepository;
 import com.proyectofinal.guardia.domain.IngresoProveedor;
 import com.proyectofinal.guardia.service.IngresoProveedorService;
 
@@ -20,6 +23,9 @@ public class IngresoProveedorServiceImpl implements IngresoProveedorService {
 	@Autowired
 	private ProveedorJPARepository proveedorRepo;
 	
+	@Autowired
+	private UsuarioJPARepository usuarioRepo;
+	
 	@Override
 	public IngresoProveedor crearIngresoProveedor(int idProveedor, Date ingreso, String planta, String chofer,
 			String patente) {
@@ -30,6 +36,9 @@ public class IngresoProveedorServiceImpl implements IngresoProveedorService {
 		ingresoProveedor.setPlanta(planta);
 		ingresoProveedor.setNombreChofer(chofer);
 		ingresoProveedor.setPatenteVehiculo(patente);
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		ingresoProveedor.setUsuarioIngreso(usuarioRepo.findByUsername(auth.getName()));
 						
 		return ingresoRepo.save(ingresoProveedor);
 	}
@@ -39,6 +48,9 @@ public class IngresoProveedorServiceImpl implements IngresoProveedorService {
 		
 		IngresoProveedor ingresoProveedor = ingresoRepo.getById(idIngreso);
 		ingresoProveedor.setEgreso(egreso);
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		ingresoProveedor.setUsuarioEgreso(usuarioRepo.findByUsername(auth.getName()));
 		
 		return ingresoRepo.save(ingresoProveedor);
 	}
@@ -53,6 +65,12 @@ public class IngresoProveedorServiceImpl implements IngresoProveedorService {
 	public List<IngresoProveedor> obtenerIngresosActivos() {
 		
 		return ingresoRepo.findAllActivos();
+	}
+
+	@Override
+	public List<IngresoProveedor> listarIngresos() {
+		
+		return ingresoRepo.findAll();
 	}
 
 }

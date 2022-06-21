@@ -4,6 +4,7 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,5 +66,11 @@ public class ProveedorController {
 		atributos.addFlashAttribute("success", "Proveedor editado exitosamente!");
 
 		return "redirect:/views/proveedor/administrar";
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<Proveedor>> listarProveedorDisponibles(){
+		
+		return ResponseEntity.ok(provServ.obtenerTodos());
 	}
 }

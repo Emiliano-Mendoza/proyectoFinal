@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
 import com.proyectofinal.guardia.domain.IngresoProveedor;
 import com.proyectofinal.guardia.domain.Proveedor;
 import com.proyectofinal.guardia.service.IngresoProveedorService;
@@ -102,4 +103,10 @@ public class IngresosProveedorController {
 		return ResponseEntity.ok(map);
 	}
 	
+	@GetMapping("/listar-ingresos")
+	public ResponseEntity<List<IngresoProveedor>> listarAsistencias() {
+							
+		
+		return ResponseEntity.ok(ingresoServ.listarIngresos());
+	}
 }

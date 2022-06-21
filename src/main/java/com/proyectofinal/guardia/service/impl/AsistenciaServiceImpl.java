@@ -86,4 +86,10 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 	}
 
+	@Override
+	public List<Asistencia> listarAsistencias() {
+		// TODO Auto-generated method stub
+		return asisRepo.findAllByOrderByIngresoAsc();
+	}
+
 }

@@ -12,6 +12,7 @@ public interface AsistenciaService {
 	public Asistencia egresoAsistencia(int idAsistencia, Date egreso);
 	public List<Asistencia> listarAsistenciasSinEgresoSinTransito();
 	public List<Asistencia> listarAsistenciasSinEgreso();
+	public List<Asistencia> listarAsistencias();
 	public void marcarAsistenciaEnTransito(int idAsistencia);
 	public void removerMarcarEnTransito(int idAsistencia);
 		

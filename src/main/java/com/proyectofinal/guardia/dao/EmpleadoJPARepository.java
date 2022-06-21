@@ -11,7 +11,7 @@ import com.proyectofinal.guardia.domain.Empleado;
 public interface EmpleadoJPARepository extends JpaRepository<Empleado, Integer> {
 
 	@Query(
-			value = "SELECT * FROM empleado e WHERE e.activo = true", 
+			value = "SELECT * FROM empleado e WHERE e.activo = true ORDER BY e.apellido", 
 			nativeQuery = true)
 	public List<Empleado> findAllDisponibles();
 	

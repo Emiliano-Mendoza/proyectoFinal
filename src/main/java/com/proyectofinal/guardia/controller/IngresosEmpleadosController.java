@@ -2,6 +2,7 @@ package com.proyectofinal.guardia.controller;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -114,9 +115,9 @@ public class IngresosEmpleadosController {
 			Date egresoTransitorio = new Date();
 			
 			if(idVehiculo != -1) {
-				transitoServ.crearTransito(idAsistencia, egresoTransitorio, vehiculoServ.obtenerVehiculo(idVehiculo).orElseThrow());
+				transitoServ.crearTransito(idAsistencia, egresoTransitorio, vehiculoServ.obtenerVehiculo(idVehiculo).orElseThrow(), comentario);
 			}else {
-				transitoServ.crearTransito(idAsistencia, egresoTransitorio, null);
+				transitoServ.crearTransito(idAsistencia, egresoTransitorio, null, comentario);
 			}
 						
 			asisServ.marcarAsistenciaEnTransito(idAsistencia);
@@ -140,9 +141,9 @@ public class IngresosEmpleadosController {
 			Transito transito;
 			
 			if(idVehiculo != -1) {
-				transito = transitoServ.reingresoTransito(idTransito, reingreso, vehiculoServ.obtenerVehiculo(idVehiculo).orElseThrow());
+				transito = transitoServ.reingresoTransito(idTransito, reingreso, vehiculoServ.obtenerVehiculo(idVehiculo).orElseThrow(), comentario);
 			}else {
-				transito = transitoServ.reingresoTransito(idTransito, reingreso, null);
+				transito = transitoServ.reingresoTransito(idTransito, reingreso, null, comentario);
 			}
 			
 			asisServ.removerMarcarEnTransito(transito.getAsistencia().getIdAsistencia());
@@ -178,4 +179,26 @@ public class IngresosEmpleadosController {
 		return ResponseEntity.ok(map);
 	}
 	
+	@GetMapping("/listar-ingresos-empleados/filtrar")
+	public ResponseEntity<List<Asistencia>> filtrar(@RequestParam(name = "date_range") String date_range,
+			@RequestParam(name = "idUsuario", required = false) int idUsuario) {
+		
+		String[] parts = date_range.split("-");								
+		
+		return ResponseEntity.ok(asisServ.listarAsistenciasSinEgresoSinTransito());
+	}
+	
+	@GetMapping("/listar-ingresos")
+	public ResponseEntity<List<Asistencia>> listarAsistencias() {
+							
+		
+		return ResponseEntity.ok(asisServ.listarAsistencias());
+	}
+	
+	@GetMapping("/listar-transitos")
+	public ResponseEntity<List<Transito>> listarTransitos() {
+							
+		
+		return ResponseEntity.ok(transitoServ.obtenerTransitos());
+	}
 }

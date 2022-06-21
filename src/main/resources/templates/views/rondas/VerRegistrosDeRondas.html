@@ -104,7 +104,7 @@
 						
 						for(let dato of data){
 							
-							aux += `<option value=${dato.idUsuario}>${dato.nombre} ${dato.apellido}</option>`;
+							aux += `<option value=${dato.idUsuario}>${dato.apellido} ${dato.nombre}</option>`;
 							
 						}
 						
@@ -187,7 +187,7 @@
                     {
                         "data":"usuario", "render": function (valor){
                             
-                            return `<span>${valor?.nombre} ${valor?.apellido}</span>`;
+                            return `<span>${valor?.apellido} ${valor?.nombre}</span>`;
                         }, "width": "20%"
                     }	 
                 ]
