@@ -78,12 +78,18 @@ public class RetiroMaterialController {
 	@PostMapping("/retiro/{idAutorizacion}")
 	public String registroDeRetiro(@PathVariable("idAutorizacion") int idAutorizacion, 
 			@RequestParam(name = "observacionGuardia") String observacionGuardia,
-			@RequestParam(name = "planta") String planta,
+			@RequestParam(name = "planta") int planta,
 			RedirectAttributes atributos) {
 				
 		try {
-						
-			retiroMaterialServ.registrarRetiro(idAutorizacion, new Date(), observacionGuardia, planta);
+			
+			String plantaAux = "No definida";
+			
+			if(planta == 1) plantaAux = "Av. Facundo Zuviría 4740 - Planta I";
+			if(planta == 2) plantaAux = "Av. Peñaloza 5750 - Planta II";
+			
+			
+			retiroMaterialServ.registrarRetiro(idAutorizacion, new Date(), observacionGuardia, plantaAux);
 			
 		}catch(Exception e) {
 			atributos.addFlashAttribute("error", e.getMessage());

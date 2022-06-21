@@ -53,12 +53,19 @@ public class IngresosProveedorController {
 
 	@PostMapping("/ingreso/{idProveedor}")
 	public String registrarIngresoDeProveedor(@PathVariable("idProveedor") int idProveedor,
+			@RequestParam(name = "planta") int planta,
 			@RequestParam(name = "chofer") String chofer,
 			@RequestParam(name = "patenteVehiculo") String patenteVehiculo, RedirectAttributes atributos) {
 				
 		try {
-			Date ingreso = new Date();			
-			ingresoServ.crearIngresoProveedor(idProveedor, ingreso, "Planta I - Av. Facundo", chofer, patenteVehiculo);
+			Date ingreso = new Date();
+			
+			String plantaAux = "No definida";
+			
+			if(planta == 1) plantaAux = "Av. Facundo Zuviría 4740 - Planta I";
+			if(planta == 2) plantaAux = "Av. Peñaloza 5750 - Planta II";
+			
+			ingresoServ.crearIngresoProveedor(idProveedor, ingreso, plantaAux, chofer, patenteVehiculo);
 			
 		}catch(Exception e){
 			atributos.addFlashAttribute("error", "No se pudo registrar el ingreso.");

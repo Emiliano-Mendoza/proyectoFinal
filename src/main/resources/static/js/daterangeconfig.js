@@ -5,7 +5,7 @@
 		$(function () {
 		    $('#date_range').daterangepicker({
 		        "locale": {
-		            "format": "DD/MM/YYYY",
+		       		"format": "DD/MM/YYYY",
 		            "separator": "-",
 		            "applyLabel": "Guardar",
 		            "cancelLabel": "Cancelar",
@@ -34,13 +34,14 @@
 		                "Octubre",
 		                "Noviembre",
 		                "Diciembre"
-		            ],
+		            ],		           
 		            "firstDay": 1
 		        },
 		        "startDate": today,
 		        "endDate" : today,
 		        "opens": "center"
 		    });
+		    		    
 	});
 	$('#date_range2').daterangepicker();
 	let today2 = new Date()

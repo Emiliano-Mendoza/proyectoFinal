@@ -3,7 +3,7 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="head">
 <meta charset="UTF-8">
-<title>Guardia</title>
+<title id="tituloPagina">Guardia</title>
 
 <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 <link rel="stylesheet" th:href="@{/css/animate.min.css}">
@@ -41,8 +41,6 @@
 	border-radius: 20px;
 	border: transparent;
 }
-
-
 
 #nav {
 	list-style: none;
@@ -83,7 +81,6 @@
 	width: 400px;
 	z-index: -1;
 	display: none;
-	
 }
 
 Popup Arrow
@@ -161,23 +158,21 @@ Popup Arrow
 			</button>
 
 			<!-- Notification button -->
-			<ul class="d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-				<li id="notification_li">
-	
-					<a href="#" id="notificationLink" style="color:grey;" ><i class="fa-solid fa-bell"></i><span
-						id="notification_count" style="display: none;"></span></a> 
-	
+			<ul
+				class="d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+				<li id="notification_li"><a href="#" id="notificationLink"
+					style="color: grey;"><i class="fa-solid fa-bell"></i><span
+						id="notification_count" style="display: none;"></span></a>
+
 					<div id="notificationContainer">
 						<div id="notificationTitle">Notificationes</div>
 						<div id="notificationsBody" class="notifications "></div>
 						<div id="notificationFooter">
 							<a href="#" id="marcarLeida">Marcar como leídas</a>
 						</div>
-					</div>
-	
-				</li>
+					</div></li>
 			</ul>
-			
+
 
 			<!-- <button
 				class="btn btn-secondary d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"
@@ -202,11 +197,51 @@ Popup Arrow
 						aria-labelledby="navbarDropdown">
 						<li><a class="dropdown-item" th:href="@{/home}">Inicio</a></li>
 						<li><hr class="dropdown-divider" /></li>
-						<li><a class="dropdown-item" th:href="@{/logout}">Cerrar
+						<li onclick="deleteCookies()"><a class="dropdown-item" th:href="@{/logout}" >Cerrar
 								Sesión</a></li>
 					</ul></li>
 			</ul>
 		</nav>
+
+
+		<!-- Modal -->
+		<div class="modal fade" id="modalPlanta" tabindex="-1"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Ingrese la
+							planta correspondiente:</h5>
+
+					</div>
+					<form>
+						<div class="modal-body" id="modalbody">
+
+
+							<ul class="list-group list-group-flush">
+
+								<li class="list-group-item"><label>Planta: </label> <select
+									class="form-select" id="plantaSelect" name="plantaSelect">
+										<option value=2 selected>Av.
+											Peñaloza 5750 - Planta II</option>
+										<option value=1>Av. Facundo Zuviría
+											4740 - Planta I</option>
+
+
+								</select></li>
+							</ul>
+
+
+						</div>
+						<div class="modal-footer">
+
+							<button type="submit" class="btn btn-primary"
+								onclick="setCookie()" data-bs-dismiss="modal">Aceptar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 
 
 	</header>
@@ -294,6 +329,7 @@ Popup Arrow
 					</div>
 
 					<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+						sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_AUTORIZADOR')"
 						data-bs-target="#collapseLayouts" aria-expanded="false"
 						aria-controls="collapseLayouts">Autorizaciones
 						<div class="sb-sidenav-collapse-arrow">
@@ -380,6 +416,7 @@ Popup Arrow
 				</div>
 			</div>
 		</nav>
+
 	</div>
 
 	<div th:fragment="mensajes">
@@ -403,13 +440,23 @@ Popup Arrow
 	</div>
 
 
+
 	<!-- CONTENIDO -->
 	<div class="container"></div>
+
+
+
+
 
 	<!-- PIE DE PAGINA -->
 	<footer th:fragment="footer"
 		class="bg-dark text-white text-center fixed-bottom ">
 
+		<div>
+			<span sec:authentication='principal.authorities' id="rolesUsuario"
+				hidden></span> <span sec:authentication='name' id="nombreUsuario"
+				hidden></span>
+		</div>
 
 
 		<script type="text/javascript" th:src="@{/js/jquery-3.3.1.min.js}"></script>
@@ -429,7 +476,8 @@ Popup Arrow
 
 
 		<script th:inline="javascript">
-			
+		const roles = document.getElementById("rolesUsuario").textContent;
+		const nombreUsuario = document.getElementById("nombreUsuario").textContent;
 		
 		window.addEventListener('DOMContentLoaded', event => {
 
@@ -518,9 +566,13 @@ Popup Arrow
 					
 					if(data.length == 0){
 						$("#notification_count").text(data.length);
+						$("#tituloPagina").text(`Guardia`);
 					}else{
 						$("#notification_count").text(data.length);
 						$("#notification_count").show();
+						
+						$("#tituloPagina").text(`(${data.length}) Guardia`);
+						
 					}
 					
 					//ordeno de la más reciente a la más antigua
@@ -573,11 +625,89 @@ Popup Arrow
 			});
 			
 		}
+						
+		function getCookie(cname) {
+			let name = cname + "=";
+			let decodedCookie = decodeURIComponent(document.cookie);
+			let ca = decodedCookie.split(';');
+			for (let i = 0; i < ca.length; i++) {
+				let c = ca[i];
+				while (c.charAt(0) == ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return c.substring(name.length, c.length);
+				}
+			}
+			return "";
+		}
 		
+		function deleteCookies() {
+			document.cookie = "logueado=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+		}
+		
+		function setCookie() {
+			let aux = document.getElementById('plantaSelect').value;
+			
+			document.cookie = nombreUsuario + "=" + aux+ "; path=/";
+			//document.cookie = "planta=" + aux+ "; path=/";
+			document.cookie = "logueado=true; path=/";
+			
+			setPlantaButton();
+		}
+		
+		
+		setPlantaButton();
+		function setPlantaButton(){
+			//Pongo el nombre de la planta en el boton de seleccionar planta
+			if (getCookie(nombreUsuario) != "") {
+				
+				if(getCookie(nombreUsuario) == 2){
+					document.getElementById("plantaButton").innerText = "Av. Peñaloza 5750 - Planta II";
+				}else if(getCookie(nombreUsuario) == 1){
+					document.getElementById("plantaButton").innerText = "Av. Facundo Zuviría 4740 - Planta I";
+				}else{
+					document.getElementById("plantaButton").innerText =  "No definida";
+				}
+											
+			}
+		}
+		
+		setPlantaEnCookie();
+		function setPlantaEnCookie(){
+			
+			if(getCookie(nombreUsuario) != ""){
+				const plantaSelect = document.getElementById("plantaSelect");
+				
+				let plantaAnterior = getCookie(nombreUsuario);
+				
+				if(plantaAnterior == 2){
+					plantaSelect.innerHTML=`
+						<option value=2 selected>Av. Peñaloza 5750 - Planta II</option>
+						<option value=1>Av. Facundo Zuviría 4740 - Planta I</option>
+					`;
+				}else if(plantaAnterior == 1){
+					plantaSelect.innerHTML=`
+						<option value=2>Av. Peñaloza 5750 - Planta II</option>
+						<option value=1 selected>Av. Facundo Zuviría 4740 - Planta I</option>
+					`;
+				}
+				
+				
+			}
+			
+		}
+		
+		
+		//muestro el modal si el usuario tiene el rol de guardia y si recien se loguea
+		$(window).on('load', function() {
+			if (getCookie("logueado") == "" && roles.indexOf("ROLE_GUARDIA") !== -1) {
+				$('#modalPlanta').modal('show');
+			}
+		});
 		
 		
 		</script>
-
 
 	</footer>
 

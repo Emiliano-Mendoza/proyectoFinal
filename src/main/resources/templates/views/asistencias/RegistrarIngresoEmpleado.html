@@ -122,6 +122,7 @@
 			});
 
 		});
+		
 
 		$("#table_id tbody").on("click", '.btn-ingreso', function() {
 			let filaSeleccionada = (this).closest("tr");
@@ -131,6 +132,12 @@
 			let imagenEmpleado= `/recursos/${imagenAux}` ;
 			
 			let action = "/views/ingresos-empleado/ingreso/" + data.nroLegajo;
+			
+			let planta = $("#plantaSelect").val();
+			let plantaAux = 'No definida';
+			
+			if(planta == 1) plantaAux = 'Av. Facundo Zuviría 4740 - Planta I';
+			else if(planta == 2) plantaAux = 'Av. Peñaloza 5750 - Planta II';
 			
 			cardAsis.innerHTML = `
 				<div class="col-md-8" >
@@ -151,7 +158,7 @@
 									  <li class="list-group-item bg-light">Empleado: ${data.nombre} ${data.apellido}</li>
 									  <li class="list-group-item bg-light">Número de Legajo: ${data.nroLegajo}</li>
 									  <li class="list-group-item bg-light">Sector de trabajo: ${data.sector.sector}</li>
-									  <li class="list-group-item bg-light">Planta: Planta I - Av. Facundo</li>
+									  <li class="list-group-item bg-light">Planta: ${plantaAux}</li>
 									  <li class="list-group-item bg-light">Fecha y hora del ingreso: <small class="text-muted"><span
 										id='date-time'></span></small></li>
 									</ul>
@@ -163,6 +170,7 @@
 							action=${action}
 							method="post"
 							>
+							<input type="number" value=${planta} hidden name="planta">
 							<div
 								class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-between">
 									<button type="button" class="btn btn-secondary" onclick="CloseCard()"

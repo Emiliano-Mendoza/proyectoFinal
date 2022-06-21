@@ -48,7 +48,12 @@
 			
 		const formulario = document.querySelector('#formulario');
 		const resultado = document.querySelector('#cardRetiro');
-	
+		
+		let plantaAux = 'No definida';
+		
+		if($("#plantaSelect").val() == 1) plantaAux = 'Av. Facundo Zuviría 4740 - Planta I';
+		else if($("#plantaSelect").val() == 2) plantaAux = 'Av. Peñaloza 5750 - Planta II';
+		
 		const filtrar = () => {
 			resultado.innerHTML = ''
 			
@@ -59,14 +64,16 @@
 				let urlRetiro= "/views/retiro-material/retiro/" + aut.idAutorizacion;
 				let materialesId = 'materiales' + aut.idAutorizacion;
 				let myform = 'myform' + aut.idAutorizacion;
+				let idPlanta = "planta" + aut.idAutorizacion;
 				
 				//le doy el formato correcto a la fecha
 				let d = new Date(aut.fechaLimite);
-				dformat = [d.getDate(),
-	  				d.getMonth()+1,
-	               d.getFullYear()].join('/')+' '+
-	              [d.getHours(),
-	               d.getMinutes()].join(':');			
+				dformat = `${
+				    d.getDate().toString().padStart(2, '0')}/${
+				    (d.getMonth()+1).toString().padStart(2, '0')}/${
+				    d.getFullYear().toString().padStart(4, '0')} ${
+				    d.getHours().toString().padStart(2, '0')}:${
+				    d.getMinutes().toString().padStart(2, '0')}`;		
 				
 				if(aut.empleado != null){
 					let nombre = aut.empleado.nombre.toLowerCase();
@@ -85,10 +92,11 @@
 										
 										
 										<ul class="list-group list-group-flush">
-										  <li class="list-group-item bg-light">Empleado autorizado: ${aut?.empleado?.nombre}
+										  <li class="list-group-item bg-light">Empleado Autorizado: ${aut?.empleado?.nombre}
 											${aut?.empleado?.apellido}</li>
 										  <li class="list-group-item bg-light">Autorizante: ${aut?.usuario?.nombre} ${aut?.usuario?.apellido}</li>
 										  <li class="list-group-item bg-light">Descripción: ${aut?.descripcion}</li>
+										  <li class="list-group-item bg-light">Planta: ${plantaAux}</li>
 										  <li class="list-group-item bg-light">
 										  	<label for="exampleInput1" class="form-label">Materiales:</label>
 											<select class="form-select"
@@ -104,7 +112,7 @@
 										  </li>
 										</ul>
 										
-										<input type="text" name="planta" value="Planta I - Av. Facundo" hidden required>
+										<input type="number" id=${idPlanta} name="planta" value=${$("#plantaSelect").val()} hidden form=${myform}>
 										
 									</div>
 									<div class="card-footer" > 
@@ -119,7 +127,7 @@
 							</form>
 						</div>
 						`;
-						
+																							
 						SetMateriales(materialesId, aut);
 					}
 				}
@@ -129,7 +137,7 @@
 					if(retiroExterno.indexOf(texto) !== -1){
 						
 						resultado.innerHTML += `
-							<div class="col-sm-6 mt-3">
+							<div class="col-sm-6 mt-2">
 								<form action=${urlRetiro} method="post"
 								 id=${myform}>
 									<div class="card text-dark bg-light mb-3">
@@ -139,6 +147,7 @@
 										  <li class="list-group-item bg-light">Retiro Externo</li>
 										  <li class="list-group-item bg-light">Autorizante: ${aut?.usuario?.nombre} ${aut?.usuario?.apellido}</li>
 										  <li class="list-group-item bg-light">Descripción: ${aut?.descripcion}</li>
+										  <li class="list-group-item bg-light">Planta: ${plantaAux}</li>
 										  <li class="list-group-item bg-light">
 										  	<label for="exampleInput1" class="form-label">Materiales:</label>
 											<select class="form-select"
@@ -154,7 +163,7 @@
 										  </li>
 										</ul>
 										
-										<input type="text" name="planta" value="Planta I - Av. Facundo" hidden required>
+										<input type="number" id=${idPlanta} name="planta" value=${$("#plantaSelect").val()} hidden form=${myform}>
 										
 									</div>
 									<div class="card-footer" > 																		

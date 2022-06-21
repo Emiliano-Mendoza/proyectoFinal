@@ -100,4 +100,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return rolesRepo.findAll();
 	}
 
+	@Override
+	public List<Usuario> obtenerUsuarioActivos() {
+
+		return usuarioRepo.findAllDisponibles();
+	}
+
 }

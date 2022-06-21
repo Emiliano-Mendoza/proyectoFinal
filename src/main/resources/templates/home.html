@@ -221,7 +221,7 @@
 							    d.getFullYear().toString().padStart(4, '0')}`;
 
 							    
-							aux += `<li class="mb-1">${dformat} - Retira: ${aut.empleado != null ? aut.empleado.nombre + ' ' + aut.empleado.apellido : 'Retiro Externo'}
+							aux += `<li class="mb-1">Fecha Límite: ${dformat} - Retira: ${aut.empleado != null ? aut.empleado.nombre + ' ' + aut.empleado.apellido : 'Retiro Externo'}
 							 - Autoriza: ${aut.usuario.nombre} ${aut.usuario.apellido} - Materiales: ${formatMaterial(aut.materiales)}
 							</li>`;
 						}
@@ -235,6 +235,18 @@
 		
 		function formatMaterial(lista){
 			let materiales = '';
+			
+			lista.sort(function (a, b) {
+								
+				if (a.idMaterial > b.idMaterial) {
+				   return 1;
+				}
+				if (a.idMaterial < b.idMaterial) {
+				   return -1;
+				}
+				 
+				return 0;
+			});
 			
 			for(let mat of lista){
 				materiales += mat.material + ' ';

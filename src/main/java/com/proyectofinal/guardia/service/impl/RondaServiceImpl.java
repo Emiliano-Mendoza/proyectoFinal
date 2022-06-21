@@ -64,4 +64,26 @@ public class RondaServiceImpl implements RondaService {
 		return null;
 	}
 
+	@Override
+	public List<Ronda> filtrarRondas(String fechaInicio, String FechaFin, int idUsuario) {
+		
+		try {
+						
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			Date fechaInicioAux = formatter.parse(fechaInicio);
+			Date fechaFinalAux = new Date(formatter.parse(FechaFin).getTime() + (1000 * 60 * 60 * 24));
+			
+			return rondaRepo.findAll().stream().filter(r -> r.getFechaRonda().after(fechaInicioAux) && r.getFechaRonda().before(fechaFinalAux)
+					&& ( idUsuario > 0 ? ( r.getUsuario()!= null && r.getUsuario().getIdUsuario() == idUsuario) : true)).collect(Collectors.toList());
+						
+						
+		} catch (ParseException e) {
+
+			e.printStackTrace();
+		}
+						
+		
+		return null;
+	}
+
 }

@@ -119,6 +119,12 @@
 			
 			let action = "/views/ingresos-proveedor/ingreso/" + data.idProveedor;
 			
+			let planta = $("#plantaSelect").val();
+			let plantaAux = 'No definida';
+			
+			if(planta == 1) plantaAux = 'Av. Facundo Zuviría 4740 - Planta I';
+			else if(planta == 2) plantaAux = 'Av. Peñaloza 5750 - Planta II';
+			
 			cardAsis.innerHTML = `
 				<div class="col-md-8" >
 					<div class="card text-dark bg-light mb-3">
@@ -136,7 +142,7 @@
 																		
 									<ul class="list-group list-group-flush mt-2">
 									  <li class="list-group-item bg-light">Proveedor: ${data.proveedor}</li>
-									  <li class="list-group-item bg-light">Planta: </li>
+									  <li class="list-group-item bg-light">Planta: ${plantaAux}</li>
 									  <li class="list-group-item bg-light">Fecha y hora del ingreso: <small class="text-muted"><span
 										id='date-time'></span></small></li>
 									  <li class="list-group-item bg-light">
@@ -155,6 +161,8 @@
 						<form 	action=${action}
 								method="post"								
 								id="myform">
+								
+								<input type="number" value=${planta} hidden name="planta">
 							<div
 								class="card-footer bg-dark d-grid gap-2 d-md-flex justify-content-between">
 								<button type="button" class="btn btn-secondary" onclick="CloseCard()"

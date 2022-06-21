@@ -64,12 +64,17 @@ public class IngresosEmpleadosController {
 	}
 
 	@PostMapping("/ingreso/{nroLegajo}")
-	public String crearAsistencia(@PathVariable("nroLegajo") int nroLegajo, RedirectAttributes atributos) {
+	public String crearAsistencia(@PathVariable("nroLegajo") int nroLegajo, @RequestParam(name = "planta") int planta, RedirectAttributes atributos) {
 
 		try {
 			Date ingreso = new Date();
+			String plantaAux = "No definida";
+			
+			if(planta == 1) plantaAux = "Av. Facundo Zuviría 4740 - Planta I";
+			if(planta == 2) plantaAux = "Av. Peñaloza 5750 - Planta II";
+			
 			asisServ.crearAsistencia(empleadoServ.buscarEmpleado(nroLegajo).orElseThrow(), ingreso,
-					"Planta I - Av. Facundo");
+					plantaAux);
 			empleadoServ.marcarEmpleadoEnPlanta(nroLegajo);
 
 		} catch (Exception e) {

@@ -13,6 +13,7 @@ public interface UsuarioService {
 	public Usuario crearUsuario(String username, String contraseña, String nombre, String apellido, Boolean activo, List<Integer> roles);
 	public Usuario editarUsuario(int idUsuario, String contraseña, String nombre, String apellido, Boolean activo, List<Integer> roles);
 	public List<Usuario> getAllUsuario();
+	public List<Usuario> obtenerUsuarioActivos();
 	public Optional<Usuario> findById(int idUsuario);
 	public Usuario findByUsuario(String us);
 	public List<Rol> obtenerRoles();

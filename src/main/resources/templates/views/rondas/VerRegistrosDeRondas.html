@@ -28,28 +28,28 @@
 					</div>
 					<div class="card-body">
 
+						<form id="filtroForm">
+							<div class="row">
 
-						<div class="row">
-
-							<div class="col-md-3 pb-2">
+								<div class="col-md-3 pb-2">
 									<label>Rango Fecha: </label> <input type="text" id="date_range"
 										name="date_range" class="form-control">
 
 								</div>
 								<div class="col-md-3 pb-2">
-									<label for="a">Guardia:</label> <select class="form-select">
-										<option value=1 selected>Mendoza Mariano</option>
-										<option value=2>Tito el Loco</option>
-										<option value=3>Del Turco Celina</option>
+									<label for="a">Usuario Guardia:</label> <select
+										class="form-select" id="usuarioSelect" name="idUsuario">
+
 									</select>
 								</div>
 								<div class="col-md-3 mt-2"
 									style="display: flex; align-items: center;">
-									<button type="button" class="btn btn-primary mt-2">Filtrar</button>
+									<button type="button" class="btn btn-primary mt-2"
+										onclick="filtrarRegistros()">Filtrar</button>
 								</div>
 
-						</div>
-
+							</div>
+						</form>
 						<hr>
 
 						<div class="mt-4"></div>
@@ -61,28 +61,11 @@
 									<th>Ronda</th>
 									<th>Descripción</th>
 									<th>Fecha</th>
+									<th>Planta</th>
 									<th>Guardia</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>08:00</td>
-									<td>Ruidos Raros</td>
-									<td>24/05/2022</td>
-									<td>Mendoza Mariano</td>
-								</tr>
-								<tr>
-									<td>18:00</td>
-									<td>Olores Extraños</td>
-									<td>24/05/2022</td>
-									<td>Mendoza Mariano</td>
-								</tr>
-								<tr>
-									<td>19:00</td>
-									<td>Avistamiento de animales</td>
-									<td>24/05/2022</td>
-									<td>Matías Rosso</td>
-								</tr>
 
 
 							</tbody>
@@ -100,11 +83,64 @@
 
 	<footer th:replace="plantilla/template :: footer"></footer>
 
-	<script type="text/javascript">
+	<script th:inline="javascript">
 		var datatable;
+		
 		$(document).ready(function() {
+			
+			let listaRondas = /*[[${listaRondas}]]*/'default';
+			
+			setDataTable(listaRondas);
+				
+			jQuery.ajax({
+				url : '/views/usuario/usuarios-activos',
+				type : "GET",
+				dataType : "json",
+				contentType : "application/json; charset=utf-8",
+				success : function(data) {
 
+					$("#usuarioSelect").html(function(){
+						let aux = '<option value=-1>Todos</option>';
+						
+						for(let dato of data){
+							
+							aux += `<option value=${dato.idUsuario}>${dato.nombre} ${dato.apellido}</option>`;
+							
+						}
+						
+						return aux;
+					});				
+				}
+			});			
+			
+		});
+		
+		function filtrarRegistros(){
+						
+			jQuery.ajax({
+				url : '/views/ronda/filtrar',
+				type : "GET",
+				dataType : "json",
+				data: $('#filtroForm').serialize(),
+				contentType : "application/json; charset=utf-8",
+				success : function(data) {
+										
+					setDataTable(data);
+														
+				}
+			});	
+			
+		}
+		
+		function setDataTable(datos){
+			
+			if(datatable != null){
+				datatable.clear();
+				datatable.destroy();
+			}
+			
 			datatable = $('#table_id').DataTable({
+				data: datos,
 				language : {
 					"decimal" : "",
 					"emptyTable" : "No hay información",
@@ -129,9 +165,38 @@
 					"className" : "dt-center",
 					"targets" : "_all"
 				} ]
-			});
-
-		});
+				,
+				columns: [
+                    { data: 'ronda', "width": "10%"},
+                    { data: 'descripcion' ,
+                        	"orderable": false, "width": "25%"},                                      
+                    {
+                        "data":"fechaRonda", "render": function (valor){
+                            
+                        	let d = new Date(valor);
+							dformat = `${
+							    d.getDate().toString().padStart(2, '0')}/${
+							    (d.getMonth()+1).toString().padStart(2, '0')}/${
+							    d.getFullYear().toString().padStart(4, '0')} `;
+                        	
+                            return `<span>${dformat}</span>`;
+                        }, "width": "20%"
+                    },	                    
+                    { data: 'planta',
+                    	"orderable": false, "width": "25%" },	                    
+                    {
+                        "data":"usuario", "render": function (valor){
+                            
+                            return `<span>${valor?.nombre} ${valor?.apellido}</span>`;
+                        }, "width": "20%"
+                    }	 
+                ]
+				
+			}).order( [ 2, 'desc' ], [0, 'desc'] ).draw();
+			
+		}
+		
+		
 	</script>
 </body>
 </html>
