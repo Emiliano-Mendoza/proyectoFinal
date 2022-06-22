@@ -1,5 +1,7 @@
 package com.proyectofinal.guardia.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +31,7 @@ public class TransitoServiceImpl implements TransitoService {
 
 	@Autowired
 	private AsistenciaJPARepository asisRepo;
-	
+
 	@Autowired
 	private UsuarioJPARepository usuarioRepo;
 
@@ -45,7 +47,7 @@ public class TransitoServiceImpl implements TransitoService {
 		transito.setTipo(tipoRepo.getById(1));
 		transito.setPrimerVehiculo(vehiculo);
 		transito.setPrimerComentario(comentario);
-		
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		transito.setUsuarioEgreso(usuarioRepo.findByUsername(auth.getName()));
 
@@ -59,11 +61,10 @@ public class TransitoServiceImpl implements TransitoService {
 		transito.setIngreso(reingreso);
 		transito.setSegundoVehiculo(vehiculo);
 		transito.setSegundoComentario(comentario);
-		
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		transito.setUsuarioIngreso(usuarioRepo.findByUsername(auth.getName()));
-		
-		
+
 		return transitoRepo.save(transito);
 
 	}
@@ -77,8 +78,41 @@ public class TransitoServiceImpl implements TransitoService {
 	@Override
 	public List<Transito> obtenerTransitosActivos() {
 
-		return transitoRepo.findAllByOrderByEgresoAsc().stream().filter(t -> (t.getIngreso() == null && t.getTipo().getIdTipo() == 1))
-				.collect(Collectors.toList());
+		return transitoRepo.findAllByOrderByEgresoAsc().stream()
+				.filter(t -> (t.getIngreso() == null && t.getTipo().getIdTipo() == 1)).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<Transito> filtrarTransitos(String fechaInicio, String fechaFin, int nroLegajo, int idUsuario,
+			int idVehiculo) {
+
+		try {
+						
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			Date fechaInicioAux = formatter.parse(fechaInicio != null ? fechaInicio : "01/01/2000");
+			Date fechaFinalAux =  fechaInicio != null ? new Date(formatter.parse(fechaFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
+
+			return transitoRepo.findAll().stream()
+					.filter(t -> (t.getEgreso() != null ? t.getEgreso().after(fechaInicioAux) : true)
+							&& (t.getEgreso() != null ?  t.getEgreso().before(fechaFinalAux) : true)
+							&& (idUsuario > 0
+									? ((t.getUsuarioIngreso() != null && t.getUsuarioIngreso().getIdUsuario() == idUsuario)
+											|| (t.getUsuarioEgreso() != null
+													&& t.getUsuarioEgreso().getIdUsuario() == idUsuario))
+									: true)
+							&& (nroLegajo > 0 ? (t.getEmpleado() != null && t.getEmpleado().getNroLegajo() == nroLegajo)
+									: true)
+							&& (idVehiculo > 0 ? ((t.getPrimerVehiculo() != null && t.getPrimerVehiculo().getIdVehiculo() == idVehiculo) ||
+									(t.getSegundoVehiculo() != null && t.getSegundoVehiculo().getIdVehiculo() == idVehiculo))
+									: true))
+					.collect(Collectors.toList());
+
+		} catch (ParseException e) {
+
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 }

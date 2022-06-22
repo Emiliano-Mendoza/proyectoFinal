@@ -12,5 +12,6 @@ public interface IngresoProveedorService {
 	public List<IngresoProveedor> obtenerIngresos();
 	public List<IngresoProveedor> obtenerIngresosActivos();
 	public List<IngresoProveedor> listarIngresos();
+	public List<IngresoProveedor> filtrarIngresos(String fechaInicio, String fechaFin, int idProveedor, int idUsuario);
 	
 }

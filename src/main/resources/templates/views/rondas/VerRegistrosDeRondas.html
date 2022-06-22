@@ -32,7 +32,7 @@
 							<div class="row">
 
 								<div class="col-md-3 pb-2">
-									<label>Rango Fecha: </label> <input type="text" id="date_range"
+									<label>Rango Fecha: </label> <input type="text" id="date_range" autocomplete="off"
 										name="date_range" class="form-control">
 
 								</div>
@@ -42,10 +42,15 @@
 
 									</select>
 								</div>
-								<div class="col-md-3 mt-2"
+								<div class="col-md-1 d-grid mt-2"
 									style="display: flex; align-items: center;">
 									<button type="button" class="btn btn-primary mt-2"
 										onclick="filtrarRegistros()">Filtrar</button>
+								</div>
+								<div class="col-md-1 d-grid mt-2"
+									style="display: flex; align-items: center;">
+									<button type="button" class="btn btn-outline-danger mt-2"
+										onclick="desfiltrar()">Desfiltrar</button>
 								</div>
 
 							</div>
@@ -85,10 +90,11 @@
 
 	<script th:inline="javascript">
 		var datatable;
+		var listaRondas;
 		
 		$(document).ready(function() {
 			
-			let listaRondas = /*[[${listaRondas}]]*/'default';
+			listaRondas = /*[[${listaRondas}]]*/'default';
 			
 			setDataTable(listaRondas);
 				
@@ -172,22 +178,14 @@
                         	"orderable": false, "width": "25%"},                                      
                     {
                         "data":"fechaRonda", "render": function (valor){
-                            
-                        	let d = new Date(valor);
-							dformat = `${
-							    d.getDate().toString().padStart(2, '0')}/${
-							    (d.getMonth()+1).toString().padStart(2, '0')}/${
-							    d.getFullYear().toString().padStart(4, '0')} `;
-                        	
-                            return `<span>${dformat}</span>`;
+                        	return valor != null && valor !== undefined ? `<span>${darFormatoFechaSimple(new Date(valor))}</span>` : `<span>-</span>`;
                         }, "width": "20%"
                     },	                    
                     { data: 'planta',
                     	"orderable": false, "width": "25%" },	                    
                     {
                         "data":"usuario", "render": function (valor){
-                            
-                            return `<span>${valor?.apellido} ${valor?.nombre}</span>`;
+                        	return valor != null && valor !== undefined ? `<span>${valor.apellido} ${valor.nombre}</span>` : `<span>-</span>`;
                         }, "width": "20%"
                     }	 
                 ]
@@ -196,6 +194,9 @@
 			
 		}
 		
+		function desfiltrar(){
+			setDataTable(listaRondas);						
+		}
 		
 	</script>
 </body>

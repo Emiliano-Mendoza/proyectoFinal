@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
+import com.proyectofinal.guardia.domain.Asistencia;
 import com.proyectofinal.guardia.domain.IngresoProveedor;
 import com.proyectofinal.guardia.domain.Proveedor;
 import com.proyectofinal.guardia.service.IngresoProveedorService;
@@ -108,5 +108,18 @@ public class IngresosProveedorController {
 							
 		
 		return ResponseEntity.ok(ingresoServ.listarIngresos());
+	}
+	
+	@GetMapping("/listar-ingresos/filtrar")
+	public ResponseEntity<List<IngresoProveedor>> filtrarIngresos(@RequestParam(name = "date_range") String date_range,
+			@RequestParam(name = "idProveedor", required = false) int idProveedor,
+			@RequestParam(name = "idUsuario", required = false) int idUsuario) {
+		
+		if (date_range.indexOf(" - ") != -1) {
+			String[] parts = date_range.split(" - ");			
+			return ResponseEntity.ok(ingresoServ.filtrarIngresos(parts[0], parts[1], idProveedor, idUsuario));
+		}
+		
+		return ResponseEntity.ok(ingresoServ.filtrarIngresos(null, null, idProveedor, idUsuario));
 	}
 }

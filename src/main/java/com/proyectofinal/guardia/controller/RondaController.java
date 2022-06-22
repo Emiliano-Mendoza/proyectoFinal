@@ -82,8 +82,12 @@ public class RondaController {
 	public ResponseEntity<List<Ronda>> filtrar(@RequestParam(name = "date_range") String date_range,
 			@RequestParam(name = "idUsuario", required = false) int idUsuario) {
 		
-		String[] parts = date_range.split("-");								
+	
+		if (date_range.indexOf(" - ") != -1) {
+			String[] parts = date_range.split(" - ");			
+			return ResponseEntity.ok(rondaServ.filtrarRondas(parts[0], parts[1], idUsuario));
+		}
 		
-		return ResponseEntity.ok(rondaServ.filtrarRondas(parts[0], parts[1], idUsuario));
+		return ResponseEntity.ok(rondaServ.filtrarRondas(null, null, idUsuario));
 	}
 }

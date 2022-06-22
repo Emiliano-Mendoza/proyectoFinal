@@ -12,5 +12,6 @@ public interface TransitoService {
 	public Transito reingresoTransito(int idTransito, Date reingreso, Vehiculo vehiculo, String comentario);
 	public List<Transito> obtenerTransitos();
 	public List<Transito> obtenerTransitosActivos();
+	public List<Transito> filtrarTransitos(String fechaInicio, String fechaFin, int nroLegajo, int idUsuario, int idVehiculo);
 			
 }

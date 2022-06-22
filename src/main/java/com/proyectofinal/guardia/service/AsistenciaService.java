@@ -13,6 +13,7 @@ public interface AsistenciaService {
 	public List<Asistencia> listarAsistenciasSinEgresoSinTransito();
 	public List<Asistencia> listarAsistenciasSinEgreso();
 	public List<Asistencia> listarAsistencias();
+	public List<Asistencia> filtrarAsistencias(String fechaInicio, String fechaFin, int nroLegajo, int idUsuario);
 	public void marcarAsistenciaEnTransito(int idAsistencia);
 	public void removerMarcarEnTransito(int idAsistencia);
 		

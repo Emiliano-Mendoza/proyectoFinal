@@ -1,7 +1,10 @@
 package com.proyectofinal.guardia.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -71,6 +74,36 @@ public class IngresoProveedorServiceImpl implements IngresoProveedorService {
 	public List<IngresoProveedor> listarIngresos() {
 		
 		return ingresoRepo.findAll();
+	}
+
+	@Override
+	public List<IngresoProveedor> filtrarIngresos(String fechaInicio, String fechaFin, int idProveedor, int idUsuario) {
+		
+		try {
+
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			Date fechaInicioAux = formatter.parse(fechaInicio != null ? fechaInicio : "01/01/2000");
+			Date fechaFinalAux = fechaFin != null ? new Date(formatter.parse(fechaFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
+
+			return ingresoRepo.findAll().stream().filter(a -> 
+					   (a.getIngreso() != null ?  a.getIngreso().after(fechaInicioAux) : true)
+					&& (a.getIngreso() != null ? a.getIngreso().before(fechaFinalAux) : true)
+					&& (idUsuario > 0
+							? ((a.getUsuarioIngreso() != null && a.getUsuarioIngreso().getIdUsuario() == idUsuario)
+									|| (a.getUsuarioEgreso() != null
+											&& a.getUsuarioEgreso().getIdUsuario() == idUsuario))
+							: true)
+					&& (idProveedor > 0 ? (a.getProveedor() != null && a.getProveedor().getIdProveedor() == idProveedor)
+							: true))
+					.collect(Collectors.toList());
+
+		} catch (ParseException e) {
+
+			e.printStackTrace();
+		}
+		
+		
+		return null;
 	}
 
 }

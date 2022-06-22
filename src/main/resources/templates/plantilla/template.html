@@ -189,12 +189,16 @@ Popup Arrow
 
 			<!-- Navbar-->
 			<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+				
 				<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle" id="navbarDropdown" href="#"
-					role="button" data-bs-toggle="dropdown" aria-expanded="false"><i
+					role="button" data-bs-toggle="dropdown" aria-expanded="false">
+					<span class="mt-2" style="color: grey;" id="userSpan"></span>
+					<i
 						class="fas fa-user fa-fw"></i></a>
 					<ul class="dropdown-menu dropdown-menu-end"
 						aria-labelledby="navbarDropdown">
+	
 						<li><a class="dropdown-item" th:href="@{/home}">Inicio</a></li>
 						<li><hr class="dropdown-divider" /></li>
 						<li onclick="deleteCookies()"><a class="dropdown-item" th:href="@{/logout}" >Cerrar
@@ -259,7 +263,7 @@ Popup Arrow
 					</a>
 					<div class="sb-sidenav-menu-heading">Guardia</div>
 
-					<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+					<a class="nav-link collapsed"  data-bs-toggle="collapse"
 						data-bs-target="#collapsePages" aria-expanded="false"
 						aria-controls="collapsePages">Registrar Actividad
 						<div class="sb-sidenav-collapse-arrow">
@@ -272,7 +276,7 @@ Popup Arrow
 
 						<nav class="sb-sidenav-menu-nested nav accordion"
 							id="sidenavAccordionPages">
-							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+							<a class="nav-link collapsed" data-bs-toggle="collapse"
 								data-bs-target="#pagesCollapseAuth" aria-expanded="false"
 								aria-controls="pagesCollapseAuth"><div
 									class="sb-nav-link-icon">
@@ -289,7 +293,7 @@ Popup Arrow
 									<a class="nav-link" th:href="@{/views/ingresos-proveedor}">Proveedor</a>
 								</nav>
 							</div>
-							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+							<a class="nav-link collapsed" data-bs-toggle="collapse"
 								data-bs-target="#pagesCollapseError" aria-expanded="false"
 								aria-controls="pagesCollapseError"><div
 									class="sb-nav-link-icon">
@@ -328,7 +332,7 @@ Popup Arrow
 
 					</div>
 
-					<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+					<a class="nav-link collapsed" data-bs-toggle="collapse"
 						sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_AUTORIZADOR')"
 						data-bs-target="#collapseLayouts" aria-expanded="false"
 						aria-controls="collapseLayouts">Autorizaciones
@@ -353,7 +357,7 @@ Popup Arrow
 						</nav>
 					</div>
 
-					<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+					<a class="nav-link collapsed" data-bs-toggle="collapse"
 						data-bs-target="#collapseLayouts3" aria-expanded="false"
 						aria-controls="collapseLayouts">Notificacíon de Eventos
 						<div class="sb-sidenav-collapse-arrow">
@@ -376,11 +380,11 @@ Popup Arrow
 					</div>
 
 					<div class="sb-sidenav-menu-heading">Administrador</div>
-					<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+					<a class="nav-link collapsed"  data-bs-toggle="collapse"
 						data-bs-target="#collapseLayouts2" aria-expanded="false"
 						aria-controls="collapseLayouts">
 						<div class="sb-nav-link-icon">
-							<i class="fas fa-columns"></i>
+							<i class="fa-solid fa-dice-d6"></i>
 						</div> Gestión de Entidades
 						<div class="sb-sidenav-collapse-arrow">
 							<i class="fas fa-angle-down"></i>
@@ -407,12 +411,44 @@ Popup Arrow
 								</div> Materiales</a>
 						</nav>
 					</div>
+					
+					<a class="nav-link collapsed" data-bs-toggle="collapse"
+						data-bs-target="#collapseLayouts4" aria-expanded="false"
+						aria-controls="collapseLayouts">
+						<div class="sb-nav-link-icon">						
+							<i class="fa-solid fa-sheet-plastic"></i>
+						</div> Ver Registros
+						<div class="sb-sidenav-collapse-arrow">
+							<i class="fas fa-angle-down"></i>
+						</div>
+					</a>
+					<div class="collapse" id="collapseLayouts4"
+						aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+						<nav class="sb-sidenav-menu-nested nav">
+							<a class="nav-link" th:href="@{/views/ingresos-empleado/registros}"><div>
+									<i class="fa-solid fa-file-circle-check" style="margin-right: 3px;"></i>
+								</div> Registros de Ingresos</a>
+							<a class="nav-link" th:href="@{/views/ronda/registros}"><div>
+								<i class="fa-solid fa-file-circle-check" style="margin-right: 3px;"></i>
+								</div> Registros de Rondas</a>
+							<a class="nav-link" th:href="@{/views/retiro-material/ver-retiros}"><div>
+								<i class="fa-solid fa-file-circle-check" style="margin-right: 3px;"></i>
+								</div> Registros de Retiros</a>
+							<a class="nav-link" th:href="@{/views/evento/ver-eventos}"><div>
+								<i class="fa-solid fa-file-circle-check" style="margin-right: 3px;"></i>
+								</div> Registros de Eventos</a>
+						</nav>
+						
+						
+					</div>
+					
 					<a class="nav-link" th:href="@{/views/usuario/administrar}">
 						<div class="sb-nav-link-icon">
 							<i class="fa-solid fa-user-group"></i>
 						</div> Gestión de Usuarios
 					</a>
-
+					
+					
 				</div>
 			</div>
 		</nav>
@@ -473,6 +509,7 @@ Popup Arrow
 		<script type="text/javascript" th:src="@{/js/jquery.dataTables.js}"></script>
 		<script type="text/javascript"
 			th:src="@{/js/dataTables.responsive.js}"></script>
+			<script type="text/javascript" th:src="@{/js/formatDate.js}"></script>
 
 
 		<script th:inline="javascript">
@@ -552,6 +589,7 @@ Popup Arrow
 			solicitarNotificaciones();
 			setInterval(solicitarNotificaciones, 10000);			
 			
+			$("#userSpan").text(nombreUsuario);
 		});
 		
 		

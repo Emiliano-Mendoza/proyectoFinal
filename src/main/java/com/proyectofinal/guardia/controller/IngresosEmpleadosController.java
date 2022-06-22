@@ -179,14 +179,6 @@ public class IngresosEmpleadosController {
 		return ResponseEntity.ok(map);
 	}
 	
-	@GetMapping("/listar-ingresos-empleados/filtrar")
-	public ResponseEntity<List<Asistencia>> filtrar(@RequestParam(name = "date_range") String date_range,
-			@RequestParam(name = "idUsuario", required = false) int idUsuario) {
-		
-		String[] parts = date_range.split("-");								
-		
-		return ResponseEntity.ok(asisServ.listarAsistenciasSinEgresoSinTransito());
-	}
 	
 	@GetMapping("/listar-ingresos")
 	public ResponseEntity<List<Asistencia>> listarAsistencias() {
@@ -200,5 +192,34 @@ public class IngresosEmpleadosController {
 							
 		
 		return ResponseEntity.ok(transitoServ.obtenerTransitos());
+	}
+	
+
+	@GetMapping("/listar-ingresos/filtrar")
+	public ResponseEntity<List<Asistencia>> filtrarAsistencias(@RequestParam(name = "date_range") String date_range,
+			@RequestParam(name = "nroLegajo", required = false) int nroLegajo,
+			@RequestParam(name = "idUsuario", required = false) int idUsuario) {
+		
+		if (date_range.indexOf(" - ") != -1) {
+			String[] parts = date_range.split(" - ");			
+			return ResponseEntity.ok(asisServ.filtrarAsistencias(parts[0], parts[1], nroLegajo, idUsuario));
+		}
+		
+		return ResponseEntity.ok(asisServ.filtrarAsistencias(null, null, nroLegajo, idUsuario));
+	}
+	
+
+	@GetMapping("/listar-transitos/filtrar")
+	public ResponseEntity<List<Transito>> filtrarTransitos(@RequestParam(name = "date_range") String date_range,
+			@RequestParam(name = "nroLegajo", required = false) int nroLegajo,
+			@RequestParam(name = "idUsuario", required = false) int idUsuario,
+			@RequestParam(name = "idVehiculo", required = false) int idVehiculo) {
+		
+		if (date_range.indexOf(" - ") != -1) {
+			String[] parts = date_range.split(" - ");			
+			return ResponseEntity.ok(transitoServ.filtrarTransitos(parts[0], parts[1], nroLegajo, idUsuario, idVehiculo));
+		}
+		
+		return ResponseEntity.ok(transitoServ.filtrarTransitos(null, null, nroLegajo, idUsuario, idVehiculo));
 	}
 }

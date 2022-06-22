@@ -17,7 +17,13 @@
 				
 				<div th:replace="plantilla/template :: mensajes"></div>
 				
-				<h1 class="">Registro de Ingreso</h1>
+				<div class="d-md-flex justify-content-between">
+					<h1 class="">Registro de Ingreso</h1>
+					
+					<a  class="nav-link" th:href="@{/views/ingresos-empleado/registros}"><i
+						class="fa-solid fa-file-circle-check"></i> Ver Registros</a>
+				</div>
+												
 				<ol class="breadcrumb mb-4">
 					<li class="breadcrumb-item active"><i class="fa-solid fa-truck-field"></i>  Proveedores</li>
 				</ol>

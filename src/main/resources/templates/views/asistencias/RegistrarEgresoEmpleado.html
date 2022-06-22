@@ -17,7 +17,15 @@
 				
 				<div th:replace="plantilla/template :: mensajes"></div>
 				
-				<h1 class="">Registro de Egreso</h1>
+				<div class="d-md-flex justify-content-between">
+					<h1 class="">Registro de Egreso</h1>
+					
+					<a  class="nav-link" th:href="@{/views/ingresos-empleado/registros}"><i
+						class="fa-solid fa-file-circle-check"></i> Ver Registros</a>
+				</div>
+				
+				
+				
 				<ol class="breadcrumb mb-4">
 					<li class="breadcrumb-item active"><i class="fa-solid fa-people-group" ></i>  Empleados</li>
 				</ol>
@@ -104,16 +112,7 @@
 						
 						let urlEgreso = '/views/ingresos-empleado/egreso/' + asis.idAsistencia;
 						let urlEgresoTransitorio = '/views/ingresos-empleado/egreso/transito/' + asis.idAsistencia;
-											 															
-						//le doy el formato correcto a la fecha
-						let d = new Date(asis.ingreso);
-						dformat = `${
-						    d.getDate().toString().padStart(2, '0')}/${
-						    (d.getMonth()+1).toString().padStart(2, '0')}/${
-						    d.getFullYear().toString().padStart(4, '0')} ${
-						    d.getHours().toString().padStart(2, '0')}:${
-						    d.getMinutes().toString().padStart(2, '0')}`;
-						    
+											 																					    
 						resultado.innerHTML += `
 							<div class="col-sm-6 mt-3">
 								<div class="card text-dark  mb-3">
@@ -137,7 +136,7 @@
 														${asis.empleado.sector.sector}</li>
 													<li class="list-group-item">Planta: ${asis.planta}</li>
 													<li class="list-group-item">Fecha y hora que ingresó:
-														${dformat}</li>
+														${darFormatoFechaCompleta(new Date(asis.ingreso))}</li>
 													<li id=${idDiv} class="list-group-item" hidden></li>
 													<li id=${idComentario} class="list-group-item" hidden></li>
 												</ul>
@@ -173,16 +172,7 @@
 					}else{
 						
 						let urlReingreso = '/views/ingresos-empleado/egreso/transito/reingreso/' + asis.idTransito;
-						
-						//le doy el formato correcto a la fecha
-						let d = new Date(asis.egreso);
-						dformat = `${
-						    d.getDate().toString().padStart(2, '0')}/${
-						    (d.getMonth()+1).toString().padStart(2, '0')}/${
-						    d.getFullYear().toString().padStart(4, '0')} ${
-						    d.getHours().toString().padStart(2, '0')}:${
-						    d.getMinutes().toString().padStart(2, '0')}`;
-						    
+												    
 						resultado.innerHTML += `
 							<div class="col-sm-6 mt-3">
 								<div class="card text-dark  mb-3">
@@ -206,7 +196,7 @@
 														${asis.empleado.sector.sector}</li>
 													<li class="list-group-item">Planta: ${asis.asistencia.planta}</li>
 													<li class="list-group-item">Egreso transitorio: 
-														${dformat}</li>
+														${darFormatoFechaCompleta(new Date(asis.egreso))}</li>
 													<li id=${idDiv} class="list-group-item" hidden></li>
 													<li id=${idComentario} class="list-group-item" hidden></li>
 												</ul>
