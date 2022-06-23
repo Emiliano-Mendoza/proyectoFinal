@@ -48,7 +48,9 @@ public class RetiroMaterialController {
 	
 	@GetMapping("/ver-retiros")
 	public String verRetiros(Model model) {
-						
+		
+		model.addAttribute("listaAutorizaciones", retiroMaterialServ.obtenerAutorizaciones());
+		
 		return "/views/retirosMaterial/VerRetirosDeMaterial";
 	}
 	
@@ -107,6 +109,32 @@ public class RetiroMaterialController {
 		
 	}
 	
-	
+	@GetMapping("/autorizaciones/filtrar")
+	public ResponseEntity<List<AutorizacionRetiroMaterial>> filtrarAutorizaciones(@RequestParam(name = "date_range") String date_range,
+			@RequestParam(name = "date_range2") String date_range2,
+			@RequestParam(name = "nroLegajo", required = false) int nroLegajo,
+			@RequestParam(name = "idAutorizante", required = false) int idAutorizante,
+			@RequestParam(name = "idGuardia", required = false) int idGuardia,
+			@RequestParam(name = "idMaterial", required = false) int idMaterial){
+		
+		
+		if (date_range.indexOf(" - ") != -1 && date_range2.indexOf(" - ") != -1){
+			String[] parts = date_range.split(" - ");
+			String[] parts2 = date_range2.split(" - ");
+			return ResponseEntity.ok(retiroMaterialServ.filtrarAutorizaciones(parts[0], parts[1], parts2[0], parts2[1], nroLegajo, idAutorizante, idGuardia, idMaterial));
+		}
+		else if (date_range.indexOf(" - ") != -1) {			
+			String[] parts = date_range.split(" - ");			
+			return ResponseEntity.ok(retiroMaterialServ.filtrarAutorizaciones(parts[0], parts[1], null, null, nroLegajo, idAutorizante, idGuardia, idMaterial));
+			
+		}else if (date_range2.indexOf(" - ") != -1) {
+			String[] parts2 = date_range2.split(" - ");
+			return ResponseEntity.ok(retiroMaterialServ.filtrarAutorizaciones(null, null, parts2[0], parts2[1], nroLegajo, idAutorizante, idGuardia, idMaterial));
+			
+		}
+				
+		return ResponseEntity.ok(retiroMaterialServ.filtrarAutorizaciones(null, null, null, null, nroLegajo, idAutorizante, idGuardia, idMaterial));
+		
+	}
 	
 }

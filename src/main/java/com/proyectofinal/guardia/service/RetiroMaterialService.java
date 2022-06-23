@@ -14,5 +14,7 @@ public interface RetiroMaterialService {
 	public Retiro registrarRetiro(int idAutorizacion, Date fechaRetiro, String observacion, String planta);
 	public List<AutorizacionRetiroMaterial> obtenerAutorizacionesActivas();
 	public List<AutorizacionRetiroMaterial> obtenerAutorizaciones();
+	public List<AutorizacionRetiroMaterial> filtrarAutorizaciones(String fechaLimiteInicio, String fechaLimiteFin, String fechaRetiroInicio,
+			String fechaRetiroFin, int nroLegajo, int idAutorizante, int idGuardia, int idMateria);
 	
 }

@@ -150,7 +150,7 @@
 									  <li class="list-group-item bg-light">Proveedor: ${data.proveedor}</li>
 									  <li class="list-group-item bg-light">Planta: ${plantaAux}</li>
 									  <li class="list-group-item bg-light">Fecha y hora del ingreso: <small class="text-muted"><span
-										id='date-time'></span></small></li>
+										id='date-time'>${darFormatoFechaCompleta(new Date())}</span></small></li>
 									  <li class="list-group-item bg-light">
 									  		<label>Nombre del chofer: </label>
 									  		<input type="text" class="form-control" name="chofer" form="myform">
@@ -181,17 +181,7 @@
 					</div>
 				</div>
 			`;
-			
-			//formato de la fecha
-			var d = new Date,
-			dformat = `${
-			    d.getDate().toString().padStart(2, '0')}/${
-			    (d.getMonth()+1).toString().padStart(2, '0')}/${
-			    d.getFullYear().toString().padStart(4, '0')} ${
-			    d.getHours().toString().padStart(2, '0')}:${
-			    d.getMinutes().toString().padStart(2, '0')}`;
-													
-			document.getElementById('date-time').innerHTML = dformat;						
+									
 			window.scroll(0, 0);
 																
 		});

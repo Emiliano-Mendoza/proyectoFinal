@@ -272,12 +272,12 @@
 		const columnsAux1 = [
 			{
                 "data":"ingreso", "render": function (valor){                                   	
-                	return valor != null && valor !== undefined ? `<span>${darFormatoFechaCompleta(new Date(valor))}</span>` : `<span>-</span>`;                	
+                	return valor != null && valor !== undefined ? `<td><span style="display:none;">${darFormatoYYYYMMDDhhmm(new Date(valor))}</span>${darFormatoFechaCompleta(new Date(valor))}</td>` : `<td>-</td>`;                	
                 }, "width": "15%"
             },
             {
                 "data":"egreso", "render": function (valor){                    
-                	return valor != null && valor !== undefined ? `<span>${darFormatoFechaCompleta(new Date(valor))}</span>` : `<span>-</span>`;                	
+                	return valor != null && valor !== undefined ? `<td><span style="display:none;">${darFormatoYYYYMMDDhhmm(new Date(valor))}</span>${darFormatoFechaCompleta(new Date(valor))}</td>` : `<td>-</td>`;                	
                 }, "width": "15%"
             },
             {
@@ -301,12 +301,12 @@
 		const columnsAux2 = [
 			{
                 "data":"ingreso", "render": function (valor){
-                	return valor != null && valor !== undefined ? `<span>${darFormatoFechaCompleta(new Date(valor))}</span>` : `<span>-</span>`;
+                	return valor != null && valor !== undefined ? `<td><span style="display:none;">${darFormatoYYYYMMDDhhmm(new Date(valor))}</span>${darFormatoFechaCompleta(new Date(valor))}</td>` : `<td>-</td>`;
                 }
             },
             {
                 "data":"egreso", "render": function (valor){
-                	return valor != null && valor !== undefined ? `<span>${darFormatoFechaCompleta(new Date(valor))}</span>` : `<span>-</span>`;
+                	return valor != null && valor !== undefined ? `<td><span style="display:none;">${darFormatoYYYYMMDDhhmm(new Date(valor))}</span>${darFormatoFechaCompleta(new Date(valor))}</td>` : `<td>-</td>`;
                 }
             },
             {
@@ -330,12 +330,12 @@
 		const columnsAux3 = [
 			{
                 "data":"egreso", "render": function (valor){
-                	return valor != null && valor !== undefined ? `<span>${darFormatoFechaCompleta(new Date(valor))}</span>` : `<span>-</span>`;
+                	return valor != null && valor !== undefined ? `<td><span style="display:none;">${darFormatoYYYYMMDDhhmm(new Date(valor))}</span>${darFormatoFechaCompleta(new Date(valor))}</td>` : `<td>-</td>`;
                 }
             },
             {
                 "data":"ingreso", "render": function (valor){
-                	return valor != null && valor !== undefined ? `<span>${darFormatoFechaCompleta(new Date(valor))}</span>` : `<span>-</span>`;
+                	return valor != null && valor !== undefined ? `<td><span style="display:none;">${darFormatoYYYYMMDDhhmm(new Date(valor))}</span>${darFormatoFechaCompleta(new Date(valor))}</td>` : `<td>-</td>`;
                 }
             },
             {

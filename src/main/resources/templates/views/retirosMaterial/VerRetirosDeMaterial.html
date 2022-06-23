@@ -30,58 +30,62 @@
 					</div>
 					<div class="card-body">
 
+						<form id="filtroForm">
+							<div class="row">
 
-						<div class="row">
+								<div class="col-md-9 row">
+									<div class="col-md-4 pb-2">
+										<label>Rango Fecha Límite: </label> <input type="text"
+											id="date_range" name="date_range" class="form-control"
+											autocomplete="off">
 
-							<div class="col-md-9 row">
-								<div class="col-md-4 pb-2">
-									<label>Rango Fecha Límite: </label> <input type="text"
-										id="date_range" name="date_range" class="form-control">
+									</div>
+									<div class="col-md-4 pb-2">
+										<label for="a">Rango Fecha Retiro:</label> <input type="text"
+											id="date_range2" name="date_range2" class="form-control"
+											autocomplete="off">
+									</div>
+									<div class="col-md-4 pb-2 ">
+										<label for="a">Empleado Autorizado:</label> <select
+											class="form-select" id="empleadoSelect" name="nroLegajo">
 
+										</select>
+									</div>
+									<div class="col-md-4 pb-2">
+										<label for="a">Autorizante:</label> <select
+											class="form-select" id="usuarioSelect1" name="idAutorizante">
+
+										</select>
+									</div>
+									<div class="col-md-4 pb-2">
+										<label for="a">Material:</label> <select class="form-select"
+											id="materiales" name="idMaterial">
+
+										</select>
+									</div>
+									<div class="col-md-4 pb-2">
+										<label for="a">Guardia:</label> <select class="form-select"
+											id="usuarioSelect2" name="idGuardia">
+
+										</select>
+									</div>
 								</div>
-								<div class="col-md-4 pb-2">
-									<label for="a">Rango Fecha Retiro:</label> <input type="text"
-										id="date_range2" name="date_range2" class="form-control">
+
+								<div class="col-md-1 d-grid mt-2"
+									style="display: flex; align-items: center;">
+									<button type="button" class="btn btn-primary mt-2"
+										onclick="filtrarRegistros()">Filtrar</button>
 								</div>
-								<div class="col-md-4 pb-2 ">
-									<label for="a">Empleado autorizado:</label> <select
-										class="form-select">
-										<option value=1 selected>Mendoza Emiliano</option>
-										<option value=2>Luís</option>
-										<option value=3>Matías</option>
-									</select>
+								
+								<div class="col-md-1 d-grid mt-2"
+									style="display: flex; align-items: center;">
+									<button type="button" class="btn btn-outline-danger mt-2"
+										onclick="desfiltrar()">Desfiltrar</button>
 								</div>
-								<div class="col-md-4 pb-2">
-									<label for="a">Autorizante:</label> <select class="form-select">
-										<option value=1 selected>Mendoza Mariano</option>
-										<option value=2>Tito el Loco</option>
-										<option value=3>Del Turco Celina</option>
-									</select>
-								</div>
-								<div class="col-md-4 pb-2">
-									<label for="a">Material:</label> <select class="form-select">
-										<option value=1 selected>Palet</option>
-										<option value=2>Nilons</option>
-										<option value=3>Cajas</option>
-									</select>
-								</div>
-								<div class="col-md-4 pb-2">
-									<label for="a">Guardia:</label> <select class="form-select">
-										<option value=1 selected>Mendoza Mariano</option>
-										<option value=2>Rubén</option>
-										<option value=3>El loco emi</option>
-									</select>
-								</div>
+								
 							</div>
 
-							<div class="col-md-3 mt-2"
-								style="display: flex; align-items: center;">
-								<button type="button" class="btn btn-primary mt-2">Filtrar</button>
-							</div>
-
-						</div>
-
-
+						</form>
 
 						<hr>
 
@@ -94,7 +98,7 @@
 								<tr>
 									<th>Fecha Límite</th>
 									<th>Fecha de Retiro</th>
-									<th>Autorizado</th>
+									<th>Empleado Autorizado</th>
 									<th>Autorizante</th>
 									<th>Materiales</th>
 									<th>Guardia</th>
@@ -103,38 +107,6 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>24/05/2022</td>
-									<td>23/05/2022</td>
-									<td>Mendoza Emiliano</td>
-									<td>Del Turco Celina</td>
-									<td>Palets</td>
-									<td>Mendoza Mariano</td>
-									<td>Se llevó altos palets</td>
-									<td>Sin observaciones</td>
-								</tr>
-								<tr>
-									<td>26/05/2022</td>
-									<td>21/05/2022</td>
-									<td>Luis</td>
-									<td>Del Turco Celina</td>
-									<td>Palets</td>
-									<td>Mendoza Mariano</td>
-									<td>Se llevó altos palets aaa re locooo jejejeje</td>
-									<td>Sin observaciones</td>
-								</tr>
-								<tr>
-									<td>28/05/2022</td>
-									<td>24/05/2022</td>
-									<td>Matías</td>
-									<td>Del Turco Celina</td>
-									<td>Palets</td>
-									<td>Mendoza Mariano</td>
-									<td>Se llevó altos palets</td>
-									<td>Sin observaciones</td>
-								</tr>
-
-
 
 							</tbody>
 						</table>
@@ -146,11 +118,89 @@
 	</div>
 	<footer th:replace="plantilla/template :: footer"></footer>
 
-	<script type="text/javascript">
+	<script th:inline="javascript">
 		var datatable;
-		$(document).ready(function() {
+		var listaAutorizaciones;
 
+				
+		$(document).ready(function() {
+			
+			listaAutorizaciones = /*[[${listaAutorizaciones}]]*/'default';
+			
+			setDataTable(listaAutorizaciones);
+			
+			jQuery.ajax({
+				url : '/views/material',
+				type : "GET",
+				dataType : "json",
+				contentType : "application/json; charset=utf-8",
+				success : function(data) {
+															
+					$("#materiales").html(function() {
+						
+						let aux = '<option value=-1>Todos</option>';
+						
+						for(let material of data){
+														
+							aux += `<option value=${material.idMaterial}>${material.material}</option>`;
+						}
+						
+						return aux;
+					});
+
+				}
+			});
+			
+			jQuery.ajax({
+				url : '/views/empleado',
+				type : "GET",
+				dataType : "json",
+				contentType : "application/json; charset=utf-8",
+				success : function(data) {
+					
+					let aux = '<option value=-1>Todos</option>';
+					
+					for(let dato of data){
+						
+						aux += `<option value=${dato.nroLegajo}>${dato.apellido} ${dato.nombre}</option>`;
+						
+					}					
+					$("#empleadoSelect").html(aux);										
+				}
+			});
+			
+			jQuery.ajax({
+				url : '/views/usuario/usuarios-activos',
+				type : "GET",
+				dataType : "json",
+				contentType : "application/json; charset=utf-8",
+				success : function(data) {
+					
+					let aux = '<option value=-1>Todos</option>';
+					
+					for(let dato of data){
+						
+						aux += `<option value=${dato.idUsuario}>${dato.apellido} ${dato.nombre}</option>`;
+						
+					}
+					
+					$("#usuarioSelect1").html(aux);
+					$("#usuarioSelect2").html(aux);
+				}
+			});
+			
+		});
+		
+		
+		function setDataTable(datos){
+			
+			if(datatable != null){
+				datatable.clear();
+				datatable.destroy();
+			}
+			
 			datatable = $('#table_id').DataTable({
+				data: datos,
 				language : {
 					"decimal" : "",
 					"emptyTable" : "No hay información",
@@ -175,9 +225,104 @@
 					"className" : "dt-center",
 					"targets" : "_all"
 				} ]
+				,
+				"autoWidth" : false,
+				columns: [
+					{
+                        "data":"fechaLimite", "render": function (valor){
+                        	return valor != null && valor !== undefined ? `<td><span style="display:none;">${darFormatoYYYYMMDD(new Date(valor))}</span>${darFormatoFechaSimple(new Date(valor))}</td>` : `<td>-</td>`;
+                        }
+                    },
+                    {
+                        "data":"retiro", "render": function (valor){                        	
+                        	return valor != null && valor !== undefined ? `<td><span style="display:none;">${darFormatoYYYYMMDDhhmm(new Date(valor.fechaRetiro))}</span>${darFormatoFechaCompleta(new Date(valor.fechaRetiro))}</td>` : `<td>-</td>`;
+                        }
+                    },
+                    {
+                        "data":"empleado", "render": function (valor){
+                        	return valor != null && valor !== undefined ? `<span>${valor.apellido} ${valor.nombre}</span>` : `<span>-</span>`;
+                        }
+                    },
+                    {
+                        "data":"usuario", "render": function (valor){
+                        	return valor != null && valor !== undefined ? `<span>${valor.apellido} ${valor.nombre}</span>` : `<span>-</span>`;
+                        }
+                    },
+                    {
+                        "data":"materiales", "render": function (valor){
+                        	return valor != null && valor !== undefined ? `<span>${formatMaterial(valor)}</span>` : `<span>-</span>`;
+                        }
+                    },
+                    {
+                    	"data":"retiro", "render": function (valor){
+                        	return valor != null && valor !== undefined ? `<span>${valor?.usuario?.apellido} ${valor?.usuario?.nombre}</span>` : `<span>-</span>`;
+                        }
+                    },
+                    { data: 'descripcion' ,
+                    	"orderable": false},
+                   	{
+                       	"data":"retiro", "render": function (valor){
+                           	return valor != null && valor !== undefined ? `<span>${valor?.observacion}</span>` : `<span>-</span>`;
+                           }
+                    	,
+                    	"orderable": false
+                    }
+                ]
+				
+			}).order( [ 0, 'desc' ]).draw();
+			
+		}
+		
+		function desfiltrar(){
+			setDataTable(listaAutorizaciones);						
+		}
+		
+		function filtrarRegistros(){
+			
+			jQuery.ajax({
+				url : '/views/retiro-material/autorizaciones/filtrar',
+				type : "GET",
+				dataType : "json",
+				data: $('#filtroForm').serialize(),
+				contentType : "application/json; charset=utf-8",
+				success : function(data) {										
+					setDataTable(data);								
+				}
+			});	
+			
+		}
+		
+				
+		function formatMaterial(lista){
+			
+			let materiales = '';
+			
+			lista.sort(function (a, b) {
+								
+				if (a.idMaterial > b.idMaterial) {
+				   return 1;
+				}
+				if (a.idMaterial < b.idMaterial) {
+				   return -1;
+				}
+				 
+				return 0;
 			});
-
-		});
+			
+			count = 1;
+			
+			for(let mat of lista){
+				
+				if(count == lista.length){
+					materiales += mat.material + '.';
+				}else{
+					materiales += mat.material + ', ';
+				}
+				count++;				
+			}
+			
+			return materiales;
+		}
 	</script>
 </body>
 </html>

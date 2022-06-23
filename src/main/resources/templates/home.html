@@ -214,14 +214,7 @@
 						
 						for(let aut of data){
 							
-							let d = new Date(aut.fechaLimite);
-							dformat = `${
-							    d.getDate().toString().padStart(2, '0')}/${
-							    (d.getMonth()+1).toString().padStart(2, '0')}/${
-							    d.getFullYear().toString().padStart(4, '0')}`;
-
-							    
-							aux += `<li class="mb-1">Fecha Límite: ${dformat} - Retira: ${aut.empleado != null ? aut.empleado.nombre + ' ' + aut.empleado.apellido : 'Retiro Externo'}
+							aux += `<li class="mb-1">Fecha Límite: ${darFormatoFechaSimple(new Date(aut.fechaLimite))} - Retira: ${aut.empleado != null ? aut.empleado.nombre + ' ' + aut.empleado.apellido : 'Retiro Externo'}
 							 - Autoriza: ${aut.usuario.nombre} ${aut.usuario.apellido} - Materiales: ${formatMaterial(aut.materiales)}
 							</li>`;
 						}
@@ -234,6 +227,7 @@
 		
 		
 		function formatMaterial(lista){
+			
 			let materiales = '';
 			
 			lista.sort(function (a, b) {
@@ -248,8 +242,16 @@
 				return 0;
 			});
 			
+			count = 1;
+			
 			for(let mat of lista){
-				materiales += mat.material + ' ';
+				
+				if(count == lista.length){
+					materiales += mat.material + '.';
+				}else{
+					materiales += mat.material + ', ';
+				}
+				count++;				
 			}
 			
 			return materiales;

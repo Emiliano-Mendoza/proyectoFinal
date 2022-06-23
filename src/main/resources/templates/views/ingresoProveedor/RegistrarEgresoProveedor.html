@@ -73,16 +73,7 @@
 					let urlEgreso= '/views/ingresos-proveedor/egreso/' + ingreso.idIngreso;
 					let idChofer = 'chofer' + ingreso.idIngreso;
 					let idPatente = 'patente' + ingreso.idIngreso;
-					
-					//le doy el formato correcto a la fecha
-					let d = new Date(ingreso.ingreso);
-					dformat = `${
-					    d.getDate().toString().padStart(2, '0')}/${
-					    (d.getMonth()+1).toString().padStart(2, '0')}/${
-					    d.getFullYear().toString().padStart(4, '0')} ${
-					    d.getHours().toString().padStart(2, '0')}:${
-					    d.getMinutes().toString().padStart(2, '0')}`;
-					    
+										    
 					resultado.innerHTML += `
 						<div class="col-sm-6 mt-3">
 							<div class="card text-dark  mb-3" >
@@ -101,7 +92,7 @@
 												<ul class="list-group list-group-flush">
 												  <li class="list-group-item">Proveedor: ${ingreso.proveedor.proveedor}</li>
 												  <li class="list-group-item">Planta: ${ingreso.planta}</li>
-												  <li class="list-group-item">Fecha y hora del ingreso: ${dformat}</li>
+												  <li class="list-group-item">Fecha y hora del ingreso: ${darFormatoFechaCompleta(new Date(ingreso.ingreso))}</li>
 												  <li class="list-group-item" id=${idChofer}>Chofer: ${ingreso.nombreChofer}</li>
 												  <li class="list-group-item" id=${idPatente}>Patente del Vehículo: ${ingreso.patenteVehiculo}</li>
 												</ul>																			

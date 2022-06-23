@@ -1,5 +1,6 @@
 package com.proyectofinal.guardia.service.impl;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,6 +22,7 @@ import com.proyectofinal.guardia.dao.RetiroJPARepository;
 import com.proyectofinal.guardia.dao.UsuarioJPARepository;
 import com.proyectofinal.guardia.domain.AutorizacionRetiroMaterial;
 import com.proyectofinal.guardia.domain.Empleado;
+import com.proyectofinal.guardia.domain.Material;
 import com.proyectofinal.guardia.domain.NotiUsuario;
 import com.proyectofinal.guardia.domain.Notificacion;
 import com.proyectofinal.guardia.domain.Retiro;
@@ -161,5 +163,50 @@ public class RetiroMaterialServiceImpl implements RetiroMaterialService {
 		}
 								
 		return true;
+	}
+
+	@Override
+	public List<AutorizacionRetiroMaterial> filtrarAutorizaciones(String fechaLimiteInicio, String fechaLimiteFin,
+			String fechaRetiroInicio, String fechaRetiroFin, int nroLegajo, int idAutorizante, int idGuardia,
+			int idMateria) {
+				
+		try {
+
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			Date fechaLimiteInicioAux = formatter.parse(fechaLimiteInicio != null ? fechaLimiteInicio : "01/01/2000");
+			Date fechaLimiteFinalAux = fechaLimiteFin != null ? new Date(formatter.parse(fechaLimiteFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
+			
+			Date fechaRetiroInicioAux = formatter.parse(fechaRetiroInicio != null ? fechaRetiroInicio : "01/01/2000");
+			Date fechaRetiroFinAux = fechaRetiroFin != null ? new Date(formatter.parse(fechaRetiroFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
+			
+			Material material;
+			if(idMateria > 0) material = materialRepo.findById(idMateria).get();
+			else material = new Material();
+			
+			return autRepo.findAll().stream().filter(a -> 
+					   (a.getFechaLimite() != null ?  a.getFechaLimite().after(fechaLimiteInicioAux) : true)
+					&& (a.getFechaLimite() != null ? a.getFechaLimite().before(fechaLimiteFinalAux) : true)
+					&& ((a.getRetiro() != null && a.getRetiro().getFechaRetiro() != null) ? a.getRetiro().getFechaRetiro().after(fechaRetiroInicioAux) : (fechaRetiroInicio != null ? false : true))
+					&& ((a.getRetiro() != null && a.getRetiro().getFechaRetiro() != null) ? a.getRetiro().getFechaRetiro().before(fechaRetiroFinAux) : (fechaRetiroFin != null ? false : true))
+					&& (idAutorizante > 0
+							? (a.getUsuario() != null && a.getUsuario().getIdUsuario() == idAutorizante)									
+							: true)
+					&& (idGuardia > 0
+							? (a.getRetiro() != null && a.getRetiro().getUsuario() != null && a.getRetiro().getUsuario().getIdUsuario() == idGuardia)									
+							: true)
+					&& (idMateria > 0
+							? ((a.getMateriales() != null && a.getMateriales().contains(material)))
+							: true)
+					&& (nroLegajo > 0 ? (a.getEmpleado() != null && a.getEmpleado().getNroLegajo() == nroLegajo)
+							: true))
+					.collect(Collectors.toList());
+
+		} catch (ParseException e) {
+
+			e.printStackTrace();
+		}
+		
+		
+		return null;
 	}
 }

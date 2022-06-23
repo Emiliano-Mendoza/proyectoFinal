@@ -178,7 +178,7 @@
                         	"orderable": false, "width": "25%"},                                      
                     {
                         "data":"fechaRonda", "render": function (valor){
-                        	return valor != null && valor !== undefined ? `<span>${darFormatoFechaSimple(new Date(valor))}</span>` : `<span>-</span>`;
+                        	return valor != null && valor !== undefined ? `<td><span style="display:none;">${darFormatoYYYYMMDD(new Date(valor))}</span>${darFormatoFechaSimple(new Date(valor))}</td>` : `<td>-</td>`;
                         }, "width": "20%"
                     },	                    
                     { data: 'planta',
