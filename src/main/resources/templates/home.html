@@ -19,11 +19,11 @@
 				<ol class="breadcrumb mb-4">
 					<li class="breadcrumb-item active">Dashboard</li>
 				</ol>
-				<div class="row">
+				<div class="row" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_GUARDIA')">
 					<div class="col-xl-3 col-md-6">
 						<div class="card bg-primary text-white mb-4">
 							<div class="card-body">
-								Empleados en Planta: <span id="cantEmpleadosEnPlanta">0</span>
+								Empleados en Planta: <span id="cantEmpleadosEnPlanta"></span>
 							</div>
 
 							<div class="card-footer">
@@ -39,7 +39,7 @@
 					<div class="col-xl-3 col-md-6">
 						<div class="card bg-warning text-black mb-4">
 							<div class="card-body">
-								Empleados en Tránsito: <span id="cantEmpleadosEnTransito">0</span>
+								Empleados en Tránsito: <span id="cantEmpleadosEnTransito"></span>
 							</div>
 							<div class="card-footer">
 								<div class="row">
@@ -71,7 +71,7 @@
 					<div class="col-xl-3 col-md-6">
 						<div class="card bg-danger text-white mb-4">
 							<div class="card-body">
-								Rondas Diarias: <span id="cantRondas">0</span>
+								Rondas Diarias: <span id="cantRondas"></span>
 							</div>
 
 							<div class="card-footer">
@@ -87,7 +87,8 @@
 
 				<div class="row mt-3">
 
-					<div class="col-6">
+					<div class="col-6" id="divEventos"
+						sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_GUARDIA', 'ROLE_NOTIFICADOR')">
 						<div class="card mb-4">
 							<div class="card-header">
 																
@@ -96,7 +97,9 @@
 										<i class="fa-solid fa-calendar-days"></i> Eventos Próximos:
 									</div>
 									
-									<a th:href="@{/views/evento/ocurrencia}" style="color:grey"><i class="fa-solid fa-circle-arrow-right"></i></a>
+									<a th:href="@{/views/evento/ocurrencia}" style="color:grey"
+										sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_GUARDIA')"
+									><i class="fa-solid fa-circle-arrow-right"></i></a>
 								</div>
 								
 							</div>
@@ -117,7 +120,8 @@
 						</div>
 					</div>
 
-					<div class="col-6">
+					<div class="col-6" id="divRetiros"
+						sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_GUARDIA', 'ROLE_AUTORIZADOR')">
 						<div class="card mb-4">
 							<div class="card-header">
 
@@ -127,7 +131,9 @@
 										Retiro:
 									</div>
 									
-									<a th:href="@{/views/retiro-material/autorizaciones}" style="color:grey"><i class="fa-solid fa-circle-arrow-right"></i></a>
+									<a th:href="@{/views/retiro-material/autorizaciones}" style="color:grey"
+										sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_GUARDIA')"
+									><i class="fa-solid fa-circle-arrow-right"></i></a>
 								</div>
 
 							</div>
@@ -150,58 +156,62 @@
 	<script th:inline="javascript">
 		
 		solicitarDatos();
-		setInterval(solicitarDatos, 10000);		
-		
+		setInterval(solicitarDatos, 10000);	
+					
 		function solicitarDatos(){
 			
-			jQuery.ajax({
-				url : '/views/ingresos-empleado/cantidad-ingresados',
-				type : "GET",
-				dataType : "json",
-				contentType : "application/json; charset=utf-8",
-				success : function(data) {
-		
-					$("#cantEmpleadosEnPlanta").text(data.cant_empleados_ingresados);
-									
-				}
-			});
 			
-			jQuery.ajax({
-				url : '/views/ingresos-empleado/cantidad-transitos',
-				type : "GET",
-				dataType : "json",
-				contentType : "application/json; charset=utf-8",
-				success : function(data) {
-		
-					$("#cantEmpleadosEnTransito").text(data.cant_empleados_transito);
-									
-				}
-			});	
-		
-			jQuery.ajax({
-				url : '/views/ingresos-proveedor/cantidad-ingresados',
-				type : "GET",
-				dataType : "json",
-				contentType : "application/json; charset=utf-8",
-				success : function(data) {
+			if(roles.indexOf("ROLE_GUARDIA") !== -1 || roles.indexOf("ROLE_ADMIN") !== -1){
+				
+				jQuery.ajax({
+					url : '/views/ingresos-empleado/cantidad-transitos',
+					type : "GET",
+					dataType : "json",
+					contentType : "application/json; charset=utf-8",
+					success : function(data) {
+			
+						$("#cantEmpleadosEnTransito").text(data.cant_empleados_transito);
+										
+					}
+				});	
+			
+				jQuery.ajax({
+					url : '/views/ingresos-proveedor/cantidad-ingresados',
+					type : "GET",
+					dataType : "json",
+					contentType : "application/json; charset=utf-8",
+					success : function(data) {
 
-					$("#cantProveedoresEnPlanta").text(data.cant_proveedores_ingresados);
-									
-				}
-			});
-			
-			jQuery.ajax({
-				url : '/views/ronda/cantidad-rondas-diarias',
-				type : "GET",
-				dataType : "json",
-				contentType : "application/json; charset=utf-8",
-				success : function(data) {
+						$("#cantProveedoresEnPlanta").text(data.cant_proveedores_ingresados);
+										
+					}
+				});
+				
+				jQuery.ajax({
+					url : '/views/ronda/cantidad-rondas-diarias',
+					type : "GET",
+					dataType : "json",
+					contentType : "application/json; charset=utf-8",
+					success : function(data) {
 
-					$("#cantRondas").text(data.cant_rondas);
-									
-				}
-			});
+						$("#cantRondas").text(data.cant_rondas);
+										
+					}
+				});
+				
+				jQuery.ajax({
+					url : '/views/ingresos-empleado/cantidad-ingresados',
+					type : "GET",
+					dataType : "json",
+					contentType : "application/json; charset=utf-8",
+					success : function(data) {
 			
+						$("#cantEmpleadosEnPlanta").text(data.cant_empleados_ingresados);
+										
+					}
+				});
+			}
+															
 			jQuery.ajax({
 				url : '/views/retiro-material/autorizaciones/listar',
 				type : "GET",
@@ -255,6 +265,17 @@
 			}
 			
 			return materiales;
+		}
+		
+		
+		if(roles.indexOf("ROLE_GUARDIA") === -1 && roles.indexOf("ROLE_ADMIN") === -1 && roles.indexOf("ROLE_NOTIFICADOR") === -1){
+			$("#divRetiros").removeClass("col-6");
+			$("#divRetiros").addClass("col-12");
+		}
+		
+		if(roles.indexOf("ROLE_GUARDIA") === -1 && roles.indexOf("ROLE_ADMIN") === -1 && roles.indexOf("ROLE_AUTORIZADOR") === -1){
+			$("#divEventos").removeClass("col-6");
+			$("#divEventos").addClass("col-12");
 		}
 		
 	</script>

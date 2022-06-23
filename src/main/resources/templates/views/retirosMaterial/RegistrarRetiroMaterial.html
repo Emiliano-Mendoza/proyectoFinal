@@ -17,7 +17,14 @@
 				
 				<div th:replace="plantilla/template :: mensajes"></div>
 				
-				<h1 class="">Registrar Retiro</h1>
+				<div class="d-md-flex justify-content-between">
+					<h1 class="">Registrar Retiro</h1>
+					
+					<a  class="nav-link" th:href="@{/views/retiro-material/ver-retiros}"><i
+						class="fa-solid fa-file-circle-check"></i> Ver Registros</a>
+				</div>
+				
+				
 				<ol class="breadcrumb mb-4">
 					<li class="breadcrumb-item active"><i
 						class="fa-solid fa-boxes"></i> Retiro de Material</li>
@@ -65,6 +72,7 @@
 				let materialesId = 'materiales' + aut.idAutorizacion;
 				let myform = 'myform' + aut.idAutorizacion;
 				let idPlanta = "planta" + aut.idAutorizacion;
+				let labelObs = "obs" + aut.idAutorizacion;
 									
 				if(aut.empleado != null){
 					let nombre = aut.empleado.nombre.toLowerCase();
@@ -97,8 +105,8 @@
 										  </li>
 										  <li class="list-group-item bg-light">Fecha límite: ${darFormatoFechaCompleta(new Date(aut.fechaLimite))}</li>
 										  <li class="list-group-item bg-light">
-										  	<label for="observacionGuardia">Observación:</label> <input type="text"
-												class="form-control" id="observacionGuardia"
+										  	<label for=${labelObs}>Observación:</label> <input type="text"
+												class="form-control" id=${labelObs}
 												name="observacionGuardia" form=${myform}>
 										  </li>
 										</ul>
@@ -148,8 +156,8 @@
 										  </li>
 										  <li class="list-group-item bg-light">Fecha límite: ${darFormatoFechaCompleta(new Date(aut.fechaLimite))}</li>
 										  <li class="list-group-item bg-light">
-										  	<label for="observacionGuardia">Observación:</label> <input type="text"
-												class="form-control" id="observacionGuardia"
+										  	<label for=${labelObs}>Observación:</label> <input type="text"
+												class="form-control" id=${labelObs}
 												name="observacionGuardia" form=${myform}>
 										  </li>
 										</ul>

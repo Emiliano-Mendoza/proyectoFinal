@@ -14,7 +14,7 @@
 		<div id="layoutSidenav_content">
 
 			<div class="container-fluid px-4 mt-3">
-			
+
 				<div th:replace="plantilla/template :: mensajes"></div>
 
 				<h1 class="">Administrar Usuarios</h1>
@@ -33,21 +33,35 @@
 
 								<div class="card-body row mb-2">
 
-									<div class="col-6">
-										
+									<div class="col-6 not-selectable" >
+
 										<input type="hidden" id="IdInput" value="0" name="idUsuario">
-										
+
+
 										<label>Nombre de usuario:</label> <input type="text"
-											name="username" id="editUser" class="form-control" required> <label id="labelPass"
-											class="mt-2">Contraseña:</label> <input id="editPass"
-											name="contraseña" type="password" class="form-control" pattern="(?=.*\d)(?=.*[a-z]).{6,}"
-											title="La contraseña debe tener al menos un número, una letra en minúscula y como mínimo 6 caracteres">
+											name="username" id="editUser" class="form-control" required
+											autocomplete="off">
 
-
+										<div class="row">
+											<label id="labelPass" class="mt-2">Contraseña:</label> 
+											<div class="col-11">
+												<input
+													id="editPass" name="contraseña" type="password"
+													class="form-control" pattern="(?=.*\d)(?=.*[a-z]).{6,}"
+													title="La contraseña debe tener al menos un número, una letra en minúscula y como mínimo 6 caracteres"
+													autocomplete="off">
+											</div>
+											<div class="col-1 mt-2">
+												<i id="iconoOjo" class="fa-solid fa-eye" 
+													style="margin-left: -13px; width: 20px; height: 20px; cursor: pointer;"
+													onclick="mostrarPass()"></i>
+											</div>
+										</div>
+										
 										<div class="row mt-2">
 
 											<div class="col-6">
-												<label>Nombre:</label> <input type="text" name="nombre"
+												<label >Nombre:</label> <input type="text" name="nombre"
 													id="editNombre" class="form-control" required>
 											</div>
 											<div class="col-6">
@@ -60,7 +74,7 @@
 										<label class="mt-2">Roles:</label> <select id="editRoles"
 											multiple aria-label="multiple select example"
 											class="form-select" name="roles" required>
-											
+
 										</select> <label class="mt-2">Activo:</label> <select id="editActivo"
 											name="activo" class="form-select" required>
 											<option value=1 selected>Sí</option>
@@ -85,7 +99,8 @@
 
 								<div
 									class="card-footer d-md-flex justify-content-between bg-dark text-white">
-									<button class="btn btn-secondary" onclick="cerrarNuevo()" type="button">Cancelar</button>
+									<button class="btn btn-secondary" onclick="cerrarNuevo()"
+										type="button">Cancelar</button>
 									<button class="btn btn-primary" type="submit">Guardar</button>
 								</div>
 
@@ -119,7 +134,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								
+
 							</tbody>
 						</table>
 
@@ -203,7 +218,8 @@
                     "searcheble": false,
                     "width": "30px"
                     }
-                ]
+                ],
+                "autoWidth" : false
 			});
 			
 			$("#editRoles").html(function(){
@@ -257,6 +273,8 @@
 				return aux;
 			});
 			
+			document.getElementById("editPass").type = "text";
+			mostrarPass();
 			
 			$("#editarCard").show();
 
@@ -280,9 +298,7 @@
 			
 			$("#editRoles").html(function(){
 				let aux = '';
-				
-				console.log(data.roles);
-				
+
 				for(let rol of listaRoles){
 					
 					if(data.roles.some(r => r.idRol === rol.idRol))
@@ -302,7 +318,10 @@
 
 			$("#tituloCard").text("Editar Usuario");
 			$('#formId').attr('action', '/views/usuario/editar');
-
+			
+			document.getElementById("editPass").type = "text";
+			mostrarPass();
+			
 			$("#editarCard").show();
 		});
 
@@ -311,6 +330,20 @@
 			$("#editImagen").val("");
 
 			$("#editarCard").hide();
+		}
+		
+		
+		function mostrarPass() {
+			var x = document.getElementById("editPass");
+			if (x.type === "password") {
+				x.type = "text";
+				$("#iconoOjo").removeClass("fa-eye");
+				$("#iconoOjo").addClass("fa-eye-slash");
+			} else {
+				x.type = "password";
+				$("#iconoOjo").removeClass("fa-eye-slash");
+				$("#iconoOjo").addClass("fa-eye");
+			}
 		}
 	</script>
 </body>

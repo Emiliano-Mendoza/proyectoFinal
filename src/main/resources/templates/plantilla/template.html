@@ -137,6 +137,19 @@ Popup Arrow
 	margin-top: -11px;
 	font-size: 11px;
 }
+
+.not-selectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.cursor_puntero {
+	cursor: pointer;
+}
 </style>
 
 </head>
@@ -261,20 +274,20 @@ Popup Arrow
 							<i class="fas fa-house"></i>
 						</div> Inicio
 					</a>
-					<div class="sb-sidenav-menu-heading">Guardia</div>
+					<div class="sb-sidenav-menu-heading" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_GUARDIA')">Guardia</div>
 
-					<a class="nav-link collapsed"  data-bs-toggle="collapse"
+					<a class="nav-link collapsed cursor_puntero"  data-bs-toggle="collapse" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_GUARDIA')"
 						data-bs-target="#collapsePages" aria-expanded="false"
 						aria-controls="collapsePages">Registrar Actividad
 						<div class="sb-sidenav-collapse-arrow">
 							<i class="fas fa-angle-down"></i>
 						</div>
 					</a>
-					<div class="collapse" id="collapsePages"
+					<div class="collapse" id="collapsePages" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_GUARDIA')"
 						aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
 
 
-						<nav class="sb-sidenav-menu-nested nav accordion"
+						<nav class="sb-sidenav-menu-nested nav accordion cursor_puntero"
 							id="sidenavAccordionPages">
 							<a class="nav-link collapsed" data-bs-toggle="collapse"
 								data-bs-target="#pagesCollapseAuth" aria-expanded="false"
@@ -293,7 +306,7 @@ Popup Arrow
 									<a class="nav-link" th:href="@{/views/ingresos-proveedor}">Proveedor</a>
 								</nav>
 							</div>
-							<a class="nav-link collapsed" data-bs-toggle="collapse"
+							<a class="nav-link collapsed cursor_puntero"  data-bs-toggle="collapse"
 								data-bs-target="#pagesCollapseError" aria-expanded="false"
 								aria-controls="pagesCollapseError"><div
 									class="sb-nav-link-icon">
@@ -332,7 +345,7 @@ Popup Arrow
 
 					</div>
 
-					<a class="nav-link collapsed" data-bs-toggle="collapse"
+					<a class="nav-link collapsed cursor_puntero" data-bs-toggle="collapse"
 						sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_AUTORIZADOR')"
 						data-bs-target="#collapseLayouts" aria-expanded="false"
 						aria-controls="collapseLayouts">Autorizaciones
@@ -340,7 +353,7 @@ Popup Arrow
 							<i class="fas fa-angle-down"></i>
 						</div>
 					</a>
-					<div class="collapse" id="collapseLayouts"
+					<div class="collapse" id="collapseLayouts" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_AUTORIZADOR')"
 						aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 						<nav class="sb-sidenav-menu-nested nav">
 							<a class="nav-link"
@@ -357,14 +370,14 @@ Popup Arrow
 						</nav>
 					</div>
 
-					<a class="nav-link collapsed" data-bs-toggle="collapse"
+					<a class="nav-link collapsed cursor_puntero" data-bs-toggle="collapse" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_NOTIFICADOR')"
 						data-bs-target="#collapseLayouts3" aria-expanded="false"
 						aria-controls="collapseLayouts">Notificacíon de Eventos
 						<div class="sb-sidenav-collapse-arrow">
 							<i class="fas fa-angle-down"></i>
 						</div>
 					</a>
-					<div class="collapse" id="collapseLayouts3"
+					<div class="collapse" id="collapseLayouts3" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_NOTIFICADOR')"
 						aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 						<nav class="sb-sidenav-menu-nested nav">
 							<a class="nav-link" th:href="@{/views/evento}">
@@ -379,8 +392,8 @@ Popup Arrow
 						</nav>
 					</div>
 
-					<div class="sb-sidenav-menu-heading">Administrador</div>
-					<a class="nav-link collapsed"  data-bs-toggle="collapse"
+					<div class="sb-sidenav-menu-heading" sec:authorize="hasAnyRole('ROLE_ADMIN')">Administrador</div>
+					<a class="nav-link collapsed cursor_puntero"  data-bs-toggle="collapse" sec:authorize="hasAnyRole('ROLE_ADMIN')"
 						data-bs-target="#collapseLayouts2" aria-expanded="false"
 						aria-controls="collapseLayouts">
 						<div class="sb-nav-link-icon">
@@ -390,7 +403,7 @@ Popup Arrow
 							<i class="fas fa-angle-down"></i>
 						</div>
 					</a>
-					<div class="collapse" id="collapseLayouts2"
+					<div class="collapse" id="collapseLayouts2" sec:authorize="hasAnyRole('ROLE_ADMIN')"
 						aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 						<nav class="sb-sidenav-menu-nested nav">
 							<a class="nav-link" th:href="@{/views/empleado/administrar}"><div>
@@ -412,7 +425,7 @@ Popup Arrow
 						</nav>
 					</div>
 					
-					<a class="nav-link collapsed" data-bs-toggle="collapse"
+					<a class="nav-link collapsed cursor_puntero" data-bs-toggle="collapse" sec:authorize="hasAnyRole('ROLE_ADMIN')"
 						data-bs-target="#collapseLayouts4" aria-expanded="false"
 						aria-controls="collapseLayouts">
 						<div class="sb-nav-link-icon">						
@@ -422,7 +435,7 @@ Popup Arrow
 							<i class="fas fa-angle-down"></i>
 						</div>
 					</a>
-					<div class="collapse" id="collapseLayouts4"
+					<div class="collapse" id="collapseLayouts4" sec:authorize="hasAnyRole('ROLE_ADMIN')"
 						aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 						<nav class="sb-sidenav-menu-nested nav">
 							<a class="nav-link" th:href="@{/views/ingresos-empleado/registros}"><div>
@@ -442,7 +455,7 @@ Popup Arrow
 						
 					</div>
 					
-					<a class="nav-link" th:href="@{/views/usuario/administrar}">
+					<a class="nav-link" th:href="@{/views/usuario/administrar}" sec:authorize="hasAnyRole('ROLE_ADMIN')">
 						<div class="sb-nav-link-icon">
 							<i class="fa-solid fa-user-group"></i>
 						</div> Gestión de Usuarios
@@ -542,7 +555,7 @@ Popup Arrow
 			$("#notificationLink").click(function()
 			{
 			$("#notificationContainer").fadeToggle(300);
-			//$("#notification_count").fadeOut("slow");
+			
 			return false;
 			});
 	
@@ -730,7 +743,7 @@ Popup Arrow
 		
 		//muestro el modal si el usuario tiene el rol de guardia y si recien se loguea
 		$(window).on('load', function() {
-			if (getCookie("logueado") == "" && roles.indexOf("ROLE_GUARDIA") !== -1) {
+			if (getCookie("logueado") == "" && (roles.indexOf("ROLE_GUARDIA") !== -1 || roles.indexOf("ROLE_ADMIN") !== -1)) {
 				$('#modalPlanta').modal('show');
 			}
 		});

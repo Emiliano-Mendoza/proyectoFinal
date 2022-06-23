@@ -59,8 +59,7 @@
 		
 		let listaAux = listaTransitos;
 		Array.prototype.push.apply(listaAux, listaAsistencias);		
-		console.log(listaAux);
-		
+	
 		let listaVehiculos;
 		
 		const formulario = document.querySelector('#buscador');
@@ -87,9 +86,7 @@
 			const texto = formulario.value.toLowerCase();
 			
 			for(let asis of listaAux){
-				
-				console.log(asis);
-				
+								
 				let nombre = asis.empleado.nombre.toLowerCase();
 				let apellido = asis.empleado.apellido.toLowerCase();
 				let empleado = asis.empleado.nombre.toLowerCase() + " " + asis.empleado.apellido.toLowerCase();

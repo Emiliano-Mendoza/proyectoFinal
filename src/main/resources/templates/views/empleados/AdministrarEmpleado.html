@@ -87,7 +87,8 @@
 										<div class="d-md-flex justify-content-center mt-4 g-0 ">
 											<div class="col-md-6">
 												<img id="file-ip-1-preview" src="/images/anonimo.jpg"
-													width="100%" height="auto">
+													width="100%" height="auto"
+													onerror="this.src='/images/anonimo.jpg';">
 											</div>
 										</div>
 
@@ -170,6 +171,7 @@
 									
 			datatable = $('#table_id').DataTable({
 				data: listaEmpleados,
+				"autoWidth" : false,
 				language : {
 					"decimal" : "",
 					"emptyTable" : "No hay información",
@@ -325,6 +327,7 @@
 				var src = URL.createObjectURL(event.target.files[0]);
 				var preview = document.getElementById("file-ip-1-preview");
 				preview.src = src;
+				preview.onerror = "this.onerror=null;this.src='/images/anonimo.jpg';"
 			}
 		}
 	</script>
