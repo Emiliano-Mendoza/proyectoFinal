@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.proyectofinal.guardia.domain.AutorizacionRetiroMaterial;
-import com.proyectofinal.guardia.domain.Empleado;
 import com.proyectofinal.guardia.domain.Retiro;
 
 

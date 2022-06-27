@@ -31,6 +31,17 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 		return usuarioRepo.save(us);
 	}
+	
+	@Override
+	public Usuario editarUsuario(Usuario us) {
+		
+		String passCrip = new BCryptPasswordEncoder().encode(us.getContraseña());
+
+		us.setContraseña(passCrip);
+
+		return usuarioRepo.save(us);
+	}
+
 
 	@Override
 	public List<Usuario> getAllUsuario() {
@@ -106,4 +117,5 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return usuarioRepo.findAllDisponibles();
 	}
 
+	
 }

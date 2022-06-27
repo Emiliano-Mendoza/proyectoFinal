@@ -2,17 +2,20 @@ package com.proyectofinal.guardia.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.proyectofinal.guardia.domain.Ronda;
 import com.proyectofinal.guardia.domain.Usuario;
 import com.proyectofinal.guardia.service.UsuarioService;
 
@@ -28,38 +31,35 @@ public class UsuarioController {
 
 		model.addAttribute("listaUsuarios", usuarioServ.getAllUsuario());
 		model.addAttribute("listaRoles", usuarioServ.obtenerRoles());
+		model.addAttribute("usuario", new Usuario());
 
-		return "/views/usuario/AdministrarUsuario";
+		return "/views/usuario/AdministrarUsuario2";
+	}
+	
+	
+	@GetMapping("/usuarios-activos")
+	public ResponseEntity<List<Usuario>> obtenerUsuariosActivos() {
+
+		return ResponseEntity.ok(usuarioServ.obtenerUsuarioActivos());
 	}
 
 	@PostMapping("/crear")
-	public String crearUsuario(@RequestParam(name = "username") String username,
-			@RequestParam(name = "contraseña") String contraseña, @RequestParam(name = "nombre") String nombre,
-			@RequestParam(name = "apellido") String apellido, @RequestParam(name = "activo") int activo,
-			@RequestParam(name = "roles") List<Integer> roles, RedirectAttributes atributos, Model model) {
+	public String crearUsuario(@Valid @ModelAttribute Usuario usuario, BindingResult result,
+			RedirectAttributes atributos) {
 
-		// verifico si ya existe el username
-		if (usuarioServ.findByUsuario(username) != null) {
-			
-			atributos.addFlashAttribute("error", "Usuario existente. No se pudo crear el nuevo usuario.");
+		if (result.hasErrors()) {
+
+			atributos.addFlashAttribute("error", "Datos incompletos. No se pudo crear el nuevo usuario.");
 			return "redirect:/views/usuario/administrar";
 		}
 
-		if (username != null && contraseña != null && !roles.isEmpty() && nombre != null && apellido != null
-				&& username.length() > 0 && contraseña.length() > 5 && nombre.length() > 0 && apellido.length() > 0) {
+		try {
 
-			try {
-				
-				usuarioServ.crearUsuario(username, contraseña, nombre, apellido, activo == 1 ? true : false, roles);
+			usuarioServ.crearUsuario(usuario);
 
-			} catch (Exception e) {
+		} catch (Exception e) {
 
-				atributos.addFlashAttribute("error", "No se pudo crear el nuevo usuario");
-				return "redirect:/views/usuario/administrar";
-			}
-		} else {
-
-			atributos.addFlashAttribute("error", "Datos incompletos. No se pudo crear el nuevo usuario");
+			atributos.addFlashAttribute("error", "No se pudo editar el usuario");
 			return "redirect:/views/usuario/administrar";
 		}
 
@@ -68,45 +68,28 @@ public class UsuarioController {
 	}
 
 	@PostMapping("/editar")
-	public String editarUsuario(@RequestParam(name = "idUsuario") int idUsuario,
-			@RequestParam(name = "contraseña", required = false) String contraseña,
-			@RequestParam(name = "nombre") String nombre, @RequestParam(name = "apellido") String apellido,
-			@RequestParam(name = "activo") int activo, @RequestParam(name = "roles") List<Integer> roles,
-			RedirectAttributes atributos, Model model) {
-		
-		
-		// verifico si existe el usuario
-		if (usuarioServ.findById(idUsuario) == null) {
-			
-			atributos.addFlashAttribute("error", "Usuario inexistente. No se pudo editar usuario.");
+	public String editarUsuario(@Valid @ModelAttribute Usuario usuario, BindingResult result,
+			RedirectAttributes atributos) {
+
+
+		if (result.hasErrors() && !(result.hasFieldErrors("contraseña") && result.getErrorCount() == 1)) {
+
+			atributos.addFlashAttribute("error", "Datos incompletos. No se pudo editar el nuevo usuario.");
 			return "redirect:/views/usuario/administrar";
 		}
 
-		if (!roles.isEmpty() && nombre != null && apellido != null && nombre.length() > 0 && apellido.length() > 0) {
+		try {
 
-			try {
-				
-				usuarioServ.editarUsuario(idUsuario, contraseña, nombre, apellido, activo == 1 ? true : false, roles);
-				
-			} catch (Exception e) {
+			usuarioServ.editarUsuario(usuario);
 
-				atributos.addFlashAttribute("error", "No se pudo editar el usuario");
-				return "redirect:/views/usuario/administrar";
-			}
-		} else {
+		} catch (Exception e) {
 
-
-			atributos.addFlashAttribute("error", "Datos incompletos. No se pudo editar el usuario");
+			atributos.addFlashAttribute("error", "No se pudo editar el usuario");
 			return "redirect:/views/usuario/administrar";
 		}
 
-		atributos.addFlashAttribute("success", "Usuario editado exitosamente!");
+		atributos.addFlashAttribute("success", "Usuario creado exitosamente!");
 		return "redirect:/views/usuario/administrar";
 	}
-	
-	@GetMapping("/usuarios-activos")
-	public ResponseEntity<List<Usuario>> obtenerUsuariosActivos() {
 
-		return ResponseEntity.ok(usuarioServ.obtenerUsuarioActivos());
-	}
 }

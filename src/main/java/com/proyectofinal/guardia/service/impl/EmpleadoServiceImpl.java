@@ -28,9 +28,9 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 	}
 
 	@Override
-	public Empleado crearEmpleado(Empleado empleado, int idSector) {
+	public Empleado crearEmpleado(Empleado empleado) {
 
-		empleado.setSector(sectorRepo.getById(idSector));
+		
 		empleado.setEnPlanta(false);
 		
 		return empleadoRepo.save(empleado);
@@ -70,7 +70,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 	}
 
 	@Override
-	public Empleado editarEmpleado(Empleado empleado, int idSector) {
+	public Empleado editarEmpleado(Empleado empleado) {
 
 		Empleado empActual = empleadoRepo.getById(empleado.getNroLegajo());
 
@@ -80,8 +80,6 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
 		}
 		empleado.setEnPlanta(empActual.getEnPlanta());
-
-		empleado.setSector(sectorRepo.getById(idSector));
 
 		return empleadoRepo.save(empleado);
 	}

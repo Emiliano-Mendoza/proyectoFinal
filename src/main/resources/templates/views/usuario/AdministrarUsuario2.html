@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="plantilla/template :: head">
+</head>
+<body class="sb-nav-fixed">
+
+	<header th:replace="plantilla/template :: header"></header>
+
+	<div id="layoutSidenav">
+
+		<div th:replace="plantilla/template :: sidenav_nav"></div>
+
+		<div id="layoutSidenav_content">
+
+			<div class="container-fluid px-4 mt-3">
+
+				<div th:replace="plantilla/template :: mensajes"></div>
+
+				<h1 class="">Administrar Usuarios</h1>
+				<ol class="breadcrumb mb-3">
+					<li class="breadcrumb-item active"><i
+						class="fa-solid fa-user-group"></i> Usuarios</li>
+				</ol>
+
+				<div class="row d-md-flex justify-content-center">
+
+					<div class="col-8" id="editarCard" style="display: none;">
+						<form th:object="${usuario}" method="post" id="formId" enctype="multipart/form-data">
+							<div class="card">
+								<div class="card-header bg-dark text-white" id="tituloCard">Editar
+									Usuario:</div>
+
+								<div class="card-body row mb-2">
+
+									<div class="col-6 not-selectable" >
+
+										<input type="hidden" id="IdInput" value="0" name="idUsuario" th:field="*{idUsuario}">
+
+
+										<label>Nombre de usuario:</label> <input type="text"
+											name="username" id="editUser" class="form-control" required th:field="*{username}"
+											autocomplete="off">
+
+										<div class="row">
+											<label id="labelPass" class="mt-2">Contraseña:</label> 
+											<div class="col-11">
+												<input
+													id="editPass" name="contraseña" type="password" th:field="*{contraseña}"
+													class="form-control" pattern="(?=.*\d)(?=.*[a-z]).{6,}"
+													title="La contraseña debe tener al menos un número, una letra en minúscula y como mínimo 6 caracteres"
+													autocomplete="off">
+											</div>
+											<div class="col-1 mt-2">
+												<i id="iconoOjo" class="fa-solid fa-eye" 
+													style="margin-left: -13px; width: 20px; height: 20px; cursor: pointer;"
+													onclick="mostrarPass()"></i>
+											</div>
+										</div>
+										
+										<div class="row mt-2">
+
+											<div class="col-6">
+												<label >Nombre:</label> <input type="text" name="nombre" th:field="*{nombre}"
+													id="editNombre" class="form-control" required>
+											</div>
+											<div class="col-6">
+												<label>Apellido:</label> <input type="text" name="apellido" th:field="*{apellido}"
+													id="editApellido" class="form-control" required>
+											</div>
+										</div>
+
+
+										<label class="mt-2">Roles:</label> <select id="editRoles"
+											multiple aria-label="multiple select example"
+											class="form-select" name="roles" required>
+
+										</select> <label class="mt-2">Activo:</label> <select id="editActivo"
+											name="activo" class="form-select" required>
+											<option value=1 selected>Sí</option>
+											<option value=0>No</option>
+										</select>
+
+
+									</div>
+									<div class="col-6">
+
+										<div class="d-md-flex justify-content-center g-0 ">
+											<div class="col-md-6" style="margin-top: 85px;">
+												<img id="file-ip-1-preview" src="/images/icono-pestaña.png"
+													width="100%" height="auto">
+											</div>
+										</div>
+
+									</div>
+
+								</div>
+
+
+								<div
+									class="card-footer d-md-flex justify-content-between bg-dark text-white">
+									<button class="btn btn-secondary" onclick="cerrarNuevo()"
+										type="button">Cancelar</button>
+									<button class="btn btn-primary" type="submit">Guardar</button>
+								</div>
+
+							</div>
+						</form>
+					</div>
+
+				</div>
+
+				<div class="card mb-4 mt-3">
+					<div class="card-header d-md-flex justify-content-between">
+						<div class="">
+							<i class="fa-solid fa-table mt-2"></i> Listado de Usuarios:
+						</div>
+						<div>
+							<button class="btn btn-primary btn-sm" onclick="nuevoCard()">Nuevo
+								Usuario</button>
+						</div>
+					</div>
+					<div class="card-body">
+
+						<table id="table_id" class="display">
+							<thead>
+								<tr>
+									<th>Username</th>
+									<th>Nombre</th>
+									<th>Apellido</th>
+									<th>Roles</th>
+									<th>Activo</th>
+									<th>Acción</th>
+								</tr>
+							</thead>
+							<tbody>
+
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<footer th:replace="plantilla/template :: footer"></footer>
+
+	<script th:inline="javascript">
+		var datatable;
+		
+		let listaRoles;
+
+		$(document).ready(function() {
+			
+			let listaUsuarios = /*[[${listaUsuarios}]]*/'default';
+			listaRoles = /*[[${listaRoles}]]*/'default';
+			
+			datatable = $('#table_id').DataTable({
+				data: listaUsuarios,
+				language : {
+					"decimal" : "",
+					"emptyTable" : "No hay información",
+					"info" : "Mostrando _START_ a _END_ de _TOTAL_ Usuarios",
+					"infoEmpty" : "Mostrando 0 to 0 of 0 Usuarios",
+					"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
+					"infoPostFix" : "",
+					"thousands" : ",",
+					"lengthMenu" : "Mostrar _MENU_ Usuarios",
+					"loadingRecords" : "Cargando...",
+					"processing" : "Procesando...",
+					"search" : "Buscar:",
+					"zeroRecords" : "Sin resultados encontrados",
+					"paginate" : {
+						"first" : "Primero",
+						"last" : "Ultimo",
+						"next" : "Siguiente",
+						"previous" : "Anterior"
+					}
+				},
+				"columnDefs" : [ {
+					"className" : "dt-center",
+					"targets" : "_all"
+				} ]
+				,
+				columns: [
+                    { data: 'username' },
+                    { data: 'nombre' },
+                    { data: 'apellido' },
+                    {
+                        "data":"roles", "render": function (roles){
+                        	let aux = '';
+                        	let count = 1;
+                        	
+                            for(let rol of roles){
+                            	
+                            	if(count == roles.length) aux += rol.rol;
+                            	else aux += rol.rol + ' - ';
+                            	
+                            	count++;
+                            }
+                            return '<span>' + aux + '</span>';
+                        }
+                    },
+                    {
+                        "data":"activo", "render": function (valor){
+                            if(valor) return '<span>Sí</span>';
+                            else return '<span>No</span>';
+                        }
+                    },
+                    {
+                    "defaultContent": '<button type="button" class=" btn btn-success btn-sm btn-editar"><i class="fas fa-pen"></i></button>',
+                    "orderable": false,
+                    "searcheble": false,
+                    "width": "30px"
+                    }
+                ],
+                "autoWidth" : false
+			});
+			
+			$("#editRoles").html(function(){
+				let aux = '';
+				let count = 1;
+				
+				for(let rol of listaRoles){
+					
+					if(count==1) aux += `<option value=${rol.idRol} selected>${rol.rol}</option>`;
+					else aux += `<option value=${rol.idRol}>${rol.rol}</option>`;
+					
+					count++;
+				}
+				
+				return aux;
+			});
+			
+			
+		});
+
+		function nuevoCard() {
+			
+			$("#IdInput").val(0);			
+			$("#editUser").val("");
+			$('#editUser').prop('readonly', false);
+			$("#editPass").val("");
+			$("#editPass").prop('required', true);			
+			$("#labelPass").html('Contraseña: ');
+			
+			$("#editNombre").val('');
+			$("#editApellido").val('');
+			
+			$("#editActivo").val(1);
+
+			$("#tituloCard").text("Crear Nuevo Usuario");
+			$("#file-ip-1-preview").attr('src', "/images/icono-pestaña.png");
+			$('#formId').attr('action', '/views/usuario/crear');
+			
+			$("#editRoles").html(function(){
+				let aux = '';
+				let count = 1;
+				
+				for(let rol of listaRoles){
+					
+					if(count==1) aux += `<option value=${rol.idRol} selected>${rol.rol}</option>`;
+					else aux += `<option value=${rol.idRol}>${rol.rol}</option>`;
+					
+					count++;
+				}
+				
+				return aux;
+			});
+			
+			document.getElementById("editPass").type = "text";
+			mostrarPass();
+			
+			$("#editarCard").show();
+
+		}
+
+		$("#table_id tbody").on("click", '.btn-editar', function() {
+			let filaSeleccionada = (this).closest("tr");
+			let data = datatable.row(filaSeleccionada).data();
+			
+			$("#IdInput").val(data.idUsuario);
+			$("#editUser").val(data.username);
+			$('#editUser').prop('readonly', true);
+			
+			$("#editPass").val('');
+			$("#editPass").prop('required', false);
+			$("#labelPass").html('Nueva Contraseña: ' + '<small class="text-muted">(Opcional)</small>');
+			
+			
+			$("#editNombre").val(data.nombre);
+			$("#editApellido").val(data.apellido);
+			
+			$("#editRoles").html(function(){
+				let aux = '';
+
+				for(let rol of listaRoles){
+					
+					if(data.roles.some(r => r.idRol === rol.idRol))
+					{
+						aux += `<option value=${rol.idRol} selected>${rol.rol}</option>`;
+					}
+					else{
+						aux += `<option value=${rol.idRol}>${rol.rol}</option>`;
+					}
+																														
+				}
+				
+				return aux;
+			});
+										
+			$("#editActivo").val(data.activo ? 1 : 0);
+
+			$("#tituloCard").text("Editar Usuario");
+			$('#formId').attr('action', '/views/usuario/editar');
+			
+			document.getElementById("editPass").type = "text";
+			mostrarPass();
+			
+			$("#editarCard").show();
+		});
+
+		function cerrarNuevo() {
+
+			$("#editImagen").val("");
+
+			$("#editarCard").hide();
+		}
+		
+		
+		function mostrarPass() {
+			var x = document.getElementById("editPass");
+			if (x.type === "password") {
+				x.type = "text";
+				$("#iconoOjo").removeClass("fa-eye");
+				$("#iconoOjo").addClass("fa-eye-slash");
+			} else {
+				x.type = "password";
+				$("#iconoOjo").removeClass("fa-eye-slash");
+				$("#iconoOjo").addClass("fa-eye");
+			}
+		}
+	</script>
+</body>
+</html>

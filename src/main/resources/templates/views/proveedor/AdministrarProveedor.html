@@ -26,20 +26,23 @@
 				<div class="row d-md-flex justify-content-center">
 
 					<div class="col-8" id="editarCard" style="display: none;">
-						<form method="post" id="formId">
+						<form th:object="${proveedorAux}"  method="post" id="formId" 
+							enctype="multipart/form-data">
 							<div class="card">
 								<div class="card-header bg-dark text-white" id="tituloCard">Editar
 									Proveedor:</div>
 
 								<div class="card-body row mb-2">
-									
-									<input type="hidden" id="IdInput" value="0" name="idProveedor">
-									
+
+									<input type="hidden" id="IdInput" value="0"
+										th:field="*{idProveedor}">
+
 									<div class="col-6">
-				
-										<label>Proveedor:</label> <input type="text" id="editProv" required
-											name="nombreProveedor" class="form-control"> <label
-											class="mt-2">Descripción:</label> <input id="editDesc" required
+
+										<label>Proveedor:</label> <input type="text" id="editProv"
+											required th:field="*{proveedor}"
+											class="form-control"> <label class="mt-2">Descripción:</label>
+										<input id="editDesc" required th:field="*{descripcion}"
 											type="text" class="form-control" name="descripcion">
 										<label class="mt-2">Activo:</label> <select id="editActivo"
 											name="activo" class="form-select">
@@ -98,7 +101,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								
+
 							</tbody>
 						</table>
 
@@ -115,19 +118,18 @@
 	<footer th:replace="plantilla/template :: footer"></footer>
 
 	<script th:inline="javascript">
-		
 		var datatable;
-				
+
 		$(document)
 				.ready(
 						function() {
-							
+
 							let listaProveedores = /*[[${listaProveedores}]]*/'default';
-														
+
 							datatable = $('#table_id')
 									.DataTable(
-											{	
-												data: listaProveedores,
+											{
+												data : listaProveedores,
 												"autoWidth" : false,
 												language : {
 													"decimal" : "",
@@ -152,30 +154,35 @@
 												"columnDefs" : [ {
 													"className" : "dt-center",
 													"targets" : "_all"
-												} ]
-												,
-												columns: [
-								                    { data: 'proveedor' },
-								                    { data: 'descripcion' },
-								                    {
-								                        "data":"activo", "render": function (valor){
-								                            if(valor) return '<span>Sí</span>';
-								                            else return '<span>No</span>';
-								                        }
-								                    },
-								                    {
-								                    "defaultContent": '<button type="button" class=" btn btn-success btn-sm btn-editar"><i class="fas fa-pen"></i></button>',
-								                    "orderable": false,
-								                    "searcheble": false,
-								                    "width": "90px"
-								                    }
-								                ]
+												} ],
+												columns : [
+														{
+															data : 'proveedor'
+														},
+														{
+															data : 'descripcion'
+														},
+														{
+															"data" : "activo",
+															"render" : function(
+																	valor) {
+																if (valor)
+																	return '<span>Sí</span>';
+																else
+																	return '<span>No</span>';
+															}
+														},
+														{
+															"defaultContent" : '<button type="button" class=" btn btn-success btn-sm btn-editar"><i class="fas fa-pen"></i></button>',
+															"orderable" : false,
+															"searcheble" : false,
+															"width" : "90px"
+														} ]
 											});
 						});
-		
-				
+
 		function nuevoCard() {
-			
+
 			$("#IdInput").val(0);
 			$("#editProv").val("");
 			$("#editDesc").val("");
@@ -193,16 +200,16 @@
 		$("#table_id tbody").on("click", '.btn-editar', function() {
 			let filaSeleccionada = (this).closest("tr");
 			let data = datatable.row(filaSeleccionada).data();
-			
+
 			$("#IdInput").val(data.idProveedor);
 			$("#editProv").val(data.proveedor);
 			$("#editDesc").val(data.descripcion);
 			$("#editActivo").val(data.activo ? 1 : 0);
-			
+
 			$("#tituloCard").text("Editar Proveedor");
-			
+
 			$('#formId').attr('action', '/views/proveedor/editar');
-			
+
 			$("#editarCard").show();
 		});
 

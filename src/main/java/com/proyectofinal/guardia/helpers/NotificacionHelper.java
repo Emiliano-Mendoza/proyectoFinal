@@ -2,10 +2,6 @@ package com.proyectofinal.guardia.helpers;
 
 import java.util.Date;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 public class NotificacionHelper {
 	

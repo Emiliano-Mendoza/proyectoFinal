@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.proyectofinal.guardia.domain.SectorTrabajo;
 import com.proyectofinal.guardia.domain.Vehiculo;
 import com.proyectofinal.guardia.service.VehiculoService;
 
@@ -37,27 +35,22 @@ public class VehiculoController {
 	}
 
 	@PostMapping("/crear")
-	public String crearVehiculo(@Valid @ModelAttribute Vehiculo vehiculo, BindingResult result, @RequestParam(name = "activo") int activo,
+	public String crearVehiculo(@Valid @ModelAttribute Vehiculo vehiculo, BindingResult result,
 			 Model model, RedirectAttributes atributos) {
 		
 		
 		if (result.hasErrors()) {
 			
-			model.addAttribute("listaVehiculos", vehiculoServ.obtenerTodos());
-			model.addAttribute("vehiculo", vehiculo);
-			model.addAttribute("error", "Datos inválidos. No se pudo editar el vehiculo.");
-
-			return "/views/vehiculo/AdministrarVehiculo";
+			atributos.addFlashAttribute("error", "Datos inválidos. No se pudo crear el vehiculo.");
+			return "redirect:/views/vehiculo/administrar";
 			
 		}else {
-			
-			vehiculo.setActivo(activo == 1 ? true : false);
 			
 			try {
 				vehiculoServ.crearVehiculo(vehiculo);
 			} catch (Exception e) {
 				atributos.addFlashAttribute("error", "No se pudo crear el vehiculo");
-				return "redirect:/views/empleado/administrar";
+				return "redirect:/views/vehiculo/administrar";
 			}
 		}
 
@@ -66,28 +59,22 @@ public class VehiculoController {
 	}
 	
 	@PostMapping("/editar")
-	public String editarVehiculo(@Valid @ModelAttribute Vehiculo vehiculo, BindingResult result, @RequestParam(name = "activo") int activo,
+	public String editarVehiculo(@Valid @ModelAttribute Vehiculo vehiculo, BindingResult result,
 			 Model model, RedirectAttributes atributos) {
-		
-		
 		
 		if (result.hasErrors()) {
 			
-			model.addAttribute("listaVehiculos", vehiculoServ.obtenerTodos());
-			model.addAttribute("vehiculo", vehiculo);
-			model.addAttribute("error", "Datos inválidos. No se pudo editar el vehiculo.");
-
-			return "/views/vehiculo/AdministrarVehiculo";
+			atributos.addFlashAttribute("error", "Datos inválidos. No se pudo editar el vehiculo.");
+			return "redirect:/views/vehiculo/administrar";
 			
 		}else {
 			
-			vehiculo.setActivo(activo == 1 ? true : false);
 			
 			try {
 				vehiculoServ.editarVehiculo(vehiculo);
 			} catch (Exception e) {
 				atributos.addFlashAttribute("error", "No se pudo editar el vehiculo");
-				return "redirect:/views/empleado/administrar";
+				return "redirect:/views/vehiculo/administrar";
 			}
 		}
 

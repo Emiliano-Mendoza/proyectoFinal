@@ -20,7 +20,20 @@ public class ProveedorServiceImpl implements ProveedorService {
 
 		return true;
 	}
+	
+	@Override
+	public Proveedor crearProveedor(Proveedor proveedor) {
+		
+		return proveedorRepo.save(proveedor);
+	}
 
+	@Override
+	public Proveedor editarProveedor(Proveedor proveedor) {
+		
+		return proveedorRepo.save(proveedor);
+	}
+	
+	
 	@Override
 	public Proveedor crearProveedor(String nombreProveedor, String descripcion, Boolean activo) {
 
@@ -55,5 +68,7 @@ public class ProveedorServiceImpl implements ProveedorService {
 		
 		return proveedorRepo.findAllDisponibles();
 	}
+
+
 
 }

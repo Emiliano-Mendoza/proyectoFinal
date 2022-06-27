@@ -17,6 +17,7 @@ public class Proveedor {
 	
 	@NotEmpty
 	private String proveedor;
+	@NotEmpty
 	private String descripcion;
 	private Boolean activo;
 	

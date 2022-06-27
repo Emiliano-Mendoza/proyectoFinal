@@ -46,9 +46,9 @@ public class EmpleadoController {
 
 	@PostMapping("/crear")
 	public String crearEmpleado(@Valid @ModelAttribute Empleado empleado, BindingResult result, Model model,
-			@RequestParam(name = "file") MultipartFile imagen, @RequestParam(name = "activo") int activo, @RequestParam(name = "sector") int sector,
+			@RequestParam(name = "file") MultipartFile imagen,
 			RedirectAttributes atributos) {
-				
+		
 		if(empleadoServ.validarDatos(empleado)) {
 			result.rejectValue("nroLegajo", "error.empleado", "Número de legajo existente");
 		}
@@ -81,12 +81,10 @@ public class EmpleadoController {
 				empleado.setImagen("Sin imagen");
 			}
 			
-			empleado.setActivo(activo == 1 ? true : false);
 			empleado.setEnPlanta(false);
-			
-			
+						
 			try {
-				empleadoServ.crearEmpleado(empleado, sector);
+				empleadoServ.crearEmpleado(empleado);
 			} catch (Exception e) {
 				atributos.addFlashAttribute("error", "No se pudo crear el empleado");
 				return "redirect:/views/empleado/administrar";
@@ -103,9 +101,8 @@ public class EmpleadoController {
 	
 	@PostMapping("/editar")
 	public String editarEmpleado(@Valid @ModelAttribute Empleado empleado, BindingResult result, Model model,
-			@RequestParam(name = "file") MultipartFile imagen, @RequestParam(name = "activo") int activo, @RequestParam(name = "sector") int sector,
+			@RequestParam(name = "file") MultipartFile imagen,
 			RedirectAttributes atributos) {
-
 		
 		if(!empleadoServ.validarDatos(empleado)) {
 			result.rejectValue("nroLegajo", "error.empleado", "Empleado no encontrado.");
@@ -137,10 +134,9 @@ public class EmpleadoController {
 				}
 			}
 			
-			empleado.setActivo(activo == 1 ? true : false);
 						
 			try {
-				empleadoServ.editarEmpleado(empleado, sector);
+				empleadoServ.editarEmpleado(empleado);
 			} catch (Exception e) {
 				atributos.addFlashAttribute("error", "No se pudo editar el empleado");
 				return "redirect:/views/empleado/administrar";
