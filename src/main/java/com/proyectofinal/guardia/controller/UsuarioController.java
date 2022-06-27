@@ -57,9 +57,8 @@ public class UsuarioController {
 
 			usuarioServ.crearUsuario(usuario);
 
-		} catch (Exception e) {
-
-			atributos.addFlashAttribute("error", "No se pudo editar el usuario");
+		} catch (Exception e) {			
+			atributos.addFlashAttribute("error", "No se pudo crear el usuario. El username ya está en uso.");
 			return "redirect:/views/usuario/administrar";
 		}
 
@@ -83,8 +82,8 @@ public class UsuarioController {
 			usuarioServ.editarUsuario(usuario);
 
 		} catch (Exception e) {
-
-			atributos.addFlashAttribute("error", "No se pudo editar el usuario");
+			System.out.println(e);
+			atributos.addFlashAttribute("error", "No se pudo editar el usuario.");
 			return "redirect:/views/usuario/administrar";
 		}
 
