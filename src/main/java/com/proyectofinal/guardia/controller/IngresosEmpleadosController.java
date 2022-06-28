@@ -41,7 +41,7 @@ public class IngresosEmpleadosController {
 	private VehiculoService vehiculoServ;
 
 	@GetMapping
-	public String listarEmpleados(Model model) {
+	public String paginaNuevoRegistroIngreso(Model model) {
 
 		model.addAttribute("listaEmpleados", empleadoServ.obtenerDisponibles().stream()
 				.filter(e -> e.getEnPlanta() != null && !e.getEnPlanta()).collect(Collectors.toList()));
@@ -50,7 +50,7 @@ public class IngresosEmpleadosController {
 	}
 
 	@GetMapping("/egreso")
-	public String listarAsistenciasParaEgreso(Model model) {
+	public String paginaNuevoRegistroEgreso(Model model) {
 
 		model.addAttribute("listaAsistencias", asisServ.listarAsistenciasSinEgresoSinTransito());
 		model.addAttribute("listaTransitos", transitoServ.obtenerTransitosActivos());

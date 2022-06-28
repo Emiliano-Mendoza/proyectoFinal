@@ -32,7 +32,7 @@ public class IngresosProveedorController {
 	private IngresoProveedorService ingresoServ;
 
 	@GetMapping
-	public String listarProveedores(Model model) {
+	public String paginaNuevoRegistroIngreso(Model model) {
 
 		List<Proveedor> listaProveedores = provServ.obtenerDisponibles();
 
@@ -42,7 +42,7 @@ public class IngresosProveedorController {
 	}
 
 	@GetMapping("/egreso")
-	public String listarIngresosDeProveedores(Model model) {
+	public String paginaNuevoRegistroEgreso(Model model) {
 		
 		List<IngresoProveedor> listaIngresos = ingresoServ.obtenerIngresosActivos();
 		

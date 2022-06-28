@@ -54,9 +54,14 @@ public class EmpleadoController {
 		}
 				
 		if (result.hasErrors()) {
-			
-			atributos.addFlashAttribute("error", "Datos inválidos. No se pudo crear el empleado.");
-			return "redirect:/views/empleado/administrar";
+
+			List<Empleado> listaEmpleados = empleadoServ.obtenerTodos();
+
+			model.addAttribute("empleado", empleado);
+			model.addAttribute("listaEmpleados", listaEmpleados);
+			model.addAttribute("error", "Datos inválidos. No se pudo crear el empleado.");
+
+			return "/views/empleados/AdministrarEmpleado";
 
 		} else {
 
@@ -105,8 +110,13 @@ public class EmpleadoController {
 		
 		if (result.hasErrors()) {
 
-			atributos.addFlashAttribute("error", "Datos inválidos. No se pudo editar el empleado.");
-			return "redirect:/views/empleado/administrar";
+			List<Empleado> listaEmpleados = empleadoServ.obtenerTodos();
+
+			model.addAttribute("empleado", empleado);
+			model.addAttribute("listaEmpleados", listaEmpleados);
+			model.addAttribute("error", "Datos inválidos. No se pudo editar el empleado.");
+
+			return "/views/empleados/AdministrarEmpleado";
 
 		}else {
 

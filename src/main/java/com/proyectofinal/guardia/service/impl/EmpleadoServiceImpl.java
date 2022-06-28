@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.proyectofinal.guardia.dao.EmpleadoJPARepository;
-import com.proyectofinal.guardia.dao.SectorTrabajoJPARepository;
 import com.proyectofinal.guardia.domain.Empleado;
 import com.proyectofinal.guardia.service.EmpleadoService;
 
@@ -16,9 +15,6 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
 	@Autowired
 	private EmpleadoJPARepository empleadoRepo;
-
-	@Autowired
-	private SectorTrabajoJPARepository sectorRepo;
 
 	@Override
 	public Boolean validarDatos(Empleado empleado) {
@@ -51,7 +47,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 	@Override
 	public Void marcarEmpleadoEnPlanta(int nroLegajo) {
 
-		Empleado empleado = empleadoRepo.getById(nroLegajo);
+		Empleado empleado = empleadoRepo.findById(nroLegajo).orElseThrow();
 
 		empleado.setEnPlanta(true);
 		empleadoRepo.save(empleado);
@@ -61,7 +57,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
 	@Override
 	public Void marcarEmpleadoEgresadoDePlanta(int nroLegajo) {
-		Empleado empleado = empleadoRepo.getById(nroLegajo);
+		Empleado empleado = empleadoRepo.findById(nroLegajo).orElseThrow();
 
 		empleado.setEnPlanta(false);
 		empleadoRepo.save(empleado);
@@ -72,7 +68,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 	@Override
 	public Empleado editarEmpleado(Empleado empleado) {
 
-		Empleado empActual = empleadoRepo.getById(empleado.getNroLegajo());
+		Empleado empActual = empleadoRepo.findById(empleado.getNroLegajo()).orElseThrow();
 
 		if (empleado.getImagen() == null) {
 
