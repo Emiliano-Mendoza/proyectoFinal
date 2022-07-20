@@ -12,7 +12,7 @@ public interface UsuarioJPARepository extends JpaRepository<Usuario, Integer> {
 	Usuario findByUsername(String us);
 	
 	@Query(
-			value = "SELECT * FROM usuario u WHERE u.activo = true ORDER BY u.apellido", 
+			value = "SELECT * FROM usuario u WHERE u.activo = 1 ORDER BY u.apellido", 
 			nativeQuery = true)
 	public List<Usuario> findAllDisponibles();
 }

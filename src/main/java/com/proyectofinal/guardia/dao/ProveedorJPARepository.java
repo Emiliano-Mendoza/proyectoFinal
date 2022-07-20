@@ -11,7 +11,7 @@ import com.proyectofinal.guardia.domain.Proveedor;
 public interface ProveedorJPARepository extends JpaRepository<Proveedor, Integer> {
 	
 	@Query(
-			value = "SELECT * FROM proveedor p WHERE p.activo = true", 
+			value = "SELECT * FROM proveedor p WHERE p.activo = 1", 
 			nativeQuery = true)
 	public List<Proveedor> findAllDisponibles();
 }

@@ -10,7 +10,7 @@ import com.proyectofinal.guardia.domain.SectorTrabajo;
 public interface SectorTrabajoJPARepository extends JpaRepository<SectorTrabajo, Integer> {
 	
 	@Query(
-			value = "SELECT * FROM sector_trabajo s WHERE s.activo = true", 
+			value = "SELECT * FROM sector_trabajo s WHERE s.activo = 1", 
 			nativeQuery = true)
 	public List<SectorTrabajo> findAllActivos();
 	

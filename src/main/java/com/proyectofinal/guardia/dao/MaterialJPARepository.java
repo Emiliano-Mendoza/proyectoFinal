@@ -10,7 +10,7 @@ import com.proyectofinal.guardia.domain.Material;
 public interface MaterialJPARepository extends JpaRepository<Material, Integer> {
 	
 	@Query(
-			value = "SELECT * FROM material m WHERE m.activo = true", 
+			value = "SELECT * FROM material m WHERE m.activo = 1", 
 			nativeQuery = true)
 	public List<Material> findAllDisponibles();
 	

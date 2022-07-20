@@ -2,6 +2,7 @@ package com.proyectofinal.guardia.domain;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="Transito")
@@ -20,7 +22,9 @@ public class Transito {
 	
 	private Date ingreso;
 	private Date egreso;
+
 	private String primerComentario;
+
 	private String segundoComentario;
 	
 	@ManyToOne
