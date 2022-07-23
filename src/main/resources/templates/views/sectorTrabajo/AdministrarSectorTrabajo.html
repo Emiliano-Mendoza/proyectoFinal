@@ -6,28 +6,330 @@
 <body class="sb-nav-fixed">
 
 	<header th:replace="plantilla/template :: header"></header>
-	
+
 	<div id="layoutSidenav">
-	
-		<div th:replace="plantilla/template :: sidenav_nav"> </div>
-		
+
+		<div th:replace="plantilla/template :: sidenav_nav"></div>
+
 		<div id="layoutSidenav_content">
-			
+
 			<div class="container-fluid px-4 mt-3">
-				 
-				 <h1>AdministrarSectorTrabajo - No implementado</h1>
-				
+
+				<h1 class="">Administrar Sectores de Trabajo</h1>
+				<ol class="breadcrumb mb-3">
+					<li class="breadcrumb-item active"><i
+						class="fa-solid fa-briefcase"></i> Sectores de Trabajo</li>
+				</ol>
+
+				<div class="row d-md-flex justify-content-center" unselectable="on" onselectstart="return false;">
+					<div class="col-9" id="nuevoCard" style="display: none;">
+
+						<form id="form1" method="post">
+							<div class="card ">
+								<div class="card-header">Nuevo Sector de Trabajo</div>
+								<div class="card-body row">
+
+									<div class="col-6">
+										<div class="mb-3">
+											<label for="input1" class="form-label">Sector de
+												Trabajo:</label> <input type="text" class="form-control" id="input1"
+												placeholder="Ej. Administración" name="sector">
+										</div>
+									</div>
+									<div class="col-6">
+										<div class="mb-3">
+											<label for="input2" class="form-label">Activo:</label> <select
+												class="form-select" id="input2" name="activo">
+												<option value=1>Sí</option>
+												<option value=0>No</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="mt-2" style="display: inline">
+										<span style="font-size: 20px">Áreas de trabajo: </span> <a
+											style="cursor: pointer; margin-left: 10px;"
+											onclick="quitarArea()"><i
+											class="fa-solid fa-circle-minus"></i></a> <a
+											style="cursor: pointer; margin: auto;"
+											onclick="nuevaArea()"><i
+											class="fa-solid fa-circle-plus"></i></a>
+									</div>
+
+									<div class="row " id="cardAreas">
+										
+									</div>
+
+								</div>
+								<div class="card-footer d-flex justify-content-between">
+									<button type="button" class="btn btn-secondary" onclick="cancelar()">Cancelar</button>
+									<button type="submit" class="btn btn-primary">Crear</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					
+					<div class="col-9" id="editarCard" style="display: none;">
+					
+						<form id="form2" method="post">
+							<div class="card ">
+								<div class="card-header">Nuevo Sector de Trabajo</div>
+								<div class="card-body row">
+									
+									<input type="hidden" id="IdInput" value="0" >
+									
+									<div class="col-6">
+										<div class="mb-3">
+											<label for="editSector" class="form-label">Sector de
+												Trabajo:</label> <input type="text" class="form-control" id="editSector"
+												placeholder="Ej. Administración" name="sector">
+										</div>
+									</div>
+									<div class="col-6">
+										<div class="mb-3">
+											<label for="editActivo" class="form-label">Activo:</label> <select
+												class="form-select" id="editActivo" name="activo">
+												<option value=1>Sí</option>
+												<option value=0>No</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="mt-2" style="display: inline">
+										<span style="font-size: 20px">Áreas de trabajo: </span> <a
+											style="cursor: pointer; margin-left: 10px;"
+											onclick="quitarArea2()"><i
+											class="fa-solid fa-circle-minus"></i></a> <a
+											style="cursor: pointer; margin: auto;"
+											onclick="nuevaArea2()"><i
+											class="fa-solid fa-circle-plus"></i></a>
+									</div>
+
+									<div class="row " id="cardAreasEditar">
+										
+									</div>
+
+								</div>
+								<div class="card-footer d-flex justify-content-between">
+									<button type="button" class="btn btn-secondary" onclick="cancelar()">Cancelar</button>
+									<button type="submit" class="btn btn-primary">Crear</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					
+				</div>
+
+				<div class="card mb-4 mt-3">
+					<div class="card-header d-md-flex justify-content-between">
+						<div class="">
+							<i class="fa-solid fa-table mt-2"></i> Sectores de Trabajo:
+						</div>
+						<div>
+							<button type="button" class="btn btn-primary btn-sm" onclick="nuevoCard()">Nuevo
+								Sector</button>
+						</div>
+					</div>
+					<div class="card-body">
+
+						<table id="table_id" class="display">
+							<thead>
+								<tr>
+									<th>Sector</th>
+									<th>Áreas de trabajo</th>
+									<th>Activo</th>
+									<th>Acción</th>
+								</tr>
+							</thead>
+							<tbody>
+
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+
 			</div>
-			
+
 		</div>
-	
+
 	</div>
-	
+
 	<footer th:replace="plantilla/template :: footer"></footer>
-	
-	<script type="text/javascript">
+
+	<script th:inline="javascript">
+		var datatable;
+		var areasNuevoCount = 0;
 		
-	
+		$(document).ready(function() {
+		
+			let listaSectores = /*[[${listaSectores}]]*/'default';
+			
+			datatable = $('#table_id').DataTable({
+				data: listaSectores,
+				"autoWidth" : false,
+				language : {
+					"decimal" : "",
+					"emptyTable" : "No hay información",
+					"info" : "Mostrando _START_ a _END_ de _TOTAL_ Sectores",
+					"infoEmpty" : "Mostrando 0 to 0 of 0 Entradas",
+					"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
+					"infoPostFix" : "",
+					"thousands" : ",",
+					"lengthMenu" : "Mostrar _MENU_ Sectores",
+					"loadingRecords" : "Cargando...",
+					"processing" : "Procesando...",
+					"search" : "Buscar:",
+					"zeroRecords" : "Sin resultados encontrados",
+					"paginate" : {
+						"first" : "Primero",
+						"last" : "Ultimo",
+						"next" : "Siguiente",
+						"previous" : "Anterior"
+					}
+				},
+				"columnDefs" : [ {
+					"className" : "dt-center",
+					"targets" : "_all"
+				}],
+				columns: [
+                    { data: 'sector' },
+                    { data: 'idSector' },
+                    {
+                        "data":"activo", "render": function (valor){
+                            if(valor) return '<span>Sí</span>';
+                            else return '<span>No</span>';
+                        }
+                    },
+                    {
+                    "defaultContent": '<button type="button" class=" btn btn-success btn-sm btn-editar"><i class="fas fa-pen"></i></button>',
+                    "orderable": false,
+                    "searcheble": false,
+                    "width": "90px"
+                    }
+                ]
+			});
+		});
+		
+		
+		const form = document.getElementById('form1');
+        form.addEventListener('submit', handleSubmit);
+        
+        function handleSubmit(event) {
+            event.preventDefault();
+
+            const data = new FormData(event.target);
+            
+            let objetoAux = {};
+            objetoAux.sector = data.get('sector');
+            objetoAux.activo = parseInt(data.get('activo'));
+            objetoAux.areas = [];
+			if(areasNuevoCount > 0){
+				
+				for(let i=0; i < areasNuevoCount; i++){
+	            	objetoAux.areas.push({
+	                      "nombre" : data.get(`nombre${i}`),
+	                      "descripcion": data.get(`descripcion${i}`),
+	                      "activo": parseInt(data.get(`activo${i}`))
+	                });
+	            }
+				
+			}
+            
+            
+			var oReq = new XMLHttpRequest();
+			oReq.open("POST", "/views/sector-trabajo/administrar/crear", true);
+			oReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			oReq.onload = function(oEvent) {
+			    if (oReq.status == 200) {
+			      console.log("piola");
+			    } else {
+			      console.log("todo mal");
+			    }
+			};
+		
+			
+			oReq.send(JSON.stringify(objetoAux));
+
+            console.log(objetoAux);
+        }
+		
+		
+		function nuevaArea(){
+
+			let areaDiv = document.getElementById('cardAreas');
+			let container = document.createElement("div");
+			container.className = "col-6";
+			container.setAttribute("id", `areaNueva${areasNuevoCount}`);
+			
+			container.innerHTML = `
+				<hr>
+				<div class="mb-2">
+					<label for="inputNombreArea" class="form-label">Nombre
+						del área:</label> <input type="text" class="form-control"
+						id="inputNombreArea" placeholder="Ej. NOVA"  name="nombre${areasNuevoCount}">
+				</div>
+				<div class="mb-2">
+					<label for="inputDescripcionArea" class="form-label">Descripción:</label>
+					<input type="text" class="form-control" name="descripcion${areasNuevoCount}"
+						id="inputDescripcionArea">
+				</div>
+				<div class="mb-3">
+					<label for="inputActivo2" class="form-label">Activo:</label>
+					<select class="form-select" id="inputActivo2" name="activo${areasNuevoCount}">
+						<option value=1>Sí</option>
+						<option value=0>No</option>
+					</select>
+				</div>				
+			`;
+			
+			areasNuevoCount++;
+			areaDiv.appendChild(container);
+		}
+		
+		function quitarArea(){
+			
+			if(areasNuevoCount > 0){
+				document.getElementById(`areaNueva${areasNuevoCount-1}`).remove();
+				areasNuevoCount--;
+			} 						
+		}
+		
+		function nuevoCard(){
+			console.log("asd");
+			$('#nuevoCard').show();
+			
+		}
+		
+		function cancelar(){
+			$('#nuevoCard').hide();
+			$('#editarCard').hide();
+		}
+		
+		$("#table_id tbody").on("click", '.btn-editar', function() {
+			
+			let filaSeleccionada = (this).closest("tr");
+			let data = datatable.row(filaSeleccionada).data();
+			$("#editarCard").show();
+			
+			$("#IdInput").val(data.idSector);
+			$("#editSector").val(data.sector);
+			$("#editActivo").val(data.activo ? 1 : 0);
+			
+			// aca va el código para ver las areas de trabajo 
+						
+			/* 			
+			$("#editModelo").val(data.modelo);
+			$("#editPat").val(data.patente);
+			$("#editActivo").val(data.activo ? 1 : 0);
+
+			$("#tituloCard").text("Editar Vehículo");
+			
+			$('#formId').attr('action', '/views/vehiculo/editar');
+			
+			$("#editarCard").show(); 
+			*/
+		});
 	</script>
 </body>
 </html>
