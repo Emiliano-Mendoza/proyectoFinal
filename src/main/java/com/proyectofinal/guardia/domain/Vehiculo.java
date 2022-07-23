@@ -1,11 +1,13 @@
 package com.proyectofinal.guardia.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="Vehiculo")
@@ -16,10 +18,18 @@ public class Vehiculo {
 	private int idVehiculo;
 	
 	@NotEmpty
+	@Column(length = 40, nullable = false)
+	@Size(min = 1, max = 40)
 	private String marca;
+	
 	@NotEmpty
+	@Column(length = 40, nullable = false)
+	@Size(min = 1, max = 40)
 	private String modelo;
+	
 	@NotEmpty
+	@Column(length = 40, nullable = false)
+	@Size(min = 1, max = 40)
 	private String patente;
 	private Boolean activo;
 	

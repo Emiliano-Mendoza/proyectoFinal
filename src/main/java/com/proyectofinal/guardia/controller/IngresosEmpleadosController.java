@@ -42,7 +42,7 @@ public class IngresosEmpleadosController {
 
 	@GetMapping
 	public String paginaNuevoRegistroIngreso(Model model) {
-
+		
 		model.addAttribute("listaEmpleados", empleadoServ.obtenerDisponibles().stream()
 				.filter(e -> e.getEnPlanta() != null && !e.getEnPlanta()).collect(Collectors.toList()));
 

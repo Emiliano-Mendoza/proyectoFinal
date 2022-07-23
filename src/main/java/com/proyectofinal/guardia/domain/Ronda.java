@@ -2,6 +2,7 @@ package com.proyectofinal.guardia.domain;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="Ronda")
@@ -22,9 +24,14 @@ public class Ronda {
 	
 	private Date fechaRonda;
 	@NotEmpty
+	@Column(length = 30)
 	@Pattern(regexp = "[0-9]{2}:[0-9]{2}")
 	private String ronda;
+	
+	@NotEmpty
 	private String descripcion;
+	@Column(length = 50)
+	@Size(max = 50)
 	private String planta;
 	
 	@ManyToOne

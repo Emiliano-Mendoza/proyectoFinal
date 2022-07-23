@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -29,15 +30,25 @@ public class Usuario {
 	private int idUsuario;
 	
 	@NotEmpty
-	@Column(unique=true)
+	@Size(min = 1, max = 50)
+	@Column(unique=true, length = 50, nullable = false)
 	private String username;
+	
 	@NotEmpty
 	@JsonIgnore
+	@Column(nullable = false)
+	@Size(min = 6)
 	private String contraseña;	
 	private Boolean activo;
+	
 	@NotEmpty
+	@Column(length = 30, nullable = false)
+	@Size(min = 1, max = 30)
 	private String nombre;
+	
 	@NotEmpty
+	@Column(length = 30, nullable = false)
+	@Size(min = 1, max = 30)
 	private String apellido;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

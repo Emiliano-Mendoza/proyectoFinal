@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 import javax.persistence.GeneratedValue;
@@ -21,8 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import javax.validation.constraints.NotEmpty;
-
-
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -38,6 +38,8 @@ public class Notificacion {
 	@NotEmpty
 	private String descripcion;
 	@NotEmpty
+	@Column(length = 50)
+	@Size(min = 1, max = 50)
 	private String tipo;
 	
 	private Date fecha;

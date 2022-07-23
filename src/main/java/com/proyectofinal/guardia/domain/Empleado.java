@@ -1,5 +1,6 @@
 package com.proyectofinal.guardia.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -7,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="Empleado")
@@ -17,8 +19,13 @@ public class Empleado {
 	private int nroLegajo;
 		
 	@NotEmpty
+	@Column(length = 30, nullable = false)
+	@Size(min = 1 , max = 30)
 	private String nombre;
 	@NotEmpty
+	@NotEmpty
+	@Column(length = 32, nullable = false)
+	@Size(min = 1 , max = 30)
 	private String apellido;
 	private String imagen;
 	private Boolean activo;
