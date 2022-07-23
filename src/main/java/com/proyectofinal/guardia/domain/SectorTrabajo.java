@@ -1,6 +1,7 @@
 package com.proyectofinal.guardia.domain;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -31,7 +32,7 @@ public class SectorTrabajo {
 	
 	@OneToMany(mappedBy = "sector", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<AreaTrabajo> areas;
+    private List<AreaTrabajo> areas = new ArrayList<>();
 	
 	
 	public int getIdSector() {
@@ -60,7 +61,16 @@ public class SectorTrabajo {
 
 	@Override
 	public String toString() {
-		return "SectorTrabajo [idSector=" + idSector + ", sector=" + sector + ", activo=" + activo + "]";
+		return "SectorTrabajo [idSector=" + idSector + ", sector=" + sector + ", activo=" + activo + ", areas=" + areas
+				+ "]";
+	}
+
+	public List<AreaTrabajo> getAreas() {
+		return areas;
+	}
+
+	public void setAreas(List<AreaTrabajo> areas) {
+		this.areas = areas;
 	}
 	
 	

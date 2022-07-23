@@ -27,4 +27,14 @@ public class SectorTrabajoServiceImpl implements SectorTrabajoService {
 		return sectorRepo.findAllActivos();
 	}
 
+	@Override
+	public SectorTrabajo crearSector(SectorTrabajo sector) {
+		
+		
+		 SectorTrabajo sectorAux = sectorRepo.save(sector);
+		 sectorAux.getAreas().forEach(a -> { a.setSector(sectorAux); });
+		 		
+		return sectorRepo.save(sectorAux);
+	}
+
 }

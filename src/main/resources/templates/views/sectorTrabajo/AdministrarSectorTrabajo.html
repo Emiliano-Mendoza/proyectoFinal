@@ -76,19 +76,19 @@
 								<div class="card-header">Nuevo Sector de Trabajo</div>
 								<div class="card-body row">
 									
-									<input type="hidden" id="IdInput" value="0" >
+									<input type="hidden" id="idSectorInput" value="0" name="idSectorEdit">
 									
 									<div class="col-6">
 										<div class="mb-3">
 											<label for="editSector" class="form-label">Sector de
 												Trabajo:</label> <input type="text" class="form-control" id="editSector"
-												placeholder="Ej. Administración" name="sector">
+												placeholder="Ej. Administración" name="sectorEdit">
 										</div>
 									</div>
 									<div class="col-6">
 										<div class="mb-3">
 											<label for="editActivo" class="form-label">Activo:</label> <select
-												class="form-select" id="editActivo" name="activo">
+												class="form-select" id="editActivo" name="activoEdit">
 												<option value=1>Sí</option>
 												<option value=0>No</option>
 											</select>
@@ -160,6 +160,7 @@
 	<script th:inline="javascript">
 		var datatable;
 		var areasNuevoCount = 0;
+		let areasEditarCount = 0;
 		
 		$(document).ready(function() {
 		
@@ -312,24 +313,100 @@
 			let data = datatable.row(filaSeleccionada).data();
 			$("#editarCard").show();
 			
-			$("#IdInput").val(data.idSector);
+			$("#idSectorInput").val(data.idSector);
 			$("#editSector").val(data.sector);
 			$("#editActivo").val(data.activo ? 1 : 0);
-			
-			// aca va el código para ver las areas de trabajo 
-						
-			/* 			
-			$("#editModelo").val(data.modelo);
-			$("#editPat").val(data.patente);
-			$("#editActivo").val(data.activo ? 1 : 0);
 
-			$("#tituloCard").text("Editar Vehículo");
+			// aca va el código para ver las areas de trabajo
+			let cardEditar = document.getElementById("cardAreasEditar");
+			cardEditar.innerHTML = '';
 			
-			$('#formId').attr('action', '/views/vehiculo/editar');
+			areasEditarCount = 0;
+			data.areas.forEach(a => {
+				
+				let container = document.createElement("div");
+				container.className = "col-6";
+				container.setAttribute("id", `areaEditarNueva${areasEditarCount}`);
+				
+				container.innerHTML += `
+					<hr>
+					<input type="hidden" id="idArea${areasEditarCount}" name="idArea${areasEditarCount}">
+					<div class="mb-2">
+						<label for="inputNombreArea${areasEditarCount}" class="form-label">Nombre
+							del área:</label> <input type="text" class="form-control"
+							id="inputNombreArea${areasEditarCount}" placeholder="Ej. NOVA"  name="nombreEditar${areasEditarCount}">
+					</div>
+					<div class="mb-2">
+						<label for="inputDescripcionArea${areasEditarCount}" class="form-label">Descripción:</label>
+						<input type="text" class="form-control" name="descripcionEditar${areasEditarCount}"
+							id="inputDescripcionArea${areasEditarCount}">
+					</div>
+					<div class="mb-3">
+						<label for="activoEditar${areasEditarCount}" class="form-label">Activo:</label>
+						<select class="form-select" id="activoEditar${areasEditarCount}" name="activoEditar${areasEditarCount}">
+							<option value=1>Sí</option>
+							<option value=0>No</option>
+						</select>
+					</div>
+				`;
+				
+				
+				cardEditar.appendChild(container);
+				console.log(a);
+				$(`#idArea${areasEditarCount}`).val(a.idArea);
+				$(`#inputNombreArea${areasEditarCount}`).val(a.nombreArea);
+				$(`#inputDescripcionArea${areasEditarCount}`).val(a.descripcion);
+				$(`#activoEditar${areasEditarCount}`).val(a.activo ? 1 : 0);
+				
+				areasEditarCount++;
+			});
 			
-			$("#editarCard").show(); 
-			*/
+						
 		});
+		
+		const formEdit = document.getElementById('form2');
+        formEdit.addEventListener('submit', handleSubmitEdit);
+        
+        function handleSubmitEdit(event) {
+            event.preventDefault();
+
+            const data = new FormData(event.target);
+            
+            let objetoAux = {};
+            objetoAux.idSector = parseInt(data.get('idSectorEdit'));
+            objetoAux.sector = data.get('sectorEdit');
+            objetoAux.activo = parseInt(data.get('activoEdit'));
+            objetoAux.areas = [];
+            
+			if(areasEditarCount > 0){
+				
+				for(let i=0; i < areasEditarCount; i++){
+	            	objetoAux.areas.push({
+	            		  "idArea" : parseInt(data.get(`idArea${i}`)),
+	                      "nombre" : data.get(`nombreEditar${i}`),
+	                      "descripcion": data.get(`descripcionEditar${i}`),
+	                      "activo": parseInt(data.get(`activoEditar${i}`))
+	                });
+	            }
+				
+			}
+			/*
+            
+			var oReq = new XMLHttpRequest();
+			oReq.open("POST", "/views/sector-trabajo/administrar/crear", true);
+			oReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			oReq.onload = function(oEvent) {
+			    if (oReq.status == 200) {
+			      console.log("piola");
+			    } else {
+			      console.log("todo mal");
+			    }
+			};
+			*/
+			
+            console.log(objetoAux);
+        }
+		
 	</script>
 </body>
 </html>
