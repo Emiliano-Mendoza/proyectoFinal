@@ -37,4 +37,13 @@ public class SectorTrabajoServiceImpl implements SectorTrabajoService {
 		return sectorRepo.save(sectorAux);
 	}
 
+	@Override
+	public SectorTrabajo editarSector(SectorTrabajo sectorUpdate) {
+		
+		SectorTrabajo sector = sectorRepo.findById(sectorUpdate.getIdSector()).orElseThrow();
+		sectorUpdate.getAreas().forEach(a -> {a.setSector(sector);});
+		
+		return sectorRepo.save(sectorUpdate);
+	}
+
 }

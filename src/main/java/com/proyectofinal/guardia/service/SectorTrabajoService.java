@@ -7,6 +7,7 @@ import com.proyectofinal.guardia.domain.SectorTrabajo;
 public interface SectorTrabajoService {
 	
 	public SectorTrabajo crearSector(SectorTrabajo sector);
+	public SectorTrabajo editarSector(SectorTrabajo sector);
 	public List<SectorTrabajo> obtenerTodos();
 	public List<SectorTrabajo> obtenerDisponibles();
 	

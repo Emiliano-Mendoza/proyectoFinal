@@ -11,9 +11,16 @@
 
 		<div th:replace="plantilla/template :: sidenav_nav"></div>
 
+
 		<div id="layoutSidenav_content">
 
 			<div class="container-fluid px-4 mt-3">
+
+
+				<!-- MENSAJES -->
+				<div id="mensaje">
+				</div>
+
 
 				<h1 class="">Administrar Sectores de Trabajo</h1>
 				<ol class="breadcrumb mb-3">
@@ -21,7 +28,8 @@
 						class="fa-solid fa-briefcase"></i> Sectores de Trabajo</li>
 				</ol>
 
-				<div class="row d-md-flex justify-content-center" unselectable="on" onselectstart="return false;">
+				<div class="row d-md-flex justify-content-center" unselectable="on"
+					onselectstart="return false;">
 					<div class="col-9" id="nuevoCard" style="display: none;">
 
 						<form id="form1" method="post">
@@ -51,38 +59,38 @@
 											style="cursor: pointer; margin-left: 10px;"
 											onclick="quitarArea()"><i
 											class="fa-solid fa-circle-minus"></i></a> <a
-											style="cursor: pointer; margin: auto;"
-											onclick="nuevaArea()"><i
+											style="cursor: pointer; margin: auto;" onclick="nuevaArea()"><i
 											class="fa-solid fa-circle-plus"></i></a>
 									</div>
 
-									<div class="row " id="cardAreas">
-										
-									</div>
+									<div class="row " id="cardAreas"></div>
 
 								</div>
 								<div class="card-footer d-flex justify-content-between">
-									<button type="button" class="btn btn-secondary" onclick="cancelar()">Cancelar</button>
+									<button type="button" class="btn btn-secondary"
+										onclick="cancelar()">Cancelar</button>
 									<button type="submit" class="btn btn-primary">Crear</button>
 								</div>
 							</div>
 						</form>
 					</div>
-					
+
 					<div class="col-9" id="editarCard" style="display: none;">
-					
+
 						<form id="form2" method="post">
 							<div class="card ">
 								<div class="card-header">Nuevo Sector de Trabajo</div>
 								<div class="card-body row">
-									
-									<input type="hidden" id="idSectorInput" value="0" name="idSectorEdit">
-									
+
+									<input type="hidden" id="idSectorInput" value="0"
+										name="idSectorEdit">
+
 									<div class="col-6">
 										<div class="mb-3">
 											<label for="editSector" class="form-label">Sector de
-												Trabajo:</label> <input type="text" class="form-control" id="editSector"
-												placeholder="Ej. Administración" name="sectorEdit">
+												Trabajo:</label> <input type="text" class="form-control"
+												id="editSector" placeholder="Ej. Administración"
+												name="sectorEdit">
 										</div>
 									</div>
 									<div class="col-6">
@@ -100,24 +108,22 @@
 											style="cursor: pointer; margin-left: 10px;"
 											onclick="quitarArea2()"><i
 											class="fa-solid fa-circle-minus"></i></a> <a
-											style="cursor: pointer; margin: auto;"
-											onclick="nuevaArea2()"><i
+											style="cursor: pointer; margin: auto;" onclick="nuevaArea2()"><i
 											class="fa-solid fa-circle-plus"></i></a>
 									</div>
 
-									<div class="row " id="cardAreasEditar">
-										
-									</div>
+									<div class="row " id="cardAreasEditar"></div>
 
 								</div>
 								<div class="card-footer d-flex justify-content-between">
-									<button type="button" class="btn btn-secondary" onclick="cancelar()">Cancelar</button>
-									<button type="submit" class="btn btn-primary">Crear</button>
+									<button type="button" class="btn btn-secondary"
+										onclick="cancelar()">Cancelar</button>
+									<button type="submit" class="btn btn-primary">Editar</button>
 								</div>
 							</div>
 						</form>
 					</div>
-					
+
 				</div>
 
 				<div class="card mb-4 mt-3">
@@ -126,8 +132,8 @@
 							<i class="fa-solid fa-table mt-2"></i> Sectores de Trabajo:
 						</div>
 						<div>
-							<button type="button" class="btn btn-primary btn-sm" onclick="nuevoCard()">Nuevo
-								Sector</button>
+							<button type="button" class="btn btn-primary btn-sm"
+								onclick="nuevoCard()">Nuevo Sector</button>
 						</div>
 					</div>
 					<div class="card-body">
@@ -160,56 +166,15 @@
 	<script th:inline="javascript">
 		var datatable;
 		var areasNuevoCount = 0;
-		let areasEditarCount = 0;
+		var areasEditarCount = 0;
+		var areasSelectLength = 0;
 		
 		$(document).ready(function() {
 		
 			let listaSectores = /*[[${listaSectores}]]*/'default';
 			
-			datatable = $('#table_id').DataTable({
-				data: listaSectores,
-				"autoWidth" : false,
-				language : {
-					"decimal" : "",
-					"emptyTable" : "No hay información",
-					"info" : "Mostrando _START_ a _END_ de _TOTAL_ Sectores",
-					"infoEmpty" : "Mostrando 0 to 0 of 0 Entradas",
-					"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
-					"infoPostFix" : "",
-					"thousands" : ",",
-					"lengthMenu" : "Mostrar _MENU_ Sectores",
-					"loadingRecords" : "Cargando...",
-					"processing" : "Procesando...",
-					"search" : "Buscar:",
-					"zeroRecords" : "Sin resultados encontrados",
-					"paginate" : {
-						"first" : "Primero",
-						"last" : "Ultimo",
-						"next" : "Siguiente",
-						"previous" : "Anterior"
-					}
-				},
-				"columnDefs" : [ {
-					"className" : "dt-center",
-					"targets" : "_all"
-				}],
-				columns: [
-                    { data: 'sector' },
-                    { data: 'idSector' },
-                    {
-                        "data":"activo", "render": function (valor){
-                            if(valor) return '<span>Sí</span>';
-                            else return '<span>No</span>';
-                        }
-                    },
-                    {
-                    "defaultContent": '<button type="button" class=" btn btn-success btn-sm btn-editar"><i class="fas fa-pen"></i></button>',
-                    "orderable": false,
-                    "searcheble": false,
-                    "width": "90px"
-                    }
-                ]
-			});
+			cargarTabla(listaSectores);
+						
 		});
 		
 		
@@ -242,17 +207,41 @@
 			oReq.open("POST", "/views/sector-trabajo/administrar/crear", true);
 			oReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 			oReq.onload = function(oEvent) {
-			    if (oReq.status == 200) {
-			      console.log("piola");
-			    } else {
-			      console.log("todo mal");
-			    }
+				 if (oReq.status == 200) {
+				    	
+				    	var listaSectorNueva = JSON.parse(oReq.responseText);
+				    	
+				    	datatable.clear();
+						datatable.destroy();
+				    	cargarTabla(listaSectorNueva);
+				    	
+				    	document.getElementById("mensaje").innerHTML=`
+				    		<div
+							class="alert alert-success alert-dismissable gap-2 d-md-flex justify-content-between"
+							role="alert">
+								<label id="mensajeSuccess">Sector de trabajo creado exitosamente.</label>
+								<button type="button" class="btn-close mr-auto"
+									data-bs-dismiss="alert" aria-label="Close"></button>
+							</div>
+				    	`;
+				    	cancelar();
+				    	window.scroll(0, 0);	
+				    } else {
+				    	document.getElementById("mensaje").innerHTML=`
+				    		<div
+							class="alert alert-danger alert-dismissable gap-2 d-md-flex justify-content-between"
+							role="alert" style="display: none;">
+								<label id="mensajeError">No se pudo crear el nuevo sector.</label>
+								<button type="button" class="btn-close mr-auto"
+									data-bs-dismiss="alert" aria-label="Close"></button>
+							</div>
+				    	`;
+				    }
 			};
 		
 			
 			oReq.send(JSON.stringify(objetoAux));
 
-            console.log(objetoAux);
         }
 		
 		
@@ -297,7 +286,9 @@
 		}
 		
 		function nuevoCard(){
-			console.log("asd");
+			$('#cardAreas').html('');
+			$('#input1').val('');
+			$('#input2').val(1);
 			$('#nuevoCard').show();
 			
 		}
@@ -322,6 +313,7 @@
 			cardEditar.innerHTML = '';
 			
 			areasEditarCount = 0;
+			areasSelectLength = data.areas.length;
 			data.areas.forEach(a => {
 				
 				let container = document.createElement("div");
@@ -352,7 +344,6 @@
 				
 				
 				cardEditar.appendChild(container);
-				console.log(a);
 				$(`#idArea${areasEditarCount}`).val(a.idArea);
 				$(`#inputNombreArea${areasEditarCount}`).val(a.nombreArea);
 				$(`#inputDescripcionArea${areasEditarCount}`).val(a.descripcion);
@@ -361,7 +352,7 @@
 				areasEditarCount++;
 			});
 			
-						
+			window.scroll(0, 0);			
 		});
 		
 		const formEdit = document.getElementById('form2');
@@ -390,23 +381,151 @@
 	            }
 				
 			}
-			/*
-            
+			
 			var oReq = new XMLHttpRequest();
-			oReq.open("POST", "/views/sector-trabajo/administrar/crear", true);
+			oReq.open("POST", "/views/sector-trabajo/administrar/editar", true);
 			oReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 			oReq.onload = function(oEvent) {
 			    if (oReq.status == 200) {
-			      console.log("piola");
+			    	
+			    	var listaSectorNueva = JSON.parse(oReq.responseText);
+			    	
+			    	datatable.clear();
+					datatable.destroy();
+			    	cargarTabla(listaSectorNueva);
+			    	
+			    	document.getElementById("mensaje").innerHTML=`
+			    		<div
+						class="alert alert-success alert-dismissable gap-2 d-md-flex justify-content-between"
+						role="alert">
+							<label id="mensajeSuccess">Sector de trabajo editado exitosamente.</label>
+							<button type="button" class="btn-close mr-auto"
+								data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+			    	`;
+			    	cancelar();
+			    	window.scroll(0, 0);	
 			    } else {
-			      console.log("todo mal");
+			    	document.getElementById("mensaje").innerHTML=`
+			    		<div
+						class="alert alert-danger alert-dismissable gap-2 d-md-flex justify-content-between"
+						role="alert" style="display: none;">
+							<label id="mensajeError">No se pudo editar el nuevo sector.</label>
+							<button type="button" class="btn-close mr-auto"
+								data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+			    	`;
 			    }
 			};
-			*/
 			
-            console.log(objetoAux);
+			oReq.send(JSON.stringify(objetoAux));
         }
 		
+        function nuevaArea2(){
+        	
+        	let cardEditar = document.getElementById("cardAreasEditar");
+        	let container = document.createElement("div");
+			container.className = "col-6";
+			container.setAttribute("id", `areaEditarNueva${areasEditarCount}`);
+			
+			container.innerHTML = `
+				<hr>
+			
+				<input type="hidden" id="idArea${areasEditarCount}" name="idArea${areasEditarCount}" value="0">
+				<div class="mb-2">
+					<label for="inputNombreArea" class="form-label">Nombre
+						del área:</label> <input type="text" class="form-control"
+						id="inputNombreArea" placeholder="Ej. NOVA"  name="nombreEditar${areasEditarCount}">
+				</div>
+				<div class="mb-2">
+					<label for="inputDescripcionArea" class="form-label">Descripción:</label>
+					<input type="text" class="form-control" name="descripcionEditar${areasEditarCount}"
+						id="inputDescripcionArea">
+				</div>
+				<div class="mb-3">
+					<label for="inputActivo2" class="form-label">Activo:</label>
+					<select class="form-select" id="inputActivo2" name="activoEditar${areasEditarCount}">
+						<option value=1>Sí</option>
+						<option value=0>No</option>
+					</select>
+				</div>				
+			`;
+			
+			areasEditarCount++;
+			cardEditar.appendChild(container);
+        }
+        
+		function quitarArea2(){
+			
+			if(areasEditarCount > areasSelectLength){
+				document.getElementById(`areaEditarNueva${areasEditarCount-1}`).remove();
+				areasEditarCount--;
+			} 						
+		}
+		
+		
+		function cargarTabla(lista){
+			
+			
+			datatable = $('#table_id').DataTable({
+				data: lista,
+				"autoWidth" : false,
+				language : {
+					"decimal" : "",
+					"emptyTable" : "No hay información",
+					"info" : "Mostrando _START_ a _END_ de _TOTAL_ Sectores",
+					"infoEmpty" : "Mostrando 0 to 0 of 0 Entradas",
+					"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
+					"infoPostFix" : "",
+					"thousands" : ",",
+					"lengthMenu" : "Mostrar _MENU_ Sectores",
+					"loadingRecords" : "Cargando...",
+					"processing" : "Procesando...",
+					"search" : "Buscar:",
+					"zeroRecords" : "Sin resultados encontrados",
+					"paginate" : {
+						"first" : "Primero",
+						"last" : "Ultimo",
+						"next" : "Siguiente",
+						"previous" : "Anterior"
+					}
+				},
+				"columnDefs" : [ {
+					"className" : "dt-center",
+					"targets" : "_all"
+				}],
+				columns: [
+                    { data: 'sector' },
+                    {
+                        "data":"areas", "render": function (valor){                        	
+                        	if(valor.length > 0){
+                        		let aux = '';
+                        		valor.forEach(area => {                        			
+                        			aux += area.nombreArea + (area.activo ? '' : '(inactivo)') + ' - ';
+                        		});
+                        		aux = aux.substring(0, aux.length - 2);
+                        		return `<span>${aux}</span>`;
+                        	}else{
+                        		return '<span>-</span>';
+                        	}	
+        
+                        }
+                    },
+                    {
+                        "data":"activo", "render": function (valor){
+                            if(valor) return '<span>Sí</span>';
+                            else return '<span>No</span>';
+                        }
+                    },
+                    {
+                    "defaultContent": '<button type="button" class=" btn btn-success btn-sm btn-editar"><i class="fas fa-pen"></i></button>',
+                    "orderable": false,
+                    "searcheble": false,
+                    "width": "90px"
+                    }
+                ]
+			});
+		}
 	</script>
 </body>
 </html>

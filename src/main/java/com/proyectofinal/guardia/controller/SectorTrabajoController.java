@@ -37,7 +37,7 @@ public class SectorTrabajoController {
 	}
 	
 	@PostMapping("/administrar/crear")
-	public String crearSector(@RequestBody Map<String, Object> sector) {
+	public ResponseEntity<List<SectorTrabajo>> crearSector(@RequestBody Map<String, Object> sector) {
 				
 		try {
 			SectorTrabajo nuevoSector = new SectorTrabajo();
@@ -49,33 +49,53 @@ public class SectorTrabajoController {
 				AreaTrabajo nuevaArea = new AreaTrabajo();
 				nuevaArea.setNombreArea(a.get("nombre").toString());
 				nuevaArea.setDescripcion(a.get("descripcion").toString());
-				nuevaArea.setActivo(true);
+				nuevaArea.setActivo(a.get("activo").toString().equals("1") ? true : false);
 				nuevoSector.getAreas().add(nuevaArea);
 				
 			});
+			
 			sectorServ.crearSector(nuevoSector);
 			
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
+			return ResponseEntity.badRequest().build();
 		}
 		
 		
-		return "/views/sectorTrabajo/AdministrarSectorTrabajo";
+		return ResponseEntity.ok(sectorServ.obtenerTodos());
 	}
 	
 	@PostMapping("/administrar/editar")
-	public String editarSector(@RequestBody Map<String, Object> sector) {
+	public ResponseEntity<List<SectorTrabajo>> editarSector(@RequestBody Map<String, Object> sector) {
 		
-		System.out.println(sector);		
+			
 		try {
 			
-						
+			SectorTrabajo nuevoSector = new SectorTrabajo();
+			nuevoSector.setIdSector(Integer.parseInt(sector.get("idSector").toString()));
+			nuevoSector.setSector(sector.get("sector").toString());
+			nuevoSector.setActivo(sector.get("activo").toString().equals("1") ? true : false);
+			
+			List<Map<String,Object>> maps = (List<Map<String, Object>>) sector.get("areas");
+			maps.forEach(a -> {
+				AreaTrabajo nuevaArea = new AreaTrabajo();
+				nuevaArea.setIdArea(Integer.parseInt(a.get("idArea").toString()));
+				nuevaArea.setNombreArea(a.get("nombre").toString());
+				nuevaArea.setDescripcion(a.get("descripcion").toString());
+				nuevaArea.setActivo(a.get("activo").toString().equals("1") ? true : false);
+				nuevoSector.getAreas().add(nuevaArea);
+				
+			});
+			
+			sectorServ.editarSector(nuevoSector);
+				
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
+			return ResponseEntity.badRequest().build();
 		}
 		
 		
-		return "/views/sectorTrabajo/AdministrarSectorTrabajo";
+		return ResponseEntity.ok(sectorServ.obtenerTodos());
 	}
 	
 	@GetMapping
