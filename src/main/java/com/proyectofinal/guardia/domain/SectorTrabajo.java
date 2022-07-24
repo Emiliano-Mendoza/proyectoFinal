@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -26,6 +27,7 @@ public class SectorTrabajo {
 	
 	@Column(length = 50, nullable = false)
 	@Size(min = 1, max = 50)
+	@NotEmpty
 	private String sector;
 	
 	private Boolean activo;

@@ -2,9 +2,14 @@ package com.proyectofinal.guardia.controller;
 
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +32,9 @@ public class SectorTrabajoController {
 	@Autowired
 	private SectorTrabajoService sectorServ;
 	
+	private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+	private Validator validator = factory.getValidator();
+	
 	@GetMapping("/administrar")
 	public String administrarSector(Model model) {
 		
@@ -43,18 +51,31 @@ public class SectorTrabajoController {
 			SectorTrabajo nuevoSector = new SectorTrabajo();
 			nuevoSector.setSector(sector.get("sector").toString());
 			nuevoSector.setActivo(sector.get("activo").toString().equals("1") ? true : false);
-						
+
 			List<Map<String,Object>> maps = (List<Map<String, Object>>) sector.get("areas");
 			maps.forEach(a -> {
 				AreaTrabajo nuevaArea = new AreaTrabajo();
 				nuevaArea.setNombreArea(a.get("nombre").toString());
 				nuevaArea.setDescripcion(a.get("descripcion").toString());
 				nuevaArea.setActivo(a.get("activo").toString().equals("1") ? true : false);
-				nuevoSector.getAreas().add(nuevaArea);
 				
+				Set<ConstraintViolation<AreaTrabajo>> violationsAreas = validator.validate(nuevaArea);
+				if(violationsAreas.isEmpty()) {
+					nuevoSector.getAreas().add(nuevaArea);
+				}else {
+					throw new RuntimeException("Datos area invalidos");
+				}
+			
 			});
 			
-			sectorServ.crearSector(nuevoSector);
+			//validar sector
+			Set<ConstraintViolation<SectorTrabajo>> violationsSectores = validator.validate(nuevoSector);
+			
+			if(violationsSectores.isEmpty()) {
+				sectorServ.crearSector(nuevoSector);
+			}else {
+				throw new Exception("Datos invalidos");
+			}						
 			
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -83,11 +104,24 @@ public class SectorTrabajoController {
 				nuevaArea.setNombreArea(a.get("nombre").toString());
 				nuevaArea.setDescripcion(a.get("descripcion").toString());
 				nuevaArea.setActivo(a.get("activo").toString().equals("1") ? true : false);
-				nuevoSector.getAreas().add(nuevaArea);
+
+				Set<ConstraintViolation<AreaTrabajo>> violationsAreas = validator.validate(nuevaArea);
+				if(violationsAreas.isEmpty()) {
+					nuevoSector.getAreas().add(nuevaArea);
+				}else {
+					throw new RuntimeException("Datos area invalidos");
+				}
 				
 			});
 			
-			sectorServ.editarSector(nuevoSector);
+			//validar sector
+			Set<ConstraintViolation<SectorTrabajo>> violationsSectores = validator.validate(nuevoSector);
+			
+			if(violationsSectores.isEmpty()) {
+				sectorServ.crearSector(nuevoSector);
+			}else {
+				throw new Exception("Datos invalidos");
+			}		
 				
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -100,7 +134,6 @@ public class SectorTrabajoController {
 	
 	@GetMapping
 	public ResponseEntity<List<SectorTrabajo>> obtenerSectoresDeTrabajo(){
-
 		
 		return ResponseEntity.ok(sectorServ.obtenerDisponibles());
 	}

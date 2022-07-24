@@ -41,13 +41,13 @@
 										<div class="mb-3">
 											<label for="input1" class="form-label">Sector de
 												Trabajo:</label> <input type="text" class="form-control" id="input1"
-												placeholder="Ej. Administración" name="sector">
+												placeholder="Ej. Administración" name="sector" required>
 										</div>
 									</div>
 									<div class="col-6">
 										<div class="mb-3">
 											<label for="input2" class="form-label">Activo:</label> <select
-												class="form-select" id="input2" name="activo">
+												class="form-select" id="input2" name="activo" required>
 												<option value=1>Sí</option>
 												<option value=0>No</option>
 											</select>
@@ -90,13 +90,13 @@
 											<label for="editSector" class="form-label">Sector de
 												Trabajo:</label> <input type="text" class="form-control"
 												id="editSector" placeholder="Ej. Administración"
-												name="sectorEdit">
+												name="sectorEdit" required>
 										</div>
 									</div>
 									<div class="col-6">
 										<div class="mb-3">
 											<label for="editActivo" class="form-label">Activo:</label> <select
-												class="form-select" id="editActivo" name="activoEdit">
+												class="form-select" id="editActivo" name="activoEdit" required>
 												<option value=1>Sí</option>
 												<option value=0>No</option>
 											</select>
@@ -257,16 +257,16 @@
 				<div class="mb-2">
 					<label for="inputNombreArea" class="form-label">Nombre
 						del área:</label> <input type="text" class="form-control"
-						id="inputNombreArea" placeholder="Ej. NOVA"  name="nombre${areasNuevoCount}">
+						id="inputNombreArea" placeholder="Ej. NOVA"  name="nombre${areasNuevoCount}" required>
 				</div>
 				<div class="mb-2">
 					<label for="inputDescripcionArea" class="form-label">Descripción:</label>
 					<input type="text" class="form-control" name="descripcion${areasNuevoCount}"
-						id="inputDescripcionArea">
+						id="inputDescripcionArea" required>
 				</div>
 				<div class="mb-3">
 					<label for="inputActivo2" class="form-label">Activo:</label>
-					<select class="form-select" id="inputActivo2" name="activo${areasNuevoCount}">
+					<select class="form-select" id="inputActivo2" name="activo${areasNuevoCount}" required>
 						<option value=1>Sí</option>
 						<option value=0>No</option>
 					</select>
@@ -286,6 +286,7 @@
 		}
 		
 		function nuevoCard(){
+			cancelar();
 			$('#cardAreas').html('');
 			$('#input1').val('');
 			$('#input2').val(1);
@@ -299,6 +300,7 @@
 		}
 		
 		$("#table_id tbody").on("click", '.btn-editar', function() {
+			cancelar();
 			
 			let filaSeleccionada = (this).closest("tr");
 			let data = datatable.row(filaSeleccionada).data();
@@ -322,20 +324,20 @@
 				
 				container.innerHTML += `
 					<hr>
-					<input type="hidden" id="idArea${areasEditarCount}" name="idArea${areasEditarCount}">
+					<input type="hidden" id="idArea${areasEditarCount}" name="idArea${areasEditarCount}" required>
 					<div class="mb-2">
 						<label for="inputNombreArea${areasEditarCount}" class="form-label">Nombre
 							del área:</label> <input type="text" class="form-control"
-							id="inputNombreArea${areasEditarCount}" placeholder="Ej. NOVA"  name="nombreEditar${areasEditarCount}">
+							id="inputNombreArea${areasEditarCount}" placeholder="Ej. NOVA"  name="nombreEditar${areasEditarCount}" required>
 					</div>
 					<div class="mb-2">
 						<label for="inputDescripcionArea${areasEditarCount}" class="form-label">Descripción:</label>
 						<input type="text" class="form-control" name="descripcionEditar${areasEditarCount}"
-							id="inputDescripcionArea${areasEditarCount}">
+							id="inputDescripcionArea${areasEditarCount}" required>
 					</div>
 					<div class="mb-3">
 						<label for="activoEditar${areasEditarCount}" class="form-label">Activo:</label>
-						<select class="form-select" id="activoEditar${areasEditarCount}" name="activoEditar${areasEditarCount}">
+						<select class="form-select" id="activoEditar${areasEditarCount}" name="activoEditar${areasEditarCount}" required>
 							<option value=1>Sí</option>
 							<option value=0>No</option>
 						</select>
@@ -431,20 +433,20 @@
 			container.innerHTML = `
 				<hr>
 			
-				<input type="hidden" id="idArea${areasEditarCount}" name="idArea${areasEditarCount}" value="0">
+				<input type="hidden" id="idArea${areasEditarCount}" name="idArea${areasEditarCount}" value="0" required>
 				<div class="mb-2">
 					<label for="inputNombreArea" class="form-label">Nombre
 						del área:</label> <input type="text" class="form-control"
-						id="inputNombreArea" placeholder="Ej. NOVA"  name="nombreEditar${areasEditarCount}">
+						id="inputNombreArea" placeholder="Ej. NOVA"  name="nombreEditar${areasEditarCount}" required>
 				</div>
 				<div class="mb-2">
 					<label for="inputDescripcionArea" class="form-label">Descripción:</label>
 					<input type="text" class="form-control" name="descripcionEditar${areasEditarCount}"
-						id="inputDescripcionArea">
+						id="inputDescripcionArea" required>
 				</div>
 				<div class="mb-3">
 					<label for="inputActivo2" class="form-label">Activo:</label>
-					<select class="form-select" id="inputActivo2" name="activoEditar${areasEditarCount}">
+					<select class="form-select" id="inputActivo2" name="activoEditar${areasEditarCount}" required>
 						<option value=1>Sí</option>
 						<option value=0>No</option>
 					</select>

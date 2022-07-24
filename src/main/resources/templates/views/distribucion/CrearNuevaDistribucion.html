@@ -49,10 +49,30 @@
 	<footer th:replace="plantilla/template :: footer"></footer>
 
 	<script th:inline="javascript">
-		
-	let colores = ['rgb(174, 174, 235)','rgb(226, 114, 96)','rgb(215, 226, 96)','rgb(226, 96, 180)'];
+	
+	let listaSectores = /*[[${listaSectores}]]*/'default';
+
+	listaSectores.forEach(sector => {
+		sector.areas = sector.areas.filter(area => area.activo);
+		sector.areas.forEach(area =>{
+			if(area.activo){
+				area['turnos'] = [{
+		            "idTurno": 1
+		        }]
+			}
+			
+		})
+	});
+	listaSectores = listaSectores.filter(sector => sector.areas.length > 0);
+	console.log(listaSectores);
+	
+	let listaEmpleados = /*[[${listaEmpleados}]]*/'default';
+	let listaEmpleadosUsados = [];
+	
+	let colores = ['rgb(174, 174, 235)','rgb(226, 114, 96)','rgb(215, 226, 96)','rgb(226, 96, 180)','rgb(200, 90, 100)'];
     
     let turnosAux = {};
+    let selectsIds = [];
     
     /*
         Hay 4 capas de indeces para los elementos:
@@ -168,6 +188,8 @@
                     "idTurno": `${sector.areas[i].turnos[0].idTurno}`
                 };
                 
+                selectsIds.push(`idSelect${idSectorAreaTurno}1`);
+                
                 divTurnos.innerHTML += `
 
                 <input type="text" name="idArea${idSectorArea}" hidden value="${sector.areas[i].idArea}">
@@ -181,7 +203,7 @@
                         
                         <div class="col-4 text-center ">
 
-                            <h3 class="mb-3 pb-3 mt-3 pt-3">${sector.areas[i].nombre}</h3>
+                            <h3 class="mb-3 pb-3 mt-3 pt-3">${sector.areas[i].nombreArea}</h3>
 
                             <p class="mt-3">T/Mer.</p>
 
@@ -223,11 +245,12 @@
 
                                         <select class="mb-1 selectpicker form-select select-font"  data-live-search="true"
                                         id="idSelect${idSectorAreaTurno}1" name="empleado${idSectorAreaTurno}"
-                                        >
+                                        onfocus="this.oldvalue = this.value;"
+                                        onchange="usarEmpleado('idSelect${idSectorAreaTurno}1', this);this.oldvalue = this.value;">
                                             <option class="text-muted" value="">Seleccione un empleado...</option>
-                                            <option value="1">Emiliano Mendoza</option>
-                                            <option value="2">Celina Del Turco</option>
-                                            <option value="3">Ramiro Rito</option>
+                                            
+                                            
+                                            
                                         </select>
 
                                     </div>
@@ -281,7 +304,9 @@
             "empleados": 1,
             "idSector": `Ausencias`
         };
-
+		
+        selectsIds.push('idSelectAusencias1');
+        
         // Acá va el html para las Ausencias
         divSectores.innerHTML += `
             <div class="col-6 mb-2" >
@@ -386,6 +411,8 @@
             </div>     
         `;
         
+        
+        cargarSelect();
     }
 
     function agregarEmpleado2(idSectorAreaTurno) {
@@ -400,7 +427,9 @@
 
         container.setAttribute("id", `selectContainer${idSectorAreaTurno}${cantEmpleados}`);
         container.className = "row";
-
+		
+        selectsIds.push(`idSelect${idSectorAreaTurno}${cantEmpleados}`);
+        
         if(idSectorAreaTurno != 'Ausencias'){
             container.innerHTML = `
                 <div class="col-9">
@@ -458,6 +487,7 @@
                  
         document.getElementById(`selectContainer${idSectorAreaTurno}${turnosAux[`turno${idSectorAreaTurno}`].empleados}`).remove();
         turnosAux[`turno${idSectorAreaTurno}`].empleados -= 1;
+        selectsIds.pop(`idSelect${idSectorAreaTurno}${turnosAux[`turno${idSectorAreaTurno}`].empleados}`);
 
     }
 
@@ -483,7 +513,11 @@
             "idArea": `${sector[0].areas[index].idArea}`,
             "idTurno": `${sector[0].areas[index].turnos[tamañoArray].idTurno}`
         };
-
+		
+        
+        selectsIds.push(`idSelect${idSectorAreaTurno}1`);
+        
+        
         let divTurnos = document.getElementById(`area${idSectorArea}`);
         let container = document.createElement("div");
         container.className = "row pt-2";
@@ -498,7 +532,7 @@
             
             <div class="col-4 text-center ">
 
-                <h3 class="mb-3 pb-3 mt-3 pt-3">${sector[0].areas[index].nombre}</h3>
+                <h3 class="mb-3 pb-3 mt-3 pt-3">${sector[0].areas[index].nombreArea}</h3>
 
                 <p class="mt-3">T/Mer.</p>
 
@@ -591,6 +625,7 @@
 
         sector[0].areas[index].turnos.pop();
         delete turnosAux[`turno${idSector}${idArea}${tamañoArray}`];
+        selectsIds.pop(`idSelect${idSector}${idArea}${tamañoArray}1`);
 
     }
 
@@ -624,169 +659,76 @@
         $(`#idTurnos${idSector}`).show();
 
     }
+	
+    function cargarSelect(){
+    	  	
+    	let optionsAux = '';
+    	let listaDeLegajos = [];
+    	
+    	listaEmpleados.forEach(empleado => {
+    		optionsAux += `<option value=${empleado.nroLegajo}>${empleado.apellido} ${empleado.nombre}</option>`;
+    	});
+    	
+    	listaEmpleados.Usdf 
+    	asd {}
+    	
+    	
+    	selectsIds.forEach(id => {
+    		//remover la opcion usando el id y dejar todo como esta
+    		let selectAux = document.getElementById(id);
+    		
+    		for (var i=0; i<selectobject.length; i++) {
+    		    if (selectobject.options[i].value == 'A')
+    		        selectobject.remove(i);
+    		}
+    		
+    		
+    	});
+    	
 
-    var listaSectores = [
-        {   
-            "idSector": 1,
-            "sector": "Pegado",
-            "areas": [
-                {   
-                    "idArea": 1,
-                    "nombre": "P4",
-                    "turnos": [{
-                        "idTurno": 1,
-                        "nombreTurno": "Mañana"
-                    }]
-                                               
-                },
-                {   
-                    "idArea": 2,
-                    "nombre": "P3",
-                    "turnos": [{
-                        "idTurno": 1,
-                        "nombreTurno": "Mañana"
-                    }]
-                }
-                ,
-                {   
-                    "idArea": 3,
-                    "nombre": "P2",
-                    "turnos": [{
-                        "idTurno": 1,
-                        "nombreTurno": "Mañana"
-                    }]
-                }
-            ]
-        },
-        {   
-            "idSector": 2,
-            "sector": "Troquelado",
-            "areas": [
-                {   
-                    "idArea": 4,
-                    "nombre": "EVO",
-                    "turnos": [{
-                        "idTurno": 1,
-                        "nombreTurno": "Mañana"
-                    }]
-                                               
-                },
-                {   
-                    "idArea": 5,
-                    "nombre": "NOVA",
-                    "turnos": [{
-                        "idTurno": 1,
-                        "nombreTurno": "Mañana"
-                    }]
-                }
-                ,
-                {   
-                    "idArea": 6,
-                    "nombre": "102",
-                    "turnos": [{
-                        "idTurno": 1,
-                        "nombreTurno": "Mañana"
-                    }]
-                }
-            ]
-        },
-        {   
-            "idSector": 3,
-            "sector": "Impresión",
-            "areas": [
-                {   
-                    "idArea": 7,
-                    "nombre": "104",
-                    "turnos": [{
-                        "idTurno": 1,
-                        "nombreTurno": "Mañana"
-                    }]
-                                               
-                },
-                {   
-                    "idArea": 8,
-                    "nombre": "105",
-                    "turnos": [{
-                        "idTurno": 1,
-                        "nombreTurno": "Mañana"
-                    }]
-                },
-                {   
-                    "idArea": 9,
-                    "nombre": "PL.2",
-                    "turnos": [{
-                        "idTurno": 1,
-                        "nombreTurno": "Mañana"
-                    }]
-                }
-            ]
-        },
-        {   
-            "idSector": 4,
-            "sector": "Descartonado",
-            "areas": [
-                {   
-                    "idArea": 10,
-                    "nombre": "104",
-                    "turnos": [{
-                        "idTurno": 1,
-                        "nombreTurno": "Mañana"
-                    }]
-                                               
-                }
-            ]
-        },
-        {   
-            "idSector": 5,
-            "sector": "Enfardado",
-            "areas": [
-                {   
-                    "idArea": 11,
-                    "nombre": "104",
-                    "turnos": [{
-                        "idTurno": 1,
-                        "nombreTurno": "Mañana"
-                    }]
-                                               
-                }
-            ]
-        },
-        {   
-            "idSector": 6,
-            "sector": "Movimientos Internos",
-            "areas": [
-                {   
-                    "idArea": 11,
-                    "nombre": "M.I.",
-                    "turnos": [{
-                        "idTurno": 1,
-                        "nombreTurno": "Mañana"
-                    }]
-                                               
-                }
-            ]
-        },
-        {   
-            "idSector": 7,
-            "sector": "Tintas",
-            "areas": [
-                {   
-                    "idArea": 12,
-                    "nombre": "Dpt. Tintas",
-                    "turnos": [{
-                        "idTurno": 1,
-                        "nombreTurno": "Mañana"
-                    }]
-                                               
-                }
-            ]
-        }
-    ];
-
+    }
+    
+    function usarEmpleado(idSelect, values){
+    	//let selectAux = document.getElementById(idSelect);
+    	console.log('valor antiguo: ' + values.oldvalue + '. valor actual: ' + values.value);
+    	
+    	if(values.oldvalue != '' && values.oldvalue != values.value){
+    		listaEmpleadosUsados.forEach(empleado => {
+        		if(empleado.nroLegajo == values.oldvalue){
+        			listaEmpleados.push(listaEmpleadosUsados.pop(empleado));
+        		}
+        	});
+    	}
+    		
+    	listaEmpleados.forEach(empleado => {
+    		if(empleado.nroLegajo == values.value){
+    			listaEmpleadosUsados.push(empleado);
+    		}
+    	});
+    	listaEmpleados = listaEmpleados.filter(empleado => empleado.nroLegajo != values.value);  	
+    	
+    	listaEmpleados.sort(function compare(a, b) {
+    		  if (a.apellido < b.apellido) {
+    			    return -1;
+    			  }
+   			  if (a.apellido > b.apellido) {
+   			    return 1;
+   			  }
+   			  // a debe ser igual b
+   			  return 0;
+    	});
+    	
+    	console.log(listaEmpleadosUsados);
+    	console.log(listaEmpleados);
+    	console.log(selectsIds);
+    	
+    	cargarSelect();
+		
+    	
+    }
+    
     mostrarAreas();
-	
-	
-	
-	</script>
+
+    </script>
 </body>
 </html>
