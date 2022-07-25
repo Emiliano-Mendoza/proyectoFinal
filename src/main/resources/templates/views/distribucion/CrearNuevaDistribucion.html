@@ -506,17 +506,14 @@
     		
     	//hay que quitar los empleados que habian sido seleccionados de la lista de empleados usados
     	
-        listaEmpleadosUsados = listaEmpleadosUsados.filter(
-        		leg => leg != aux
-        );
     	values = {
     			"oldvalue": aux
     	};
         usarEmpleado(values);
 
         document.getElementById(`selectContainer${idSectorAreaTurno}${turnosAux[`turno${idSectorAreaTurno}`].empleados}`).remove();
+        selectsIds = selectsIds.filter(id => id != `idSelect${idSectorAreaTurno}${turnosAux[`turno${idSectorAreaTurno}`].empleados}`);
         turnosAux[`turno${idSectorAreaTurno}`].empleados -= 1;
-        selectsIds.pop(`idSelect${idSectorAreaTurno}${turnosAux[`turno${idSectorAreaTurno}`].empleados}`);
 		
         
         
@@ -650,17 +647,45 @@
 
         let sector = listaSectores.filter(s => s.idSector == idSector);
         tamañoArray = sector[0].areas[index].turnos.length;
-
-
+       
+        let listaLegajos = [];
+        let listaIdsSelects = [];
+        let cantidadEmpleados = turnosAux[`turno${idSector}${idArea}${tamañoArray}`].empleados;
+        for(let i=0; i < cantidadEmpleados; i++){      	
+        	
+        	listaIdsSelects.push(`idSelect${idSector}${idArea}${tamañoArray}${i+1}`);
+        	listaLegajos.push(document.getElementById(`idSelect${idSector}${idArea}${tamañoArray}${i+1}`).value);
+        	     	
+        }
+        console.log('Empleados liberados: ' + listaLegajos);
+        console.log('Ids a liberar: ' + listaIdsSelects);
+        
+        listaEmpleadosUsados = listaEmpleadosUsados.filter(leg => !listaLegajos.includes(leg));
+        console.log(selectsIds);
+        selectsIds = selectsIds.filter(id => !listaIdsSelects.includes(id));
+        console.log(selectsIds);
+        
+		selectsIds.forEach(id => {    		
+    		let selectobject = document.getElementById(id);
+    		   		
+    		for (var i=0; i<selectobject.length; i++) {
+    		    if (listaEmpleadosUsados.includes(selectobject.options[i].value) 
+    		    		){  		    
+    		    	selectobject.options[i].disabled = true;
+    		    }else{
+    		    	selectobject.options[i].disabled = false;
+    		    }
+    		    
+    		} 
+	
+    	});
+        
+                
         let divSelects = document.getElementById(`turno${idSector}${idArea}${tamañoArray}`).remove();
 
         sector[0].areas[index].turnos.pop();
         delete turnosAux[`turno${idSector}${idArea}${tamañoArray}`];
-        selectsIds.pop(`idSelect${idSector}${idArea}${tamañoArray}1`);
-		
-        
-      	//hay que quitar los empleados que habian sido seleccionados de la lista de empleados usados
-        
+          	       
     }
 
 
@@ -750,7 +775,7 @@
     
     function usarEmpleado(values){
     	//let selectAux = document.getElementById(idSelect);
-    	console.log('valor antiguo: ' + values.oldvalue + '. valor actual: ' + values.value);
+    	console.log('valor antiguo: ' + values.oldvalue + '. valor actual: ' + (values.value != undefined ? values.value : 'ninguno'));
 		
     	
     	listaEmpleadosUsados = listaEmpleadosUsados.filter(leg => leg != values.oldvalue);
