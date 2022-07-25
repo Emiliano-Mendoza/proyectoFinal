@@ -51,7 +51,8 @@
 	<script th:inline="javascript">
 	
 	let listaSectores = /*[[${listaSectores}]]*/'default';
-
+	
+	//filtro la areas que estan inactivas de cada sector
 	listaSectores.forEach(sector => {
 		sector.areas = sector.areas.filter(area => area.activo);
 		sector.areas.forEach(area =>{
@@ -62,16 +63,17 @@
 			}
 			
 		})
-	});
+	});	
 	listaSectores = listaSectores.filter(sector => sector.areas.length > 0);
-	console.log(listaSectores);
-	
+
 	let listaEmpleados = /*[[${listaEmpleados}]]*/'default';
 	let listaEmpleadosUsados = [];
 	
 	let colores = ['rgb(174, 174, 235)','rgb(226, 114, 96)','rgb(215, 226, 96)','rgb(226, 96, 180)','rgb(200, 90, 100)'];
     
+	//objeto que va aguardar la cantidad de empleados que tiene cada turno bajo el nombre clave del mismo turno, por ejemplo turno2341
     let turnosAux = {};
+	//lista con los ids de todos los selects, se utiliza para marcar a los empleados que ya han sido seleccionados como disableds
     let selectsIds = [];
     
     /*
@@ -81,76 +83,7 @@
             3º Es el id del turno de trabajo
             4º Es la cantidad de empleados agregados en el turno, al inicio es 1
     */
-    
-    const form = document.getElementById(`form1`);
-    form.addEventListener('submit', handleSubmit);
-
-    function handleSubmit(event) {
-        event.preventDefault();
-		
-      //tengo que habilitar los empleados inabilitados (capaz sea suficiente cambiarle el color)
-        selectsIds.forEach(id => {    		
-    		let selectobject = document.getElementById(id);    		   		
-    		for (var i=0; i<selectobject.length; i++) {
-    			if(selectobject.options[i].disabled && selectobject.options[i].selected){
-    				selectobject.options[i].disabled = false;
-    				console.log(selectobject.options[i].value);
-    				$('#'+ id).val(selectobject.options[i].value);
-    			}
-    					    
-    		}
-    	});
-        
-        
-        
-        const data = new FormData(event.target);
-
-		let turnosArray = [];
-			
-        Object.values(turnosAux).forEach(turno => {
-        	
-            if(turno.idSector != 'Ausencias'){
-				
-            	turnosArray.push( {
-                    "empleados": data.getAll(`empleado${turno.idSector}${turno.idArea}${turno.idTurno}`),
-                    "refrigerios": data.getAll(`refrigerio${turno.idSector}${turno.idArea}${turno.idTurno}`),
-                    "idArea": parseInt(data.get(`idArea${turno.idSector}${turno.idArea}`)),
-                    "idTurno": parseInt(data.get(`idTurno${turno.idSector}${turno.idArea}${turno.idTurno}`)),
-                    "turno" : data.get(`turno${turno.idSector}${turno.idArea}${turno.idTurno}`),
-                    "horario": data.get(`horario${turno.idSector}${turno.idArea}${turno.idTurno}`)
-                });
-
-            }else{
-            	turnosArray.push( {
-                    "empleados": data.getAll(`empleadoAusencias`),
-                    "motivo" : data.getAll(`motivoAusencia`),
-                    "idArea": 0,
-                    "idTurno": 0,
-                    "comentario": data.get('textareaAusencias')
-                });
-            }
-            
-        
-        });
-        
-        var oReq = new XMLHttpRequest();
-		oReq.open("POST", "/views/distribucion/crear", true);
-		oReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-		oReq.onload = function(oEvent) {
-		    if (oReq.status == 200) {
-		      console.log("piola");
-		    } else {
-		      console.log("todo mal");
-		    }
-		};
-	
-		
-		oReq.send(JSON.stringify(turnosArray));
-               
-        console.log(turnosArray);
-    }
-
-    
+  
     function mostrarAreas(){
         
         let divSectores = document.getElementById(`idSectoresDeTrabajo`);
@@ -207,113 +140,24 @@
                 
                 divTurnos.innerHTML += `
 
-                <input type="text" name="idArea${idSectorArea}" hidden value="${sector.areas[i].idArea}">
-
-                <div class="col-12" style="background-color: ${colores[i]};" 
-                    id="area${idSectorArea}">
-                                            
-                    <input type="text" name="idTurno${idSectorAreaTurno}" hidden value="${sector.areas[i].turnos[0].idTurno}">
-                    
-                    <div class="row pt-2" id="turno${idSectorAreaTurno}">
-                        
-                        <div class="col-4 text-center ">
-
-                            <h3 class="mb-3 pb-3 mt-3 pt-3">${sector.areas[i].nombreArea}</h3>
-
-                            <p class="mt-3">T/Mer.</p>
-
-                            <div class="d-grid">
-                                <select class="mb-1 pb-4 pt-4 mb-4 form-select "
-                                style="text-align: center;" 
-                                id="idRefrigerio${idSectorAreaTurno}" 
-                                onchange="marcarRefrigerios(${idSectorAreaTurno})">
-                                    <option class="text-muted" value="0" selected>Refrigerio</option>
-                                    <option value="1">T1</option>
-                                    <option value="2">T2</option>
-                                    <option value="3">T3</option>
-                                </select>
-                            </div>  
-                            
-                        </div>
-                        <div class="col-8">
-                            <div class="text-center mb-1 pb-1 mt-1 pt-1">
-                                <select class="mb-1 form-select select-font" style="text-align: center;" name="turno${idSectorAreaTurno}">
-                                    <option value="" >Seleccione un turno...</option>
-                                    <option value="1">Mañana</option>
-                                    <option value="2">Tarde</option>
-                                    <option value="3">Noche</option>
-                                </select>
-                            </div>
-                            <div class="d-flex justify-content-center mb-2 pb-2 mt-1 pt-1 "
-                                >
-                                <input type="text" placeholder="Horario..." name="horario${idSectorAreaTurno}" class="form-control"
-                                style='width:8em; background-color: rgb(166, 243, 243); text-align: center;' 
-                                maxlength="5">
-                            </div>
-
-                            <div id="idSelects${idSectorAreaTurno}">
-                                
-                                <div class="row" 
-                                id="selectContainer${idSectorAreaTurno}1">
-                                    
-                                    <div class="col-9">
-
-                                        <select class="mb-1 selectpicker form-select select-font"  data-live-search="true"
-                                        id="idSelect${idSectorAreaTurno}1" name="empleado${idSectorAreaTurno}"
-                                        onfocus="this.oldvalue = this.value;"
-                                        onchange="usarEmpleado(this);this.oldvalue = this.value;">
-                                            <option class="text-muted" value="">Seleccione un empleado...</option>
-                                            
-                                            
-                                            
-                                        </select>
-
-                                    </div>
-
-                                    <div class="col-3">
-
-                                        <select class="mb-1 form-select select-font" 
-                                        onchange="reiniciarRefrigerioGeneral(${idSectorAreaTurno},1)"
-                                        id="idRefrigerioEmpleado${idSectorAreaTurno}1" name="refrigerio${idSectorAreaTurno}">
-                                            <option value="" selected></option>
-                                            <option value="1">T1</option>
-                                            <option value="2">T2</option>
-                                            <option value="3">T3</option>
-
-                                        </select>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                            
-                            <div class="d-flex justify-content-center">
-
-                                <div>
-                                    <a style="cursor: pointer; margin: auto;"
-                                        onclick="quitarEmpleado2(${idSectorAreaTurno})"><i
-                                            class="fa-solid fa-circle-minus"></i></a>
-                                    <a style="cursor: pointer; margin: auto;"
-                                        onclick="agregarEmpleado2(${idSectorAreaTurno})"><i
-                                            class="fa-solid fa-circle-plus"></i></a>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer gap-2 d-md-flex justify-content-end" style="background-color: ${colores[i]};" > 
-                    
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="quitarTurno2(${sector.idSector},${sector.areas[i].idArea}, ${i})"> Quitar Turno</button>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="agregarTurno2(${sector.idSector}, ${sector.areas[i].idArea}, ${i})"> Agregar Turno</button>
-                </div>
+	                <input type="text" name="idArea${idSectorArea}" hidden value="${sector.areas[i].idArea}">
+	
+	                <div class="col-12" style="background-color: ${colores[i]};" 
+	                    id="area${idSectorArea}">
+	                                                        
+	                    <div class="row pt-2" id="turno${idSectorAreaTurno}">	                        
+							${generarHtml(idSectorAreaTurno, sector.areas[i].turnos[0].idTurno, sector.areas[i].nombreArea)}  	                    
+	                    </div>
+	                </div>
+	                <div class="card-footer gap-2 d-md-flex justify-content-end" style="background-color: ${colores[i]};" > 
+	                    
+	                    <button type="button" class="btn btn-secondary btn-sm" onclick="quitarTurno2(${sector.idSector},${sector.areas[i].idArea}, ${i})"> Quitar Turno</button>
+	                    <button type="button" class="btn btn-secondary btn-sm" onclick="agregarTurno2(${sector.idSector}, ${sector.areas[i].idArea}, ${i})"> Agregar Turno</button>
+	                </div>
                 `;
                 
-            }
-            
-            
+            }    
         }
-
 
         turnosAux[`turnoAusencias`] = {
             "empleados": 1,
@@ -330,7 +174,6 @@
                         <div></div>
                         
                         <h4 style="display:inline;">Ausencias</h4>
-
                         <div id="botonOcultarMostrarAusencias">
                             <button type="button" class="bg-dark" onclick="minimizarSector('Ausencias')">
                                 <i class="fa-solid fa-primary-color fa-window-minimize text-white">
@@ -338,8 +181,7 @@
                             <button type="button" class="bg-dark" onclick="maximizarSector('Ausencias')">
                                 <i class="fa-solid fa-window-maximize text-white"></i>
                             </i></button>
-                        </div>
-                        
+                        </div>                        
                     </div>
                     
                     <div class="card-body " style="background-color: rgb(255, 255, 255);">
@@ -361,37 +203,14 @@
                                         <div id="idSelectsAusencias">
                                             
                                             <div class="row" 
-                                            id="selectContainerAusencias1">
-                                                
-                                                <div class="col-8">
-
-                                                    <select class="mb-1 selectpicker form-select select-font"  data-live-search="true"
-                                                    id="idSelectAusencias1" name="empleadoAusencias"
-                                                    onfocus="this.oldvalue = this.value;"
-                                                    onchange="usarEmpleado(this);this.oldvalue = this.value;">
-                                                        
-                                                    </select>
-
-                                                </div>
-
-                                                <div class="col-4">
-
-                                                    <select class="mb-1 form-select select-font" 
-                                                    onchange="reiniciarRefrigerioGeneral('Ausencias',1)"
-                                                    id="idMotivoAusencias1" name="motivoAusencia">
-                                                        <option class="text-muted" value="" selected>Motivo...</option>
-                                                        <option value="Vacaciones">Vacaciones</option>
-                                                        <option value="Enfermedad">Enfermedad</option>
-                                                        <option value="Otro">Otro</option>
-
-                                                    </select>
-                                                </div>
+                                            id="selectContainerAusencias1">      
+                                            
+                                               ${generarHtmlEmpleadoSelects('Ausencias', 1)}
+                                               
                                             </div>
                                             
-                                        </div>
-                                        
+                                        </div>                                        
                                         <div class="d-flex justify-content-center">
-
                                             <div>
                                                 <a style="cursor: pointer; margin: auto;"
                                                     onclick="quitarEmpleado2('Ausencias')"><i
@@ -400,21 +219,15 @@
                                                     onclick="agregarEmpleado2('Ausencias')"><i
                                                         class="fa-solid fa-circle-plus"></i></a>
                                             </div>
-
                                         </div>
-
                                         <hr>
-
                                         <div>
                                             <h4 class="mb-3">Comentarios adicionales:</h4>
-
                                             <div class="form-floating pb-3">
                                                 <textarea class="form-control" placeholder="Leave a comment here" 
-                                                id="textareaAusencias" name="textareaAusencias" style="height: 100px"></textarea>
-                                                
+                                                id="textareaAusencias" name="textareaAusencias" style="height: 100px"></textarea>                                               
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -423,14 +236,11 @@
                 </div>
             </div>     
         `;
-        
-        
+                
         cargarSelect();
     }
 
     function agregarEmpleado2(idSectorAreaTurno) {
-
-        console.log(`${idSectorAreaTurno}`);
 
         let divSelects = document.getElementById(`idSelects${idSectorAreaTurno}`);
         let container = document.createElement("div");
@@ -442,60 +252,11 @@
         container.className = "row";
 		
         selectsIds.push(`idSelect${idSectorAreaTurno}${cantEmpleados}`);
-        
-        if(idSectorAreaTurno != 'Ausencias'){
-            container.innerHTML = `
-                <div class="col-9">
-                    <select class="mb-1 selectpicker form-select select-font"  data-live-search="true"
-                    id="idSelect${idSectorAreaTurno}${cantEmpleados}" name="empleado${idSectorAreaTurno}"
-                    onfocus="this.oldvalue = this.value;"
-                    onchange="usarEmpleado(this);this.oldvalue = this.value;">
-                        
-                    </select>
-                </div>
-                <div class="col-3">
-                    <select class="mb-1 form-select select-font" 
-                    onchange="reiniciarRefrigerioGeneral(${idSectorAreaTurno},${cantEmpleados})"
-                    id="idRefrigerioEmpleado${idSectorAreaTurno}${cantEmpleados}" name="refrigerio${idSectorAreaTurno}">
-                        <option value="" selected></option>
-                        <option value="1">T1</option>
-                        <option value="2">T2</option>
-                        <option value="3">T3</option>
-                    </select>
-                </div>
-            
-            `;
-             divSelects.appendChild(container);
-             cargarSelect(`idSelect${idSectorAreaTurno}${cantEmpleados}`);
-        }else{
-            container.innerHTML = `
-                <div class="col-8">
-                    <select class="mb-1 selectpicker form-select select-font"  data-live-search="true"
-                    id="idSelectAusencias${cantEmpleados}" name="empleadoAusencias"
-                    onfocus="this.oldvalue = this.value;"
-                    onchange="usarEmpleado(this);this.oldvalue = this.value;">
-                        
-                    
-                    
-                    </select>
-                </div>
-                <div class="col-4">
-                    <select class="mb-1 form-select select-font"                       
-                    id="idMotivoAusencias${cantEmpleados}" name="motivoAusencia">
-                        <option class="text-muted" value="" selected>Motivo...</option>
-                        <option value="Vacaciones">Vacaciones</option>
-                        <option value="Enfermedad">Enfermedad</option>
-                        <option value="Otro">Otro</option>
-                    </select>
-                </div>
-            
-            `;
-            divSelects.appendChild(container);
-            cargarSelect(`idSelectAusencias${cantEmpleados}`);
-        }
-        
-                   
-       
+                
+        container.innerHTML = generarHtmlEmpleadoSelects(idSectorAreaTurno, cantEmpleados);
+        divSelects.appendChild(container);
+        cargarSelect(`idSelect${idSectorAreaTurno}${cantEmpleados}`);
+                                   
         $('#idRefrigerioEmpleado' + idSectorAreaTurno + cantEmpleados).val($('#idRefrigerio' + idSectorAreaTurno).val());
         
     }
@@ -504,8 +265,7 @@
            	
     	let aux = document.getElementById('idSelect' + idSectorAreaTurno + turnosAux[`turno${idSectorAreaTurno}`].empleados).value;
     		
-    	//hay que quitar los empleados que habian sido seleccionados de la lista de empleados usados
-    	
+    	//hay que quitar los empleados que habian sido seleccionados de la lista de empleados usados  	
     	values = {
     			"oldvalue": aux
     	};
@@ -513,10 +273,7 @@
 
         document.getElementById(`selectContainer${idSectorAreaTurno}${turnosAux[`turno${idSectorAreaTurno}`].empleados}`).remove();
         selectsIds = selectsIds.filter(id => id != `idSelect${idSectorAreaTurno}${turnosAux[`turno${idSectorAreaTurno}`].empleados}`);
-        turnosAux[`turno${idSectorAreaTurno}`].empleados -= 1;
-		
-        
-        
+        turnosAux[`turno${idSectorAreaTurno}`].empleados -= 1;    
     }
 
     function agregarTurno2(idSector, idArea, index){
@@ -540,27 +297,83 @@
             "idSector": `${sector[0].idSector}`,
             "idArea": `${sector[0].areas[index].idArea}`,
             "idTurno": `${sector[0].areas[index].turnos[tamañoArray].idTurno}`
-        };
-		
+        };		
         
         selectsIds.push(`idSelect${idSectorAreaTurno}1`);
-        
-        
+                
         let divTurnos = document.getElementById(`area${idSectorArea}`);
         let container = document.createElement("div");
         container.className = "row pt-2";
 
         container.setAttribute("id", `turno${idSectorAreaTurno}`);
 
-        container.innerHTML = `            
-            
-            ${tamañoArray != 0 ? '<hr>' : ''}
-                       
-            <input type="text" name="idTurno${idSectorAreaTurno}" hidden value="${sector[0].areas[index].turnos[tamañoArray].idTurno}">
+        container.innerHTML = `                        
+            ${tamañoArray != 0 ? '<hr>' : ''}   
+            ${generarHtml(idSectorAreaTurno, sector[0].areas[index].turnos[tamañoArray].idTurno, sector[0].areas[index].nombreArea)}                                                                          
+        `;
+		
+        divTurnos.appendChild(container);
+        cargarSelect(`idSelect${idSectorAreaTurno}1`);
+
+    }
+    
+    function generarHtmlEmpleadoSelects(idSectorAreaTurno, cantEmpleados){
+    	let htmlAux = '';
+    	if(idSectorAreaTurno != 'Ausencias'){
+    		htmlAux = `
+	    		<div class="col-9">
+	                <select class="mb-1 selectpicker form-select select-font"  data-live-search="true"
+	                id="idSelect${idSectorAreaTurno}${cantEmpleados}" name="empleado${idSectorAreaTurno}"
+	                onfocus="this.oldvalue = this.value;"
+	                onchange="usarEmpleado(this);this.oldvalue = this.value;">
+	                    
+	                </select>
+	            </div>
+	            <div class="col-3">
+	                <select class="mb-1 form-select select-font" 
+	                onchange="reiniciarRefrigerioGeneral(${idSectorAreaTurno},${cantEmpleados})"
+	                id="idRefrigerioEmpleado${idSectorAreaTurno}${cantEmpleados}" name="refrigerio${idSectorAreaTurno}">
+	                    <option value="" selected></option>
+	                    <option value="1">T1</option>
+	                    <option value="2">T2</option>
+	                    <option value="3">T3</option>
+	                </select>
+	            </div> 	    	
+    	    `;
+    	}else{
+    		htmlAux = ` 
+	    		<div class="col-8">
+	                <select class="mb-1 selectpicker form-select select-font"  data-live-search="true"
+	                id="idSelectAusencias${cantEmpleados}" name="empleadoAusencias"
+	                onfocus="this.oldvalue = this.value;"
+	                onchange="usarEmpleado(this);this.oldvalue = this.value;">
+	               
+	                </select>
+	            </div>
+	            <div class="col-4">
+	                <select class="mb-1 form-select select-font"                       
+	                id="idMotivoAusencias${cantEmpleados}" name="motivoAusencia">
+	                    <option class="text-muted" value="" selected>Motivo...</option>
+	                    <option value="Vacaciones">Vacaciones</option>
+	                    <option value="Enfermedad">Enfermedad</option>
+	                    <option value="Otro">Otro</option>
+	                </select>
+	            </div>
+    		`;
+    	}
+    	
+    	return htmlAux;
+    }
+    
+    
+    function generarHtml(idSectorAreaTurno, valorIdTurno, nombreArea){
+    	
+    	let htmlAux = `
+			<input type="text" name="idTurno${idSectorAreaTurno}" hidden value="${valorIdTurno}">
             
             <div class="col-4 text-center ">
 
-                <h3 class="mb-3 pb-3 mt-3 pt-3">${sector[0].areas[index].nombreArea}</h3>
+                <h3 class="mb-3 pb-3 mt-3 pt-3">${nombreArea}</h3>
 
                 <p class="mt-3">T/Mer.</p>
 
@@ -573,9 +386,7 @@
                         <option value="2">T2</option>
                         <option value="3">T3</option>
                     </select>
-                </div>  
-                
-
+                </div>                 
             </div>
             <div class="col-8">
                 <div class="text-center mb-1 pb-1 mt-1 pt-1">
@@ -597,25 +408,7 @@
                     <div class="row" 
                     id="selectContainer${idSectorAreaTurno}1">
                         
-
-                        <div class="col-9">
-                            <select class="mb-1 selectpicker form-select"  data-live-search="true" name="empleado${idSectorAreaTurno}"
-                            id="idSelect${idSectorAreaTurno}1"
-                           	onfocus="this.oldvalue = this.value;"
-                            onchange="usarEmpleado(this);this.oldvalue = this.value;">
-                                
-                            </select>
-                        </div>
-                        <div class="col-3">  
-                            <select class="mb-1 form-select" name="refrigerio${idSectorAreaTurno}"
-                            onchange="reiniciarRefrigerioGeneral(${idSectorAreaTurno},1)" 
-                            id="idRefrigerioEmpleado${idSectorAreaTurno}1">
-                                <option value="" selected></option>
-                                <option value="1">T1</option>
-                                <option value="2">T2</option>
-                                <option value="3">T3</option>
-                            </select>
-                        </div>  
+                    	${generarHtmlEmpleadoSelects(idSectorAreaTurno, 1)}
 
                     </div>
                 </div>
@@ -630,23 +423,19 @@
                             onclick="agregarEmpleado2(${idSectorAreaTurno})"><i
                                 class="fa-solid fa-circle-plus"></i></a>
                     </div>
-
                 </div>
-
-            </div>
-            
-                                              
-        `;
-		
-        divTurnos.appendChild(container);
-        cargarSelect(`idSelect${idSectorAreaTurno}1`);
-
+            </div> 	
+    	`;	
+    	
+    	return htmlAux;
     }
-
+    
+    
+    
     function quitarTurno2(idSector, idArea, index){
 
         let sector = listaSectores.filter(s => s.idSector == idSector);
-        tamañoArray = sector[0].areas[index].turnos.length;
+        let tamañoArray = sector[0].areas[index].turnos.length;
        
         let listaLegajos = [];
         let listaIdsSelects = [];
@@ -657,30 +446,13 @@
         	listaLegajos.push(document.getElementById(`idSelect${idSector}${idArea}${tamañoArray}${i+1}`).value);
         	     	
         }
-        console.log('Empleados liberados: ' + listaLegajos);
-        console.log('Ids a liberar: ' + listaIdsSelects);
         
         listaEmpleadosUsados = listaEmpleadosUsados.filter(leg => !listaLegajos.includes(leg));
-        console.log(selectsIds);
+        
         selectsIds = selectsIds.filter(id => !listaIdsSelects.includes(id));
-        console.log(selectsIds);
         
-		selectsIds.forEach(id => {    		
-    		let selectobject = document.getElementById(id);
-    		   		
-    		for (var i=0; i<selectobject.length; i++) {
-    		    if (listaEmpleadosUsados.includes(selectobject.options[i].value) 
-    		    		){  		    
-    		    	selectobject.options[i].disabled = true;
-    		    }else{
-    		    	selectobject.options[i].disabled = false;
-    		    }
-    		    
-    		} 
-	
-    	});
-        
-                
+        deshabilitarEmpleadosUsados();
+                       
         let divSelects = document.getElementById(`turno${idSector}${idArea}${tamañoArray}`).remove();
 
         sector[0].areas[index].turnos.pop();
@@ -720,8 +492,7 @@
     }
 	
     function cargarSelect(idS){
-    	console.log(idS);
-    	
+
     	let optionsAux = '';
     	listaEmpleados.forEach(empleado => {
     		
@@ -731,8 +502,7 @@
     		else{
     			optionsAux += `<option value=${empleado.nroLegajo}>${empleado.apellido} ${empleado.nombre}</option>`;
     		}	
-    		
-    		
+    		  		
     	});
     	
     	if(idS == undefined){
@@ -745,11 +515,7 @@
         			 <option value="">Seleccione un empleado...</option>
         			 ${optionsAux}
         		`;
-        		
-        		/* for (var i=0; i<selectobject.length; i++) {
-        		    if (selectobject.options[i].value == 'A')
-        		        selectobject.remove(i);
-        		} */	
+        			
         	});
     	}
     	else{
@@ -774,10 +540,9 @@
     }
     
     function usarEmpleado(values){
-    	//let selectAux = document.getElementById(idSelect);
-    	console.log('valor antiguo: ' + values.oldvalue + '. valor actual: ' + (values.value != undefined ? values.value : 'ninguno'));
-		
     	
+    	console.log('valor antiguo: ' + values.oldvalue + '. valor actual: ' + (values.value != undefined ? values.value : 'ninguno'));
+		    	
     	listaEmpleadosUsados = listaEmpleadosUsados.filter(leg => leg != values.oldvalue);
     	
     	if(values.value != undefined && values.value != null) {
@@ -786,8 +551,13 @@
     	
     	console.log(listaEmpleadosUsados);
 
-		selectsIds.forEach(id => {
-    		
+    	deshabilitarEmpleadosUsados();  	
+    }
+    
+    
+    function deshabilitarEmpleadosUsados(){
+    	
+			selectsIds.forEach(id => {   		
     		let selectobject = document.getElementById(id);
     		   		
     		for (var i=0; i<selectobject.length; i++) {
@@ -799,13 +569,77 @@
     		    }
     		    
     		} 
-    		
-    		
-    	});	   	
+    		   		
+    	});
     }
     
     mostrarAreas();
+	
+    
+    const form = document.getElementById(`form1`);
+    form.addEventListener('submit', handleSubmit);
 
+    function handleSubmit(event) {
+        event.preventDefault();
+		
+      //tengo que habilitar los empleados inhabilitados (capaz sea suficiente cambiarle el color)
+        selectsIds.forEach(id => {    		
+    		let selectobject = document.getElementById(id);    		   		
+    		for (var i=0; i<selectobject.length; i++) {
+    			if(selectobject.options[i].disabled && selectobject.options[i].selected){
+    				selectobject.options[i].disabled = false;
+    				
+    				$('#'+ id).val(selectobject.options[i].value);
+    			}
+    					    
+    		}
+    	});
+          
+        const data = new FormData(event.target);
+
+		let turnosArray = [];
+			
+        Object.values(turnosAux).forEach(turno => {
+        	
+            if(turno.idSector != 'Ausencias'){
+				
+            	turnosArray.push( {
+                    "empleados": data.getAll(`empleado${turno.idSector}${turno.idArea}${turno.idTurno}`),
+                    "refrigerios": data.getAll(`refrigerio${turno.idSector}${turno.idArea}${turno.idTurno}`),
+                    "idArea": parseInt(data.get(`idArea${turno.idSector}${turno.idArea}`)),
+                    "idTurno": parseInt(data.get(`idTurno${turno.idSector}${turno.idArea}${turno.idTurno}`)),
+                    "turno" : data.get(`turno${turno.idSector}${turno.idArea}${turno.idTurno}`),
+                    "horario": data.get(`horario${turno.idSector}${turno.idArea}${turno.idTurno}`)
+                });
+
+            }else{
+            	turnosArray.push( {
+                    "empleados": data.getAll(`empleadoAusencias`),
+                    "motivo" : data.getAll(`motivoAusencia`),
+                    "idArea": 0,
+                    "idTurno": 0,
+                    "comentario": data.get('textareaAusencias')
+                });
+            }
+            
+        
+        });
+        
+        var oReq = new XMLHttpRequest();
+		oReq.open("POST", "/views/distribucion/crear", true);
+		oReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+		oReq.onload = function(oEvent) {
+		    if (oReq.status == 200) {
+		      console.log("piola");
+		    } else {
+		      console.log("todo mal");
+		    }
+		};
+			
+		oReq.send(JSON.stringify(turnosArray));
+               
+        console.log(turnosArray);
+    }
     </script>
 </body>
 </html>
