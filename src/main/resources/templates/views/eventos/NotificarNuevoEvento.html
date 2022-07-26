@@ -15,7 +15,48 @@
 			
 			<div class="container-fluid px-4 mt-3">
 				 
-				 <h1>NotificarNuevoEvento  - No implementado</h1>
+				<div th:replace="plantilla/template :: mensajes"></div>
+				
+				
+				
+				<div class="d-md-flex justify-content-between">
+					<h1 class="">Notificar Nuevo Evento</h1>					
+					<a  class="nav-link" th:href="@{/views/evento/ver-eventos}"><i
+						class="fa-solid fa-file-circle-check"></i> Ver Registros</a>
+				</div>
+				
+				
+				<ol class="breadcrumb mb-4">
+					<li class="breadcrumb-item active"><i
+						class="fa-solid fa-flag"></i> Eventos</li>
+				</ol>
+				
+				<div class="card">
+					<form id="formEvento" method="post">
+						<div class="card-header fw-bold">Nuevo Evento:</div>
+						<div class="card-body">
+								<div class="mb-3">
+									<label for="desc" class="form-label">Descripción:</label>
+									<textarea class="form-control" id="desc" name="desc" rows="3"
+										required></textarea>
+								</div>
+								<div class="">
+									<label for="fechaEvento" class="form-label">Fecha
+										del Evento: </label> <input type="datetime-local" name="fechaEvento"
+										id="fechaEvento" required>
+								</div>
+					
+						</div>
+						<div class="card-footer d-md-flex justify-content-end">
+							
+							<input type="submit" class="btn btn-secondary "
+								value="Confirmar" />
+						</div>
+					</form>
+				</div>
+				
+				<h5 class="mt-3">Tus eventos próximos:</h5>
+				
 				
 			</div>
 			
@@ -25,9 +66,37 @@
 	
 	<footer th:replace="plantilla/template :: footer"></footer>
 	
-	<script type="text/javascript">
+	<script th:inline="javascript">
 		
-	
+	function SetDate(dateField, currentDate) {
+
+		const today = new Date()
+		let aux = '';
+
+		let dd = today.getDate();
+		let mm = today.getMonth() + 1; //January is 0!
+		let yyyy = today.getFullYear();
+
+		if (dd < 10) {
+			dd = '0' + dd;
+		}
+		if (mm < 10) {
+			mm = '0' + mm;
+		}
+
+		aux = yyyy + '-' + mm + '-' + dd + 'T00:00';
+		
+		if(currentDate==null){
+			document.getElementById(dateField).setAttribute("min", aux);
+			document.getElementById(dateField).setAttribute("value", aux);
+		}else{
+			document.getElementById(dateField).setAttribute("min", aux);
+			document.getElementById(dateField).setAttribute("value", currentDate);
+		}
+		
+	}
+
+	SetDate('fechaEvento', null);
 	</script>
 </body>
 </html>

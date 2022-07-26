@@ -15,8 +15,19 @@
 			
 			<div class="container-fluid px-4 mt-3">
 				 
-				 <h1>RegistrarOcurrenciaDeEvento  - No implementado</h1>
+				 <div th:replace="plantilla/template :: mensajes"></div>
 				
+				<div class="d-md-flex justify-content-between">
+					<h1 class="">Listado de Eventos</h1>					
+					<a  class="nav-link" th:href="@{/views/evento/ver-eventos}"><i
+						class="fa-solid fa-file-circle-check"></i> Ver Registros</a>
+				</div>
+				<ol class="breadcrumb mb-4">
+					<li class="breadcrumb-item active"><i
+						class="fa-solid fa-calendar-days"></i> Eventos</li>
+				</ol>
+				
+					
 			</div>
 			
 		</div>
@@ -25,7 +36,7 @@
 	
 	<footer th:replace="plantilla/template :: footer"></footer>
 	
-	<script type="text/javascript">
+	<script th:inline="javascript">
 		
 	
 	</script>

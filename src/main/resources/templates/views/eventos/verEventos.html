@@ -6,28 +6,142 @@
 <body class="sb-nav-fixed">
 
 	<header th:replace="plantilla/template :: header"></header>
-	
+
 	<div id="layoutSidenav">
-	
-		<div th:replace="plantilla/template :: sidenav_nav"> </div>
-		
+
+		<div th:replace="plantilla/template :: sidenav_nav"></div>
+
 		<div id="layoutSidenav_content">
-			
+
 			<div class="container-fluid px-4 mt-3">
-				 
-				 <h1>verEventos - No implementado</h1>
-				
+
+				<h1 class="">Registros de Eventos</h1>
+				<ol class="breadcrumb mb-4">
+					<li class="breadcrumb-item active"><i
+						class="fa-solid fa-calendar-days"></i> Eventos</li>
+				</ol>
+
+				<div class="card mb-4">
+					<div class="card-header">
+						<i class="fa-solid fa-table"></i> Registros de Eventos:
+					</div>
+
+					<div class="card-body">
+						<form id="filtroForm1">
+							<div class="row">
+								<div class="col-md-3 pb-2">
+									<label>Rango Fecha: </label> <input type="text" id="date_range"
+										autocomplete="off" name="date_range" class="form-control">
+								</div>
+								<div class="col-md-3 pb-2">
+									<label for="usuarioSelect1">Notificante:</label> <select class="form-select"
+										id="usuarioSelect1" name="idNotificante">
+
+									</select>
+								</div>
+								<div class="col-md-3 pb-2">
+									<label for="usuarioSelect2">Guardia:</label> <select class="form-select"
+										id="usuarioSelect2" name="idUsuario">
+
+									</select>
+								</div>
+								<div class="col-md-1 d-grid mt-1"
+									style="display: flex; align-items: center;">
+									<button type="button" class="btn btn-primary mt-2">Filtrar</button>
+								</div>
+								<div class="col-md-1 d-grid mt-1"
+									style="display: flex; align-items: center;">
+									<button type="button" class="btn btn-outline-danger mt-2"
+										onclick="desfiltrar('table_id')">Desfiltrar</button>
+								</div>
+
+							</div>
+						</form>
+						<hr>
+
+						<div class="mt-4"></div>
+
+						<table id="table_id" class="display">
+							<thead>
+								<tr>
+									<th>Fecha Evento</th>
+									<th>Descripción</th>
+									<th>Notificante</th>
+									<th>Guardia</th>
+									<th>Comentario</th>
+									<th>Motivo Cancelación</th>
+								</tr>
+							</thead>
+							<tbody>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+
+
 			</div>
-			
+
 		</div>
-	
+
 	</div>
-	
+
 	<footer th:replace="plantilla/template :: footer"></footer>
-	
-	<script type="text/javascript">
-		
-	
+
+	<script th:inline="javascript">
+		var datatable;
+		var listaEventos;
+
+		$(document).ready(function() {
+
+			//listaEventos = /*[[${listaEventos}]]*/'default';
+			listaEventos = [];
+			setDataTable(listaEventos);
+
+		});
+
+		function setDataTable(datos) {
+
+			if (datatable != null) {
+				datatable.clear();
+				datatable.destroy();
+			}
+
+			datatable = $('#table_id').DataTable({
+				data : datos,
+				"autoWidth" : false,
+				language : {
+					"decimal" : "",
+					"emptyTable" : "No hay información",
+					"info" : "Mostrando _START_ a _END_ de _TOTAL_ Registros",
+					"infoEmpty" : "Mostrando 0 to 0 of 0 Entradas",
+					"infoFiltered" : "(Filtrado de _MAX_ total entradas)",
+					"infoPostFix" : "",
+					"thousands" : ",",
+					"lengthMenu" : "Mostrar _MENU_ Registros",
+					"loadingRecords" : "Cargando...",
+					"processing" : "Procesando...",
+					"search" : "Buscar:",
+					"zeroRecords" : "Sin resultados encontrados",
+					"paginate" : {
+						"first" : "Primero",
+						"last" : "Ultimo",
+						"next" : "Siguiente",
+						"previous" : "Anterior"
+					}
+				},
+				"columnDefs" : [ {
+					"className" : "dt-center",
+					"targets" : "_all"
+				} ]
+			}).order([ 2, 'desc' ], [ 0, 'desc' ]).draw();
+
+		}
+
+		function desfiltrar() {
+			setDataTable(listaRondas);
+		}
 	</script>
 </body>
 </html>
