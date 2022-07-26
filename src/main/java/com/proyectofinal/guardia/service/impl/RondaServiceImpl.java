@@ -65,25 +65,14 @@ public class RondaServiceImpl implements RondaService {
 	}
 
 	@Override
-	public List<Ronda> filtrarRondas(String fechaInicio, String fechaFin, int idUsuario) {
+	public List<Ronda> filtrarRondas(String fechaInicio, String fechaFin, int idUsuario) throws ParseException {
 		
-		try {
-						
-			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-			Date fechaInicioAux = formatter.parse(fechaInicio != null ? fechaInicio : "01/01/2000");
-			Date fechaFinalAux = fechaFin != null ? new Date(formatter.parse(fechaFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
-			
-			return rondaRepo.findAll().stream().filter(r -> r.getFechaRonda().after(fechaInicioAux) && r.getFechaRonda().before(fechaFinalAux)
-					&& ( idUsuario > 0 ? ( r.getUsuario()!= null && r.getUsuario().getIdUsuario() == idUsuario) : true)).collect(Collectors.toList());
-						
-						
-		} catch (ParseException e) {
-
-			e.printStackTrace();
-		}
-						
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Date fechaInicioAux = formatter.parse(fechaInicio != null ? fechaInicio : "01/01/2000");
+		Date fechaFinalAux = fechaFin != null ? new Date(formatter.parse(fechaFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
 		
-		return null;
+		return rondaRepo.findAll().stream().filter(r -> r.getFechaRonda().after(fechaInicioAux) && r.getFechaRonda().before(fechaFinalAux)
+				&& ( idUsuario > 0 ? ( r.getUsuario()!= null && r.getUsuario().getIdUsuario() == idUsuario) : true)).collect(Collectors.toList());
 	}
 
 }

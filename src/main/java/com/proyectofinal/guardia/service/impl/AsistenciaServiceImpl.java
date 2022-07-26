@@ -12,7 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.proyectofinal.guardia.dao.AsistenciaJPARepository;
-import com.proyectofinal.guardia.dao.EmpleadoJPARepository;
 import com.proyectofinal.guardia.dao.UsuarioJPARepository;
 import com.proyectofinal.guardia.domain.Asistencia;
 import com.proyectofinal.guardia.domain.Empleado;
@@ -23,9 +22,6 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 	@Autowired
 	private AsistenciaJPARepository asisRepo;
-
-	// @Autowired
-	// private EmpleadoJPARepository empleadoRepo;
 
 	@Autowired
 	private UsuarioJPARepository usuarioRepo;
@@ -97,32 +93,23 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 
 	@Override
-	public List<Asistencia> filtrarAsistencias(String fechaInicio, String fechaFin, int nroLegajo, int idUsuario) {
+	public List<Asistencia> filtrarAsistencias(String fechaInicio, String fechaFin, int nroLegajo, int idUsuario) throws ParseException {
 
-		try {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Date fechaInicioAux = formatter.parse(fechaInicio != null ? fechaInicio : "01/01/2000");
+		Date fechaFinalAux = fechaFin != null ? new Date(formatter.parse(fechaFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
 
-			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-			Date fechaInicioAux = formatter.parse(fechaInicio != null ? fechaInicio : "01/01/2000");
-			Date fechaFinalAux = fechaFin != null ? new Date(formatter.parse(fechaFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
-
-			return asisRepo.findAll().stream().filter(a -> 
-					   (a.getIngreso() != null ?  a.getIngreso().after(fechaInicioAux) : true)
-					&& (a.getIngreso() != null ? a.getIngreso().before(fechaFinalAux) : true)
-					&& (idUsuario > 0
-							? ((a.getUsuarioIngreso() != null && a.getUsuarioIngreso().getIdUsuario() == idUsuario)
-									|| (a.getUsuarioEgreso() != null
-											&& a.getUsuarioEgreso().getIdUsuario() == idUsuario))
-							: true)
-					&& (nroLegajo > 0 ? (a.getEmpleado() != null && a.getEmpleado().getNroLegajo() == nroLegajo)
-							: true))
-					.collect(Collectors.toList());
-
-		} catch (ParseException e) {
-
-			e.printStackTrace();
-		}
-
-		return null;
+		return asisRepo.findAll().stream().filter(a -> 
+				   (a.getIngreso() != null ?  a.getIngreso().after(fechaInicioAux) : true)
+				&& (a.getIngreso() != null ? a.getIngreso().before(fechaFinalAux) : true)
+				&& (idUsuario > 0
+						? ((a.getUsuarioIngreso() != null && a.getUsuarioIngreso().getIdUsuario() == idUsuario)
+								|| (a.getUsuarioEgreso() != null
+										&& a.getUsuarioEgreso().getIdUsuario() == idUsuario))
+						: true)
+				&& (nroLegajo > 0 ? (a.getEmpleado() != null && a.getEmpleado().getNroLegajo() == nroLegajo)
+						: true))
+				.collect(Collectors.toList());
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.proyectofinal.guardia.service;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,6 @@ public interface TransitoService {
 	public Transito reingresoTransito(int idTransito, Date reingreso, Vehiculo vehiculo, String comentario);
 	public List<Transito> obtenerTransitos();
 	public List<Transito> obtenerTransitosActivos();
-	public List<Transito> filtrarTransitos(String fechaInicio, String fechaFin, int nroLegajo, int idUsuario, int idVehiculo);
+	public List<Transito> filtrarTransitos(String fechaInicio, String fechaFin, int nroLegajo, int idUsuario, int idVehiculo) throws ParseException;
 			
 }

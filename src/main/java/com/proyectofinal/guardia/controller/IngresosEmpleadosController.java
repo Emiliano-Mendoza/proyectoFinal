@@ -1,5 +1,6 @@
 package com.proyectofinal.guardia.controller;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -199,13 +200,20 @@ public class IngresosEmpleadosController {
 	public ResponseEntity<List<Asistencia>> filtrarAsistencias(@RequestParam(name = "date_range") String date_range,
 			@RequestParam(name = "nroLegajo", required = false) int nroLegajo,
 			@RequestParam(name = "idUsuario", required = false) int idUsuario) {
-		
-		if (date_range.indexOf(" - ") != -1) {
-			String[] parts = date_range.split(" - ");			
-			return ResponseEntity.ok(asisServ.filtrarAsistencias(parts[0], parts[1], nroLegajo, idUsuario));
+		try {
+			if (date_range.indexOf(" - ") != -1) {
+				
+				String[] parts = date_range.split(" - ");							
+				return ResponseEntity.ok(asisServ.filtrarAsistencias(parts[0], parts[1], nroLegajo, idUsuario));	
+				
+			}else {
+				return ResponseEntity.ok(asisServ.filtrarAsistencias(null, null, nroLegajo, idUsuario));
+			}
+			
+		} catch (ParseException e) {
+			return ResponseEntity.badRequest().build();
 		}
-		
-		return ResponseEntity.ok(asisServ.filtrarAsistencias(null, null, nroLegajo, idUsuario));
+
 	}
 	
 
@@ -215,11 +223,17 @@ public class IngresosEmpleadosController {
 			@RequestParam(name = "idUsuario", required = false) int idUsuario,
 			@RequestParam(name = "idVehiculo", required = false) int idVehiculo) {
 		
-		if (date_range.indexOf(" - ") != -1) {
-			String[] parts = date_range.split(" - ");			
-			return ResponseEntity.ok(transitoServ.filtrarTransitos(parts[0], parts[1], nroLegajo, idUsuario, idVehiculo));
+		try {
+			if (date_range.indexOf(" - ") != -1) {
+				String[] parts = date_range.split(" - ");			
+				return ResponseEntity.ok(transitoServ.filtrarTransitos(parts[0], parts[1], nroLegajo, idUsuario, idVehiculo));
+			}else {
+				return ResponseEntity.ok(transitoServ.filtrarTransitos(null, null, nroLegajo, idUsuario, idVehiculo));
+			}
+			
+		} catch (ParseException e) {
+			return ResponseEntity.badRequest().build();
 		}
-		
-		return ResponseEntity.ok(transitoServ.filtrarTransitos(null, null, nroLegajo, idUsuario, idVehiculo));
+
 	}
 }

@@ -105,14 +105,7 @@
 							</div>
 																												
 							<div class="card-body" style="overflow-x: hidden; overflow-y: auto; height: 40vh;">
-								<ul>
-									<li>Evento 1</li>
-									<li>Evento 2</li>
-									<li>Evento 3</li>
-									<li>Evento 4</li>
-									<li>Evento 5</li>
-									<li>Evento 6</li>
-									<li>Evento 7</li>
+								<ul id="evId">
 
 								</ul>
 
@@ -226,6 +219,28 @@
 							
 							aux += `<li class="mb-1">Fecha Límite: ${darFormatoFechaSimple(new Date(aut.fechaLimite))} - Retira: ${aut.empleado != null ? aut.empleado.nombre + ' ' + aut.empleado.apellido : 'Retiro Externo'}
 							 - Autoriza: ${aut.usuario.nombre} ${aut.usuario.apellido} - Materiales: ${formatMaterial(aut.materiales)}
+							</li>`;
+						}
+						
+						return aux;
+					});								
+				}
+			});
+			
+			jQuery.ajax({
+				url : '/views/evento/listar',
+				type : "GET",
+				dataType : "json",
+				contentType : "application/json; charset=utf-8",
+				success : function(data) {
+
+					$("#evId").html(function(){
+						let aux = '';
+						
+						for(let ev of data){
+							
+							aux += `<li class="mb-1">Fecha Evento: ${darFormatoFechaCompleta(new Date(ev.fechaEvento))} 
+							- Notificante: ${ev.notificador.nombre} ${ev.notificador.apellido} 
 							</li>`;
 						}
 						

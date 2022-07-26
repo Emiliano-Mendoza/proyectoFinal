@@ -1,6 +1,7 @@
 package com.proyectofinal.guardia.controller;
 
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -82,12 +83,17 @@ public class RondaController {
 	public ResponseEntity<List<Ronda>> filtrar(@RequestParam(name = "date_range") String date_range,
 			@RequestParam(name = "idUsuario", required = false) int idUsuario) {
 		
-	
-		if (date_range.indexOf(" - ") != -1) {
-			String[] parts = date_range.split(" - ");			
-			return ResponseEntity.ok(rondaServ.filtrarRondas(parts[0], parts[1], idUsuario));
-		}
+		try {
+			if (date_range.indexOf(" - ") != -1) {
+				String[] parts = date_range.split(" - ");	
+				
+				return ResponseEntity.ok(rondaServ.filtrarRondas(parts[0], parts[1], idUsuario));				 
+			}else {
+				return ResponseEntity.ok(rondaServ.filtrarRondas(null, null, idUsuario));
+			}
+		}catch (ParseException e) {
+			return ResponseEntity.badRequest().build();
+		}	
 		
-		return ResponseEntity.ok(rondaServ.filtrarRondas(null, null, idUsuario));
 	}
 }

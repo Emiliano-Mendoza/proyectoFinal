@@ -84,35 +84,27 @@ public class TransitoServiceImpl implements TransitoService {
 
 	@Override
 	public List<Transito> filtrarTransitos(String fechaInicio, String fechaFin, int nroLegajo, int idUsuario,
-			int idVehiculo) {
+			int idVehiculo) throws ParseException {
+			
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Date fechaInicioAux = formatter.parse(fechaInicio != null ? fechaInicio : "01/01/2000");
+		Date fechaFinalAux =  fechaInicio != null ? new Date(formatter.parse(fechaFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
 
-		try {
-						
-			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-			Date fechaInicioAux = formatter.parse(fechaInicio != null ? fechaInicio : "01/01/2000");
-			Date fechaFinalAux =  fechaInicio != null ? new Date(formatter.parse(fechaFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
+		return transitoRepo.findAll().stream()
+				.filter(t -> (t.getEgreso() != null ? t.getEgreso().after(fechaInicioAux) : true)
+						&& (t.getEgreso() != null ?  t.getEgreso().before(fechaFinalAux) : true)
+						&& (idUsuario > 0
+								? ((t.getUsuarioIngreso() != null && t.getUsuarioIngreso().getIdUsuario() == idUsuario)
+										|| (t.getUsuarioEgreso() != null
+												&& t.getUsuarioEgreso().getIdUsuario() == idUsuario))
+								: true)
+						&& (nroLegajo > 0 ? (t.getEmpleado() != null && t.getEmpleado().getNroLegajo() == nroLegajo)
+								: true)
+						&& (idVehiculo > 0 ? ((t.getPrimerVehiculo() != null && t.getPrimerVehiculo().getIdVehiculo() == idVehiculo) ||
+								(t.getSegundoVehiculo() != null && t.getSegundoVehiculo().getIdVehiculo() == idVehiculo))
+								: true))
+				.collect(Collectors.toList());
 
-			return transitoRepo.findAll().stream()
-					.filter(t -> (t.getEgreso() != null ? t.getEgreso().after(fechaInicioAux) : true)
-							&& (t.getEgreso() != null ?  t.getEgreso().before(fechaFinalAux) : true)
-							&& (idUsuario > 0
-									? ((t.getUsuarioIngreso() != null && t.getUsuarioIngreso().getIdUsuario() == idUsuario)
-											|| (t.getUsuarioEgreso() != null
-													&& t.getUsuarioEgreso().getIdUsuario() == idUsuario))
-									: true)
-							&& (nroLegajo > 0 ? (t.getEmpleado() != null && t.getEmpleado().getNroLegajo() == nroLegajo)
-									: true)
-							&& (idVehiculo > 0 ? ((t.getPrimerVehiculo() != null && t.getPrimerVehiculo().getIdVehiculo() == idVehiculo) ||
-									(t.getSegundoVehiculo() != null && t.getSegundoVehiculo().getIdVehiculo() == idVehiculo))
-									: true))
-					.collect(Collectors.toList());
-
-		} catch (ParseException e) {
-
-			e.printStackTrace();
-		}
-
-		return null;
 	}
 
 }

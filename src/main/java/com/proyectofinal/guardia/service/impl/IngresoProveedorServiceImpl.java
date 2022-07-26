@@ -77,33 +77,23 @@ public class IngresoProveedorServiceImpl implements IngresoProveedorService {
 	}
 
 	@Override
-	public List<IngresoProveedor> filtrarIngresos(String fechaInicio, String fechaFin, int idProveedor, int idUsuario) {
+	public List<IngresoProveedor> filtrarIngresos(String fechaInicio, String fechaFin, int idProveedor, int idUsuario) throws ParseException {
 		
-		try {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Date fechaInicioAux = formatter.parse(fechaInicio != null ? fechaInicio : "01/01/2000");
+		Date fechaFinalAux = fechaFin != null ? new Date(formatter.parse(fechaFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
 
-			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-			Date fechaInicioAux = formatter.parse(fechaInicio != null ? fechaInicio : "01/01/2000");
-			Date fechaFinalAux = fechaFin != null ? new Date(formatter.parse(fechaFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
-
-			return ingresoRepo.findAll().stream().filter(a -> 
-					   (a.getIngreso() != null ?  a.getIngreso().after(fechaInicioAux) : true)
-					&& (a.getIngreso() != null ? a.getIngreso().before(fechaFinalAux) : true)
-					&& (idUsuario > 0
-							? ((a.getUsuarioIngreso() != null && a.getUsuarioIngreso().getIdUsuario() == idUsuario)
-									|| (a.getUsuarioEgreso() != null
-											&& a.getUsuarioEgreso().getIdUsuario() == idUsuario))
-							: true)
-					&& (idProveedor > 0 ? (a.getProveedor() != null && a.getProveedor().getIdProveedor() == idProveedor)
-							: true))
-					.collect(Collectors.toList());
-
-		} catch (ParseException e) {
-
-			e.printStackTrace();
-		}
-		
-		
-		return null;
+		return ingresoRepo.findAll().stream().filter(a -> 
+				   (a.getIngreso() != null ?  a.getIngreso().after(fechaInicioAux) : true)
+				&& (a.getIngreso() != null ? a.getIngreso().before(fechaFinalAux) : true)
+				&& (idUsuario > 0
+						? ((a.getUsuarioIngreso() != null && a.getUsuarioIngreso().getIdUsuario() == idUsuario)
+								|| (a.getUsuarioEgreso() != null
+										&& a.getUsuarioEgreso().getIdUsuario() == idUsuario))
+						: true)
+				&& (idProveedor > 0 ? (a.getProveedor() != null && a.getProveedor().getIdProveedor() == idProveedor)
+						: true))
+				.collect(Collectors.toList());
 	}
 
 }

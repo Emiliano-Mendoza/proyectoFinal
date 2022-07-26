@@ -1,5 +1,6 @@
 package com.proyectofinal.guardia.service;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface AsistenciaService {
 	public List<Asistencia> listarAsistenciasSinEgresoSinTransito();
 	public List<Asistencia> listarAsistenciasSinEgreso();
 	public List<Asistencia> listarAsistencias();
-	public List<Asistencia> filtrarAsistencias(String fechaInicio, String fechaFin, int nroLegajo, int idUsuario);
+	public List<Asistencia> filtrarAsistencias(String fechaInicio, String fechaFin, int nroLegajo, int idUsuario) throws ParseException;
 	public void marcarAsistenciaEnTransito(int idAsistencia);
 	public void removerMarcarEnTransito(int idAsistencia);
 		

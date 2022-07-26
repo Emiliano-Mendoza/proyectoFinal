@@ -1,6 +1,7 @@
 package com.proyectofinal.guardia.controller;
 
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -89,8 +90,7 @@ public class RetiroMaterialController {
 			
 			if(planta == 1) plantaAux = "Av. Facundo Zuviría 4740 - Planta I";
 			if(planta == 2) plantaAux = "Av. Peñaloza 5750 - Planta II";
-			
-			
+				
 			retiroMaterialServ.registrarRetiro(idAutorizacion, new Date(), observacionGuardia, plantaAux);
 			
 		}catch(Exception e) {
@@ -117,23 +117,26 @@ public class RetiroMaterialController {
 			@RequestParam(name = "idGuardia", required = false) int idGuardia,
 			@RequestParam(name = "idMaterial", required = false) int idMaterial){
 		
-		
-		if (date_range.indexOf(" - ") != -1 && date_range2.indexOf(" - ") != -1){
-			String[] parts = date_range.split(" - ");
-			String[] parts2 = date_range2.split(" - ");
-			return ResponseEntity.ok(retiroMaterialServ.filtrarAutorizaciones(parts[0], parts[1], parts2[0], parts2[1], nroLegajo, idAutorizante, idGuardia, idMaterial));
-		}
-		else if (date_range.indexOf(" - ") != -1) {			
-			String[] parts = date_range.split(" - ");			
-			return ResponseEntity.ok(retiroMaterialServ.filtrarAutorizaciones(parts[0], parts[1], null, null, nroLegajo, idAutorizante, idGuardia, idMaterial));
-			
-		}else if (date_range2.indexOf(" - ") != -1) {
-			String[] parts2 = date_range2.split(" - ");
-			return ResponseEntity.ok(retiroMaterialServ.filtrarAutorizaciones(null, null, parts2[0], parts2[1], nroLegajo, idAutorizante, idGuardia, idMaterial));
-			
-		}
+		try {
+			if (date_range.indexOf(" - ") != -1 && date_range2.indexOf(" - ") != -1){
+				String[] parts = date_range.split(" - ");
+				String[] parts2 = date_range2.split(" - ");
 				
-		return ResponseEntity.ok(retiroMaterialServ.filtrarAutorizaciones(null, null, null, null, nroLegajo, idAutorizante, idGuardia, idMaterial));
+				return ResponseEntity.ok(retiroMaterialServ.filtrarAutorizaciones(parts[0], parts[1], parts2[0], parts2[1], nroLegajo, idAutorizante, idGuardia, idMaterial));				 
+			}
+			else if (date_range.indexOf(" - ") != -1) {			
+				String[] parts = date_range.split(" - ");			
+				return ResponseEntity.ok(retiroMaterialServ.filtrarAutorizaciones(parts[0], parts[1], null, null, nroLegajo, idAutorizante, idGuardia, idMaterial));
+				
+			}else if (date_range2.indexOf(" - ") != -1) {
+				String[] parts2 = date_range2.split(" - ");
+				return ResponseEntity.ok(retiroMaterialServ.filtrarAutorizaciones(null, null, parts2[0], parts2[1], nroLegajo, idAutorizante, idGuardia, idMaterial));
+				
+			}
+			return ResponseEntity.ok(retiroMaterialServ.filtrarAutorizaciones(null, null, null, null, nroLegajo, idAutorizante, idGuardia, idMaterial));
+		}catch (ParseException e) {
+			return ResponseEntity.badRequest().build();
+		}
 		
 	}
 	

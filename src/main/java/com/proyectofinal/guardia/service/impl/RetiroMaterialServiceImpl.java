@@ -53,42 +53,38 @@ public class RetiroMaterialServiceImpl implements RetiroMaterialService {
 
 	@Override
 	public AutorizacionRetiroMaterial crearAutorizacion(int nroLegajo, List<Integer> materiales, String fechaLimite,
-			String descripcion) {
+			String descripcion) throws ParseException {
 
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-		try {
-			AutorizacionRetiroMaterial autorizacion = new AutorizacionRetiroMaterial();
 
-			if (nroLegajo > 0) {
-				autorizacion.setEmpleado(empleadoRepo.findById(nroLegajo).orElseThrow());
-			} else {
-				autorizacion.setEmpleado(null);
-			}
+		AutorizacionRetiroMaterial autorizacion = new AutorizacionRetiroMaterial();
 
-			materiales.forEach((mat) -> {
-				autorizacion.getMateriales().add(materialRepo.findById(mat).get());
-			});
-
-			autorizacion.setDescripcion(descripcion);
-
-			Date fecha = formatter.parse(fechaLimite + " 23:59:59");
-			autorizacion.setFechaLimite(fecha);
-
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			autorizacion.setUsuario(usuarioRepo.findByUsername(auth.getName()));
-			
-			
-			crearNotificaciones(autorizacion.getUsuario());
-									
-			
-			return autRepo.save(autorizacion);
-			
-		} catch (Exception e) {
-
+		if (nroLegajo > 0) {
+			autorizacion.setEmpleado(empleadoRepo.findById(nroLegajo).orElseThrow());
+		} else {
+			autorizacion.setEmpleado(null);
 		}
 
-		return null;
+		materiales.forEach((mat) -> {
+			autorizacion.getMateriales().add(materialRepo.findById(mat).get());
+		});
+
+		autorizacion.setDescripcion(descripcion);
+
+		Date fecha = formatter.parse(fechaLimite + " 23:59:59");
+		autorizacion.setFechaLimite(fecha);
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		autorizacion.setUsuario(usuarioRepo.findByUsername(auth.getName()));
+		
+		
+		crearNotificaciones(autorizacion.getUsuario());
+								
+		
+		return autRepo.save(autorizacion);
+			
+
 	}
 
 	@Override
@@ -168,45 +164,38 @@ public class RetiroMaterialServiceImpl implements RetiroMaterialService {
 	@Override
 	public List<AutorizacionRetiroMaterial> filtrarAutorizaciones(String fechaLimiteInicio, String fechaLimiteFin,
 			String fechaRetiroInicio, String fechaRetiroFin, int nroLegajo, int idAutorizante, int idGuardia,
-			int idMateria) {
+			int idMateria) throws ParseException {
 				
-		try {
 
-			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-			Date fechaLimiteInicioAux = formatter.parse(fechaLimiteInicio != null ? fechaLimiteInicio : "01/01/2000");
-			Date fechaLimiteFinalAux = fechaLimiteFin != null ? new Date(formatter.parse(fechaLimiteFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
-			
-			Date fechaRetiroInicioAux = formatter.parse(fechaRetiroInicio != null ? fechaRetiroInicio : "01/01/2000");
-			Date fechaRetiroFinAux = fechaRetiroFin != null ? new Date(formatter.parse(fechaRetiroFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
-			
-			Material material;
-			if(idMateria > 0) material = materialRepo.findById(idMateria).get();
-			else material = new Material();
-			
-			return autRepo.findAll().stream().filter(a -> 
-					   (a.getFechaLimite() != null ?  a.getFechaLimite().after(fechaLimiteInicioAux) : true)
-					&& (a.getFechaLimite() != null ? a.getFechaLimite().before(fechaLimiteFinalAux) : true)
-					&& ((a.getRetiro() != null && a.getRetiro().getFechaRetiro() != null) ? a.getRetiro().getFechaRetiro().after(fechaRetiroInicioAux) : (fechaRetiroInicio != null ? false : true))
-					&& ((a.getRetiro() != null && a.getRetiro().getFechaRetiro() != null) ? a.getRetiro().getFechaRetiro().before(fechaRetiroFinAux) : (fechaRetiroFin != null ? false : true))
-					&& (idAutorizante > 0
-							? (a.getUsuario() != null && a.getUsuario().getIdUsuario() == idAutorizante)									
-							: true)
-					&& (idGuardia > 0
-							? (a.getRetiro() != null && a.getRetiro().getUsuario() != null && a.getRetiro().getUsuario().getIdUsuario() == idGuardia)									
-							: true)
-					&& (idMateria > 0
-							? ((a.getMateriales() != null && a.getMateriales().contains(material)))
-							: true)
-					&& (nroLegajo > 0 ? (a.getEmpleado() != null && a.getEmpleado().getNroLegajo() == nroLegajo)
-							: true))
-					.collect(Collectors.toList());
-
-		} catch (ParseException e) {
-
-			e.printStackTrace();
-		}
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Date fechaLimiteInicioAux = formatter.parse(fechaLimiteInicio != null ? fechaLimiteInicio : "01/01/2000");
+		Date fechaLimiteFinalAux = fechaLimiteFin != null ? new Date(formatter.parse(fechaLimiteFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
 		
+		Date fechaRetiroInicioAux = formatter.parse(fechaRetiroInicio != null ? fechaRetiroInicio : "01/01/2000");
+		Date fechaRetiroFinAux = fechaRetiroFin != null ? new Date(formatter.parse(fechaRetiroFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
 		
-		return null;
+		Material material;
+		if(idMateria > 0) material = materialRepo.findById(idMateria).get();
+		else material = new Material();
+		
+		return autRepo.findAll().stream().filter(a -> 
+				   (a.getFechaLimite() != null ?  a.getFechaLimite().after(fechaLimiteInicioAux) : true)
+				&& (a.getFechaLimite() != null ? a.getFechaLimite().before(fechaLimiteFinalAux) : true)
+				&& ((a.getRetiro() != null && a.getRetiro().getFechaRetiro() != null) ? a.getRetiro().getFechaRetiro().after(fechaRetiroInicioAux) : (fechaRetiroInicio != null ? false : true))
+				&& ((a.getRetiro() != null && a.getRetiro().getFechaRetiro() != null) ? a.getRetiro().getFechaRetiro().before(fechaRetiroFinAux) : (fechaRetiroFin != null ? false : true))
+				&& (idAutorizante > 0
+						? (a.getUsuario() != null && a.getUsuario().getIdUsuario() == idAutorizante)									
+						: true)
+				&& (idGuardia > 0
+						? (a.getRetiro() != null && a.getRetiro().getUsuario() != null && a.getRetiro().getUsuario().getIdUsuario() == idGuardia)									
+						: true)
+				&& (idMateria > 0
+						? ((a.getMateriales() != null && a.getMateriales().contains(material)))
+						: true)
+				&& (nroLegajo > 0 ? (a.getEmpleado() != null && a.getEmpleado().getNroLegajo() == nroLegajo)
+						: true))
+				.collect(Collectors.toList());
+
+
 	}
 }

@@ -1,5 +1,6 @@
 package com.proyectofinal.guardia.controller;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -113,12 +114,17 @@ public class IngresosProveedorController {
 	public ResponseEntity<List<IngresoProveedor>> filtrarIngresos(@RequestParam(name = "date_range") String date_range,
 			@RequestParam(name = "idProveedor", required = false) int idProveedor,
 			@RequestParam(name = "idUsuario", required = false) int idUsuario) {
+		try {
+			if (date_range.indexOf(" - ") != -1) {
+				String[] parts = date_range.split(" - ");			
+				
+				return ResponseEntity.ok(ingresoServ.filtrarIngresos(parts[0], parts[1], idProveedor, idUsuario));				
+			}else {
+				return ResponseEntity.ok(ingresoServ.filtrarIngresos(null, null, idProveedor, idUsuario));
+			}
+		}catch (ParseException e) {
+			return ResponseEntity.badRequest().build();
+		} 
 		
-		if (date_range.indexOf(" - ") != -1) {
-			String[] parts = date_range.split(" - ");			
-			return ResponseEntity.ok(ingresoServ.filtrarIngresos(parts[0], parts[1], idProveedor, idUsuario));
-		}
-		
-		return ResponseEntity.ok(ingresoServ.filtrarIngresos(null, null, idProveedor, idUsuario));
 	}
 }
