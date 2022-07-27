@@ -7,8 +7,8 @@ import com.proyectofinal.guardia.domain.Material;
 
 public interface MaterialService {
 
-	public Material crearMaterial(String material, Boolean activo);
-	public Material editarMaterial(int idMaterial, String material, Boolean activo);
+	public Material crearMaterial(Material material);
+	public Material editarMaterial(Material material);
 	public List<Material> obtenerTodos();
 	public List<Material> obtenerDisponibles();
 	public Optional<Material> obtenerPorId(int idMaterial);

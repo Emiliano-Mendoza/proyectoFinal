@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,25 +60,43 @@ public class EventoController {
 		return "redirect:/views/evento";
 	}
 	
-	@PostMapping("/editar")
-	public String editarEvento(@Valid @ModelAttribute Evento evento, BindingResult result,
+	@PostMapping("/editar/{idEvento}")
+	public String editarEvento(@PathVariable("idEvento") int idEvento,
+			   @RequestParam(name = "descripcion") String descripcion,
+			   @RequestParam(name = "fechaEvento") String fechaEvento,
 			 RedirectAttributes atributos) {
-				
-		if (result.hasErrors()) {
+		
+		try {
+			Evento evento = eventoServ.obtenerPorId(idEvento).orElseThrow();
+			evento.setDescripcion(descripcion);
+			eventoServ.crearEvento(evento, fechaEvento);
 			
-			atributos.addFlashAttribute("error", "Datos inválidos. No se pudo editar el evento.");
+		} catch (Exception e) {
+			atributos.addFlashAttribute("error", "No se pudo editar el evento");
 			return "redirect:/views/evento";
-			
-		}else {			
-			try {
-				
-			} catch (Exception e) {
-				atributos.addFlashAttribute("error", "No se pudo editar el evento");
-				return "redirect:/views/evento";
-			}
 		}
-
+		
 		atributos.addFlashAttribute("success", "Evento editado exitosamente!");
+		return "redirect:/views/evento";
+	}
+	
+	@PostMapping("/cancelar/{idEvento}")
+	public String cancelarEvento(@PathVariable("idEvento") int idEvento,
+			   @RequestParam(name = "motivoCancelacion") String motivoCancelacion,
+			 RedirectAttributes atributos) {
+		
+		try {
+			Evento evento = eventoServ.obtenerPorId(idEvento).orElseThrow();
+			evento.setMotivoCancelacion(motivoCancelacion);
+			evento.setCancelado(true);
+			eventoServ.editarEvento(evento);
+			
+		} catch (Exception e) {
+			atributos.addFlashAttribute("error", "No se pudo cancelar el evento");
+			return "redirect:/views/evento";
+		}
+		
+		atributos.addFlashAttribute("success", "Evento cancelado exitosamente!");
 		return "redirect:/views/evento";
 	}
 	
@@ -89,8 +108,30 @@ public class EventoController {
 	
 	@GetMapping("/ocurrencia")
 	public String ocurrenciaDeEventos(Model model) {
-						
+		
+		model.addAttribute("listaEventos", eventoServ.obtenerActivos());
+		
 		return "/views/eventos/RegistrarOcurrenciaDeEvento";
+	}
+	
+	@PostMapping("/ocurrencia/{idEvento}")
+	public String ocurrenciaEvento(@PathVariable("idEvento") int idEvento,
+			   @RequestParam(name = "observacionGuardia") String observacionGuardia,
+			 RedirectAttributes atributos) {
+		
+		try {
+			Evento evento = eventoServ.obtenerPorId(idEvento).orElseThrow();
+			evento.setObservacion(observacionGuardia);
+			evento.setOcurrencia(true);
+			eventoServ.editarEvento(evento);
+			
+		} catch (Exception e) {
+			atributos.addFlashAttribute("error", "No se pudo registrar la ocurrencia del evento");
+			return "redirect:/views/evento/ocurrencia";
+		}
+		
+		atributos.addFlashAttribute("success", "Evento registrado exitosamente!");
+		return "redirect:/views/evento/ocurrencia";
 	}
 	
 	@GetMapping("/listar")

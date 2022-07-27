@@ -18,10 +18,10 @@ import com.proyectofinal.guardia.dao.AutorizacionJPARepository;
 import com.proyectofinal.guardia.dao.EmpleadoJPARepository;
 import com.proyectofinal.guardia.dao.MaterialJPARepository;
 import com.proyectofinal.guardia.dao.NotificacionJPARepository;
-import com.proyectofinal.guardia.dao.RetiroJPARepository;
+
 import com.proyectofinal.guardia.dao.UsuarioJPARepository;
 import com.proyectofinal.guardia.domain.AutorizacionRetiroMaterial;
-import com.proyectofinal.guardia.domain.Empleado;
+
 import com.proyectofinal.guardia.domain.Material;
 import com.proyectofinal.guardia.domain.NotiUsuario;
 import com.proyectofinal.guardia.domain.Notificacion;
@@ -33,8 +33,6 @@ import com.proyectofinal.guardia.service.RetiroMaterialService;
 @Service
 public class RetiroMaterialServiceImpl implements RetiroMaterialService {
 
-	@Autowired
-	private RetiroJPARepository retiroRepo;
 
 	@Autowired
 	private AutorizacionJPARepository autRepo;

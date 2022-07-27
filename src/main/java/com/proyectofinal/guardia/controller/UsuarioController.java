@@ -71,8 +71,9 @@ public class UsuarioController {
 			RedirectAttributes atributos) {
 
 
-		if (result.hasErrors() && !(result.hasFieldErrors("contraseña") && result.getErrorCount() == 1)) {
-
+		if (result.hasErrors() && !(result.hasFieldErrors("contraseña") && result.getErrorCount() == 2)) {
+			
+			// si no se agrega la contraseña se tienen 2 errores, el error de contraseña vacia y el del temaño
 			atributos.addFlashAttribute("error", "Datos incompletos. No se pudo editar el nuevo usuario.");
 			return "redirect:/views/usuario/administrar";
 		}

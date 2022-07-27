@@ -17,15 +17,15 @@ public class MaterialServiceImpl implements MaterialService {
 	private MaterialJPARepository materialRepo;
 	
 	@Override
-	public Material crearMaterial(String material, Boolean activo) {
-		// TODO Auto-generated method stub
-		return null;
+	public Material crearMaterial(Material material) {
+		
+		return materialRepo.save(material);
 	}
 
 	@Override
-	public Material editarMaterial(int idMaterial, String material, Boolean activo) {
-		// TODO Auto-generated method stub
-		return null;
+	public Material editarMaterial(Material material) {
+		
+		return materialRepo.save(material);
 	}
 
 	@Override
@@ -42,8 +42,8 @@ public class MaterialServiceImpl implements MaterialService {
 
 	@Override
 	public Optional<Material> obtenerPorId(int idMaterial) {
-		// TODO Auto-generated method stub
-		return null;
+
+		return materialRepo.findById(idMaterial);
 	}
 
 }

@@ -67,6 +67,11 @@ public class Material {
 	public void setActivo(Boolean activo) {
 		this.activo = activo;
 	}
+
+	@Override
+	public String toString() {
+		return "Material [idMaterial=" + idMaterial + ", material=" + material + ", activo=" + activo + "]";
+	}
 	
 	
 }

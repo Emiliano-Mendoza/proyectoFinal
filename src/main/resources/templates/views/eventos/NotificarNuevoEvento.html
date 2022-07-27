@@ -6,74 +6,246 @@
 <body class="sb-nav-fixed">
 
 	<header th:replace="plantilla/template :: header"></header>
-	
+
 	<div id="layoutSidenav">
-	
-		<div th:replace="plantilla/template :: sidenav_nav"> </div>
-		
+
+		<div th:replace="plantilla/template :: sidenav_nav"></div>
+
 		<div id="layoutSidenav_content">
-			
+
 			<div class="container-fluid px-4 mt-3">
-				 
+
 				<div th:replace="plantilla/template :: mensajes"></div>
-												
+
 				<div class="d-md-flex justify-content-between">
-					<h1 class="">Notificar Nuevo Evento</h1>					
-					<a  class="nav-link" th:href="@{/views/evento/ver-eventos}"><i
+					<h1 class="">Notificar Nuevo Evento</h1>
+					<a class="nav-link" th:href="@{/views/evento/ver-eventos}"><i
 						class="fa-solid fa-file-circle-check"></i> Ver Registros</a>
 				</div>
-								
+
 				<ol class="breadcrumb mb-4">
-					<li class="breadcrumb-item active"><i
-						class="fa-solid fa-flag"></i> Eventos</li>
+					<li class="breadcrumb-item active"><i class="fa-solid fa-flag"></i>
+						Eventos</li>
 				</ol>
-				
+
 				<div class="card">
-					<form id="formEvento" method="post" th:action="@{/views/evento/crear}" th:object="${evento}">
+					<form id="formEvento" method="post"
+						th:action="@{/views/evento/crear}" th:object="${evento}">
 						<div class="card-header fw-bold">Nuevo Evento:</div>
 						<div class="card-body">
-								
-								<input type="hidden" id="IdInput" value="0" th:field="*{idEvento}" >
-						
-								<div class="mb-3">
-									<label for="desc" class="form-label">Descripción:</label>
-									<textarea class="form-control" id="desc" name="desc" rows="3" th:field="*{descripcion}"
-										required></textarea>
-								</div>
-								<div class="">
-									<label for="fechaEvento" class="form-label">Fecha
-										del Evento: </label> <input type="datetime-local" name="fecha"
-										id="fechaEvento" required>
-								</div>
-					
+
+							<input type="hidden" id="IdInput" value="0"
+								th:field="*{idEvento}">
+
+							<div class="mb-3">
+								<label for="desc" class="form-label">Descripción:</label>
+								<textarea class="form-control" id="desc" name="desc" rows="3"
+									th:field="*{descripcion}" required></textarea>
+							</div>
+							<div class="">
+								<label for="fechaEvento" class="form-label">Fecha del
+									Evento: </label> <input type="datetime-local" name="fecha"
+									id="fechaEvento" required>
+							</div>
+
 						</div>
 						<div class="card-footer d-md-flex justify-content-end">
-							
-							<input type="submit" class="btn btn-secondary "
+
+							<input type="submit" class="btn btn-secondary btn-sm"
 								value="Confirmar" />
 						</div>
 					</form>
-				</div>				
-				<h5 class="mt-3">Tus eventos próximos:</h5>			
-				
-			</div>			
-		</div>	
+				</div>
+
+				<h5 class="mt-4">Tus eventos próximos:</h5>
+
+				<div class="row">
+					<div class="col-sm-6 mt-3" th:each="ev:${listaEventos}">
+						<div class="card" th:id="'div'+${ev.idEvento}"
+							th:style="${ev.cancelado} == TRUE ? 'background-color: #ff8080' : ''">
+							<div class="card-header fw-bold"
+								th:text="${ev.cancelado} ? 'Evento Cancelado': 'Evento Próximo'"></div>
+							<div class="card-body rounded"
+								th:style="${ev.cancelado} == TRUE ? 'background-color: #FFFFFF' : ''">
+
+								<div id="cardEvento" >
+
+									<ul class="list-group list-group-flush ">
+										<li class="list-group-item">Descripción: <span
+											th:text="${ev.descripcion}"></span></li>
+										<li class="list-group-item">Fecha Evento: <span
+											th:text="${#dates.format(ev.fechaEvento, 'dd/MM/yyyy HH:mm')}"></span></li>
+										<li class="list-group-item">Encargado: <span>[[${ev.notificador.nombre}]]
+												[[${ev.notificador.apellido}]]</span></li>
+										<li class="list-group-item"><span
+											th:text="${ev.cancelado} ? 'Motivo Cancelación: ' : ''"></span>
+											<span
+											th:text="${ev.cancelado} ? ${ev.motivoCancelacion} : ''"></span>
+										</li>
+									</ul>
+
+								</div>
+							
+							</div>
+
+							<div class="card-footer gap-2 d-md-flex justify-content-md-end">
+								<input th:type="${ev.cancelado} ? hidden : button"
+									class="btn btn-success btn-sm"
+									th:attr="onclick=|editarEvento('${ev.idEvento}',`${ev.descripcion}`,
+									 '${#dates.format(ev.fechaEvento, 'dd/MM/yyyy HH:mm')}','${ev.notificador.nombre}','${ev.notificador.apellido}' )|"
+									value="Editar" /> <input class="btn btn-secondary btn-sm"
+									th:type="${ev.cancelado} ? hidden : button"
+									th:attr="onclick=|CancelarEvento('${ev.idEvento}')|"
+									value="Cancelar Evento" />
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
 	</div>
-	
+
 	<footer th:replace="plantilla/template :: footer"></footer>
-	
+
 	<script th:inline="javascript">
 		
 	let listaEventos = /*[[${listaEventos}]]*/'default';
 	console.log(listaEventos);
 	
+	function editarEvento(idEvento){
+		
+		let aux = '#div' + idEvento;
+		let fechaN = 'fecha' + idEvento;
+		let action = '/views/evento/editar/' + idEvento; 
+		
+		let evento = listaEventos.find(ev => ev.idEvento == idEvento);
+		const resultado = document.querySelector(aux);
+		
+		resultado.innerHTML = `
+			
+			<div class="card-header fw-bold">Evento Próximo</div>
+			
+			<form action=${action} method="post" >
+				<div class="card-body" >					
+
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">
+							<label for="exampleInput" class="form-label">Descripción:</label>
+							<textarea class="form-control" rows="3" id="descripcion" name="descripcion"
+								required >${evento.descripcion}</textarea>
+						</li>
+						<li class="list-group-item">
+							<label for="exampleInputDate" class="form-label">Fecha
+							del Evento: </label> <input type="datetime-local" name="fechaEvento"
+							id=${fechaN} required>
+							</li>
+						<li class="list-group-item">
+							<p>
+								Encargado: <span>${evento.notificador.nombre} ${evento.notificador.apellido}</span>
+							</p>
+						</li>
+						
+					</ul>
+				</div>
+	
+				<div class="card-footer gap-2 d-md-flex justify-content-between">
+					<input type="button" class="btn btn-danger btn-sm" value="Cancelar" 
+						onclick="cancelarEditado('${idEvento}')">
+					<input type="submit" class="btn btn-primary btn-sm" value="Confirmar">
+				</div>
+			</form>
+			
+		`;
+		
+		SetDate(fechaN, evento.fechaEvento);
+	}
+	
+	function CancelarEvento(idEvento){
+		let aux = '#div' + idEvento;
+		let fechaN = 'fecha' + idEvento;
+		let action = '/views/evento/cancelar/' + idEvento; 		
+		let evento = listaEventos.find(ev => ev.idEvento == idEvento);
+		const resultado = document.querySelector(aux);
+		
+		resultado.innerHTML = `
+			<div class="card-header fw-bold">Evento Próximo</div>
+		
+			<form action=${action} method="post" >
+				<div class="card-body">
+					
+					<ul class="list-group list-group-flush">
+					  <li class="list-group-item">Descripción: <span>${evento.descripcion}</span></li>
+					  <li class="list-group-item">Fecha Evento: <span>${darFormatoFechaCompleta(new Date(evento.fechaEvento))}</span></li>
+					  <li class="list-group-item">Encargado: <span>${evento.notificador.nombre} ${evento.notificador.apellido}</span></li>
+					  <li class="list-group-item">
+					 	 <label for="exampleInput" class="form-label">Motivo de la cancelación:</label>
+						<textarea class="form-control" rows="3" id="motivoCancelacion" name="motivoCancelacion"
+							required ></textarea>
+					  </li>
+					</ul>						
+					
+				</div>
+
+				<div class="card-footer gap-2 d-md-flex justify-content-between">
+					<button type="button" class="btn btn-secondary btn-sm"
+						onclick="cancelarEditado('${idEvento}')">Volver</button>
+						<button class="btn btn-secondary btn-sm">Confirmar</button>
+				</div>
+			</form>		 
+		`;
+		
+	}
+	
+	function cancelarEditado(idEvento){
+		let aux = '#div' + idEvento;
+		let evento = listaEventos.find(ev => ev.idEvento == idEvento);
+		
+		const resultado = document.querySelector(aux);
+		
+		resultado.innerHTML = `
+			<div class="card-header fw-bold">Evento Próximo</div>
+			<div class="card-body">			
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">Descripción: <span>${evento.descripcion}</span></li>
+					<li class="list-group-item">Fecha Evento: <span>${darFormatoFechaCompleta(new Date(evento.fechaEvento))}</span></li>
+					<li class="list-group-item">Encargado: <span>${evento.notificador.nombre} ${evento.notificador.apellido}</span></li>
+				</ul>			
+			</div>
+
+			<div class="card-footer gap-2 d-md-flex justify-content-md-end">
+				<button type="button" class="btn btn-success btn-sm"
+					onclick="editarEvento('${idEvento}')">Editar</button>
+					<button class="btn btn-secondary btn-sm"
+						onclick="CancelarEvento('${idEvento}')">Cancelar Evento</button>
+			</div>
+			
+		`;
+	}
+	
 	function SetDate(dateField, currentDate) {
+		
+		let aux = obtenerFormatoDeFecha();
+		
+		if(currentDate==null){
+			document.getElementById(dateField).setAttribute("min", aux);
+			document.getElementById(dateField).setAttribute("value", aux);
+		}else{
+			let aux2 = obtenerFormatoDeFecha(currentDate);
+			
+			document.getElementById(dateField).setAttribute("min", aux);
+			document.getElementById(dateField).setAttribute("value", aux2);
+		}
+		
+	}
 
-		const today = new Date()
-		let aux = '';
-
+	function obtenerFormatoDeFecha(fecha){
+		
+		let today = new Date((fecha != undefined ? new Date(fecha) : new Date()));
+		
 		let dd = today.getDate();
-		let mm = today.getMonth() + 1; //January is 0!
+		let mm = today.getMonth() + 1; 
 		let yyyy = today.getFullYear();
 
 		if (dd < 10) {
@@ -82,19 +254,10 @@
 		if (mm < 10) {
 			mm = '0' + mm;
 		}
-
-		aux = yyyy + '-' + mm + '-' + dd + 'T00:00';
 		
-		if(currentDate==null){
-			document.getElementById(dateField).setAttribute("min", aux);
-			document.getElementById(dateField).setAttribute("value", aux);
-		}else{
-			document.getElementById(dateField).setAttribute("min", aux);
-			document.getElementById(dateField).setAttribute("value", currentDate);
-		}
-		
+		return yyyy + '-' + mm + '-' + dd + 'T00:00';
 	}
-
+	
 	SetDate('fechaEvento', null);
 	</script>
 </body>

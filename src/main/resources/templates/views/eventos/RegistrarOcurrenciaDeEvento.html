@@ -6,39 +6,74 @@
 <body class="sb-nav-fixed">
 
 	<header th:replace="plantilla/template :: header"></header>
-	
+
 	<div id="layoutSidenav">
-	
-		<div th:replace="plantilla/template :: sidenav_nav"> </div>
-		
+
+		<div th:replace="plantilla/template :: sidenav_nav"></div>
+
 		<div id="layoutSidenav_content">
-			
+
 			<div class="container-fluid px-4 mt-3">
-				 
-				 <div th:replace="plantilla/template :: mensajes"></div>
-				
+
+				<div th:replace="plantilla/template :: mensajes"></div>
+
 				<div class="d-md-flex justify-content-between">
-					<h1 class="">Listado de Eventos</h1>					
-					<a  class="nav-link" th:href="@{/views/evento/ver-eventos}"><i
+					<h1 class="">Listado de Eventos</h1>
+					<a class="nav-link" th:href="@{/views/evento/ver-eventos}"><i
 						class="fa-solid fa-file-circle-check"></i> Ver Registros</a>
 				</div>
 				<ol class="breadcrumb mb-4">
 					<li class="breadcrumb-item active"><i
 						class="fa-solid fa-calendar-days"></i> Eventos</li>
 				</ol>
-				
-					
+
+
+				<div class="row">
+					<div class="col-sm-6 mt-3" th:each="ev:${listaEventos}">
+						<div class="card text-dark bg-light  mb-3">
+
+							<h5 class="card-header">Evento Próximo:</h5>
+							<form method="post"
+								th:action="@{/views/evento/ocurrencia/} + ${ev.idEvento}"
+								th:id="myform + ${ev.idEvento}">
+
+								<div class="card-body">
+
+									<ul class="list-group list-group-flush ">
+										<li class="list-group-item bg-light">Descripción: <span
+											th:text="${ev?.descripcion}"></span></li>
+										<li class="list-group-item bg-light">Fecha evento: <span
+											th:text="${#dates.format(ev?.fechaEvento, 'dd/MM/yyyy HH:mm')}"></span>
+										</li>
+										<li class="list-group-item bg-light">Encargado: <span>[[${ev?.notificador?.nombre}]]
+												[[${ev?.notificador?.apellido}]]</span>
+										</li>
+										<li class="list-group-item bg-light"><label
+											for="observacionGuardia">Observación:</label> <input
+											type="text" class="form-control" id="observacionGuardia"
+											name="observacionGuardia" th:form="myform + ${ev.idEvento}">
+										</li>
+									</ul>
+								</div>
+								<div
+									class="card-footer d-grid gap-2 d-md-flex justify-content-md-end mt-2">
+									<input type="submit" class="btn btn-primary btn-sm "
+										value="Confirmar Evento" />
+								</div>
+
+							</form>
+						</div>
+					</div>
+				</div>
 			</div>
-			
 		</div>
-	
+
 	</div>
-	
+
 	<footer th:replace="plantilla/template :: footer"></footer>
-	
+
 	<script th:inline="javascript">
 		
-	
 	</script>
 </body>
 </html>
