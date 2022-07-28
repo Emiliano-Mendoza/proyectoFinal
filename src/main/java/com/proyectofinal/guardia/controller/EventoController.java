@@ -1,5 +1,6 @@
 package com.proyectofinal.guardia.controller;
 
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -102,7 +103,9 @@ public class EventoController {
 	
 	@GetMapping("/ver-eventos")
 	public String verEventos(Model model) {
-						
+		
+		model.addAttribute("listaEventos", eventoServ.obtenerTodos());
+	
 		return "/views/eventos/verEventos";
 	}
 	
@@ -123,7 +126,7 @@ public class EventoController {
 			Evento evento = eventoServ.obtenerPorId(idEvento).orElseThrow();
 			evento.setObservacion(observacionGuardia);
 			evento.setOcurrencia(true);
-			eventoServ.editarEvento(evento);
+			eventoServ.marcarOcurrenciaEvento(evento);
 			
 		} catch (Exception e) {
 			atributos.addFlashAttribute("error", "No se pudo registrar la ocurrencia del evento");
@@ -139,5 +142,27 @@ public class EventoController {
 		
 		return ResponseEntity.ok(eventoServ.obtenerActivos());
 		
+	}
+	
+	@GetMapping("/filtrar")
+	public ResponseEntity<List<Evento>> listarEventos(
+			@RequestParam(name = "date_range") String date_range,
+			@RequestParam(name = "idNotificante", required = false) int idNotificante,
+			@RequestParam(name = "idGuardia", required = false) int idGuardia){
+		
+		try {
+			
+			if (date_range.indexOf(" - ") != -1){
+				String[] parts = date_range.split(" - ");
+				
+				return ResponseEntity.ok(eventoServ.filtrarEventos(parts[0], parts[1], idGuardia, idNotificante));				 
+			}else {
+				
+				return ResponseEntity.ok(eventoServ.filtrarEventos(null, null, idGuardia, idNotificante));		
+			}			
+			
+		}catch (ParseException e) {
+			return ResponseEntity.badRequest().build();
+		}
 	}
 }

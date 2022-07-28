@@ -240,7 +240,7 @@
                     },
                     {
                         "data":"empleado", "render": function (valor){
-                        	return valor != null && valor !== undefined ? `<span>${valor.apellido} ${valor.nombre}</span>` : `<span>-</span>`;
+                        	return valor != null && valor !== undefined ? `<span>${valor.apellido} ${valor.nombre}</span>` : `<span>Retiro Externo</span>`;
                         }
                     },
                     {
@@ -268,7 +268,18 @@
                     	"orderable": false
                     }
                 ]
-				
+				,
+                "createdRow": function( row, data, dataIndex){
+                    
+                    if(data.retiro != null && data.retiro != undefined){
+                        $(row).css('color', '#32CD32');
+                        
+                    }
+                    else if(data.retiro == null){
+                        //$(row).css('color', 'orange');
+                        
+                    }
+                }
 			}).order( [ 0, 'desc' ]).draw();
 			
 		}

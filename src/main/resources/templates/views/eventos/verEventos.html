@@ -41,18 +41,19 @@
 								</div>
 								<div class="col-md-3 pb-2">
 									<label for="usuarioSelect2">Guardia:</label> <select class="form-select"
-										id="usuarioSelect2" name="idUsuario">
+										id="usuarioSelect2" name="idGuardia">
 
 									</select>
 								</div>
 								<div class="col-md-1 d-grid mt-1"
 									style="display: flex; align-items: center;">
-									<button type="button" class="btn btn-primary mt-2">Filtrar</button>
+									<button type="button" class="btn btn-primary mt-2"
+									onclick="filtrarRegistros()">Filtrar</button>
 								</div>
 								<div class="col-md-1 d-grid mt-1"
 									style="display: flex; align-items: center;">
 									<button type="button" class="btn btn-outline-danger mt-2"
-										onclick="desfiltrar('table_id')">Desfiltrar</button>
+										onclick="desfiltrar()">Desfiltrar</button>
 								</div>
 
 							</div>
@@ -68,7 +69,8 @@
 									<th>Descripción</th>
 									<th>Notificante</th>
 									<th>Guardia</th>
-									<th>Comentario</th>
+									<th>Observación Guardia</th>
+									<th>Cancelado</th>
 									<th>Motivo Cancelación</th>
 								</tr>
 							</thead>
@@ -95,10 +97,29 @@
 
 		$(document).ready(function() {
 
-			//listaEventos = /*[[${listaEventos}]]*/'default';
-			listaEventos = [];
+			listaEventos = /*[[${listaEventos}]]*/'default';
+			
 			setDataTable(listaEventos);
-
+			
+			jQuery.ajax({
+				url : '/views/usuario/usuarios-activos',
+				type : "GET",
+				dataType : "json",
+				contentType : "application/json; charset=utf-8",
+				success : function(data) {
+					
+					let aux = '<option value=-1>Todos</option>';
+					
+					for(let dato of data){
+						
+						aux += `<option value=${dato.idUsuario}>${dato.apellido} ${dato.nombre}</option>`;
+						
+					}
+					
+					$("#usuarioSelect1").html(aux);
+					$("#usuarioSelect2").html(aux);
+				}
+			});
 		});
 
 		function setDataTable(datos) {
@@ -134,13 +155,80 @@
 				"columnDefs" : [ {
 					"className" : "dt-center",
 					"targets" : "_all"
-				} ]
+				} ],
+
+				columns: [
+					{
+                        "data":"fechaEvento", "render": function (valor){
+                        	return valor != null && valor !== undefined ? `<td><span style="display:none;">${darFormatoYYYYMMDDhhmm(new Date(valor))}</span>${darFormatoFechaCompleta(new Date(valor))}</td>` : `<td>-</td>`;
+                        }
+                    },
+                    { data: 'descripcion' , 
+                    	"render": function (valor){
+                        	return valor != null && valor !== undefined ? `<span>${valor}</span>` : `<span>-</span>`;
+                        },
+                    	"orderable": false},
+                    {
+                        "data":"notificador", "render": function (valor){
+                        	return valor != null && valor !== undefined ? `<span>${valor.apellido} ${valor.nombre}</span>` : `<span>-</span>`;
+                        }
+                    },
+                    {
+                        "data":"guardia", "render": function (valor){
+                        	return valor != null && valor !== undefined ? `<span>${valor.apellido} ${valor.nombre}</span>` : `<span>-</span>`;
+                        }
+                    },
+                    { data: 'observacion' ,
+                    	"render": function (valor){
+                        	return valor != null && valor !== undefined ? `<span>${valor}</span>` : `<span>-</span>`;
+                        },
+                    	"orderable": false},
+                   	{ data: 'cancelado' ,
+                       	"render": function (valor){
+                           	return valor != null && valor !== undefined ? `<span>${valor ? 'Sí' : 'No'}</span>` : `<span>-</span>`;
+                           }},
+                   	{ data: 'motivoCancelacion',
+                    		"render": function (valor){
+                            	return valor != null && valor !== undefined ? `<span>${valor}</span>` : `<span>-</span>`;
+                            },
+                    		"orderable": false}           
+                ],
+                "createdRow": function( row, data, dataIndex){
+                  
+                    if(!data.ocurrencia && !data.cancelado){
+                        //$(row).css('color', 'orange');
+                        
+                    }
+                    else if(data.cancelado){
+                        $(row).css('color', 'red');
+                        
+                    }
+                    else if(data.ocurrencia && !data.cancelado){
+                        $(row).css('color', '#32CD32');
+                        
+                    }
+                }
 			}).order([ 2, 'desc' ], [ 0, 'desc' ]).draw();
 
 		}
 
 		function desfiltrar() {
-			setDataTable(listaRondas);
+			setDataTable(listaEventos);
+		}
+		
+		function filtrarRegistros(){
+
+			jQuery.ajax({
+				url : '/views/evento/filtrar',
+				type : "GET",
+				dataType : "json",
+				data: $('#filtroForm1').serialize(),
+				contentType : "application/json; charset=utf-8",
+				success : function(data) {										
+					setDataTable(data);								
+				}
+			});	
+			
 		}
 	</script>
 </body>

@@ -154,5 +154,36 @@ public class EventoServiceImpl implements EventoService {
 								
 		return true;
 	}
+
+
+	@Override
+	public Evento marcarOcurrenciaEvento(Evento evento) {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		evento.setGuardia(usuarioRepo.findByUsername(auth.getName()));
+
+		return eventoRepo.save(evento);
+	}
+
+
+	@Override
+	public List<Evento> filtrarEventos(String fechaInicio, String fechaFin, int idGuardia, int idNotificante)
+			throws ParseException {
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Date fechaInicioAux = fechaInicio != null ? new Date(formatter.parse(fechaInicio).getTime() - 1) : new Date(2000,0,1);
+		Date fechaFinalAux = fechaFin != null ? new Date(formatter.parse(fechaFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
+		
+		return eventoRepo.findAll().stream().filter(e -> 
+		   (e.getFechaEvento() != null ? e.getFechaEvento().after(fechaInicioAux) : true)
+		   && (e.getFechaEvento() != null ? e.getFechaEvento().before(fechaFinalAux) : true)
+		   && (idNotificante > 0
+					? (e.getNotificador() != null && e.getNotificador().getIdUsuario() == idNotificante)									
+					: true)
+		   && (idGuardia > 0
+						? (e.getGuardia() != null && e.getGuardia() != null && e.getGuardia().getIdUsuario() == idGuardia)									
+						: true))
+		.collect(Collectors.toList());
+	}
 	
 }
