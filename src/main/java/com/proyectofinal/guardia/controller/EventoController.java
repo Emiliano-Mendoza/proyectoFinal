@@ -147,9 +147,9 @@ public class EventoController {
 	@GetMapping("/filtrar")
 	public ResponseEntity<List<Evento>> listarEventos(
 			@RequestParam(name = "date_range") String date_range,
-			@RequestParam(name = "idNotificante", required = false) int idNotificante,
-			@RequestParam(name = "idGuardia", required = false) int idGuardia){
-		
+			@RequestParam(name = "idNotificante", required = false) Integer idNotificante,
+			@RequestParam(name = "idGuardia", required = false) Integer idGuardia){
+
 		try {
 			
 			if (date_range.indexOf(" - ") != -1){
@@ -157,7 +157,7 @@ public class EventoController {
 				
 				return ResponseEntity.ok(eventoServ.filtrarEventos(parts[0], parts[1], idGuardia, idNotificante));				 
 			}else {
-				
+
 				return ResponseEntity.ok(eventoServ.filtrarEventos(null, null, idGuardia, idNotificante));		
 			}			
 			

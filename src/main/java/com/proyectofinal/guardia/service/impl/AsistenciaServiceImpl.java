@@ -98,7 +98,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		Date fechaInicioAux = formatter.parse(fechaInicio != null ? fechaInicio : "01/01/2000");
 		Date fechaFinalAux = fechaFin != null ? new Date(formatter.parse(fechaFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
-
+		
 		return asisRepo.findAll().stream().filter(a -> 
 				   (a.getIngreso() != null ?  a.getIngreso().after(fechaInicioAux) : true)
 				&& (a.getIngreso() != null ? a.getIngreso().before(fechaFinalAux) : true)

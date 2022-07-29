@@ -208,11 +208,14 @@
                         
                     }
                 }
-			}).order([ 2, 'desc' ], [ 0, 'desc' ]).draw();
+			}).order( [ 0, 'desc' ]).draw();
 
 		}
 
 		function desfiltrar() {
+			$('#date_range').val('');
+			$('#usuarioSelect1').val(-1);
+			$('#usuarioSelect2').val(-1);
 			setDataTable(listaEventos);
 		}
 		

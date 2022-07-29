@@ -171,18 +171,18 @@ public class EventoServiceImpl implements EventoService {
 			throws ParseException {
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-		Date fechaInicioAux = fechaInicio != null ? new Date(formatter.parse(fechaInicio).getTime() - 1) : new Date(2000,0,1);
-		Date fechaFinalAux = fechaFin != null ? new Date(formatter.parse(fechaFin).getTime() + (1000 * 60 * 60 * 24)) : new Date(3000,0,1);
-		
+		Date fechaInicioAux =  new Date(formatter.parse(fechaInicio != null ? fechaInicio : "01/01/2000").getTime() - 1);
+		Date fechaFinalAux =  new Date(formatter.parse(fechaFin != null ? fechaFin : "01/01/2200").getTime() + (1000 * 60 * 60 * 24));
+	
 		return eventoRepo.findAll().stream().filter(e -> 
 		   (e.getFechaEvento() != null ? e.getFechaEvento().after(fechaInicioAux) : true)
 		   && (e.getFechaEvento() != null ? e.getFechaEvento().before(fechaFinalAux) : true)
-		   && (idNotificante > 0
+		   && (idNotificante > 0  
 					? (e.getNotificador() != null && e.getNotificador().getIdUsuario() == idNotificante)									
 					: true)
-		   && (idGuardia > 0
-						? (e.getGuardia() != null && e.getGuardia() != null && e.getGuardia().getIdUsuario() == idGuardia)									
-						: true))
+		   && (idGuardia > 0 
+					? (e.getGuardia() != null && e.getGuardia().getIdUsuario() == idGuardia)									
+					: true))
 		.collect(Collectors.toList());
 	}
 	

@@ -468,7 +468,15 @@ Popup Arrow
 						</div> Gestión de Usuarios
 					</a>
 					
+					<a class="nav-link" th:href="@{/views/distribucion}" sec:authorize="hasAnyRole('ROLE_ADMIN')">
+						<div class="sb-nav-link-icon">
+							<i class="fa-solid fa-person-digging"></i>
+						</div> Distribución de Trabajo
+					</a>
+					
+					<!-- Corregir esto -->
 					<a class="nav-link collapsed cursor_puntero" data-bs-toggle="collapse" sec:authorize="hasAnyRole('ROLE_ADMIN')"
+						style="display: none;"
 						data-bs-target="#collapseLayouts5" aria-expanded="false"
 						aria-controls="collapseLayouts">Distribucion de Turnos
 						<div class="sb-sidenav-collapse-arrow">
@@ -476,6 +484,7 @@ Popup Arrow
 						</div>
 					</a>
 					<div class="collapse" id="collapseLayouts5" sec:authorize="hasAnyRole('ROLE_ADMIN')"
+						style="display: none;"
 						aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 						<nav class="sb-sidenav-menu-nested nav">
 							<a class="nav-link" th:href="@{/views/distribucion}">
